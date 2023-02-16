@@ -109,7 +109,7 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-catkin_install_python(PROGRAMS scripts/Whisper_node.py
+catkin_install_python(PROGRAMS scripts/Whisper_node.py scripts/Ada_node.py
 DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 
