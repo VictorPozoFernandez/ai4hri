@@ -34,12 +34,11 @@ def main():
     threading.Thread(target=transcribe_audio,
                     args=(audio_queue, result_queue, audio_model, rate)).start()
 
-    rate = rospy.Rate(1)
     while not rospy.is_shutdown():
 
         utterance = String()
         utterance = result_queue.get() 
-        if utterance != "":
+        if utterance != "" and utterance != "."and utterance != ",":
             print(utterance)
             pub.publish(utterance)
         rate.sleep()
