@@ -28,8 +28,8 @@ def callback(msg):
             list.append(vec["embedding"])
 
         arr = np.asarray(list)
-        keyword_dict = np.load('/home/victor/catkin_ws_AI4HRI/src/ai4hri/scripts/keyword_dict.npy',allow_pickle='TRUE').item()
-        kmeans = np.load('/home/victor/catkin_ws_AI4HRI/src/ai4hri/scripts/kmeans_model.npy',allow_pickle='TRUE').item()
+        keyword_dict = np.load('/home/victor/catkin_ws/src/ai4hri/scripts/keyword_dict.npy',allow_pickle='TRUE').item()
+        kmeans = np.load('/home/victor/catkin_ws/src/ai4hri/scripts/kmeans_model.npy',allow_pickle='TRUE').item()
 
         y = kmeans.predict(arr)
         print("Cluster:" + str(y[0]))
