@@ -6,11 +6,16 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 
+global list_of_lists
+list_of_lists=[]
+
+
 def main():
 
     rospy.init_node("Ada", anonymous=True)
     rospy.loginfo("Node Ada initialized. Listening...")
     rospy.Subscriber("/ai4hri/utterance", String, callback)
+
 
     rospy.spin()
 
@@ -33,7 +38,24 @@ def callback(msg):
 
         y = kmeans.predict(arr)
         print("Cluster:" + str(y[0]))
-        print("Keywords:" + str(keyword_dict[y[0]]))
+
+        keyword_list =[]
+        for keyword in keyword_dict[y[0]]:
+             keyword_list.append(keyword[0])
+
+        if len(list_of_lists) > 1:
+             list_of_lists.pop(0)
+        list_of_lists.append(keyword_list)
+
+        print(list_of_lists)
+
+        if len(list_of_lists) > 1:
+            keyword_list = list_of_lists[0] + list_of_lists[1]
+        else:
+             keyword_list = list_of_lists[0]
+        
+        
+
 
 
 if __name__ == '__main__':
