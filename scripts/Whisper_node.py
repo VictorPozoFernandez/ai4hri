@@ -18,7 +18,7 @@ def main():
 
     model = "small.en"  # ["tiny.en","base.en", "small.en","medium.en","large"]   Use the "large" model for detecting different languages other than English. 
     energy = 300
-    pause = 0.8
+    pause = 0.5
 
     ## Microphone detection. Uncomment to list available microphones
     #for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
@@ -38,7 +38,7 @@ def main():
 
         utterance = String()
         utterance = result_queue.get() 
-        if utterance != "" and utterance != "."and utterance != ",":
+        if len(utterance) > 15:
             print(utterance)
             pub.publish(utterance)
         rate.sleep()

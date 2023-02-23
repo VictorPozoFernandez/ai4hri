@@ -4,10 +4,14 @@ import openai
 import os
 import numpy as np
 from sklearn.cluster import KMeans
+from ai4hri.msg import String_list
+from keybert import KeyBERT
 
 
 global list_of_lists
+global real_list_of_lists
 list_of_lists=[]
+real_list_of_lists=[]
 
 
 def main():
@@ -20,8 +24,33 @@ def main():
     rospy.spin()
 
 def callback(msg):
+        
+        kw_model = KeyBERT(model='all-mpnet-base-v2')
+        real_keywords = kw_model.extract_keywords(msg.data, keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
 
-        openai.organization = os.environ.get("OPENAI_ORG_ID")
+        real_keyword_list =[]
+        for real_keyword in real_keywords:
+             real_keyword_list.append(real_keyword[0])
+
+        if len(real_list_of_lists) > 1:
+             real_list_of_lists.pop(0)
+        real_list_of_lists.append(real_keyword_list)
+
+        print(real_list_of_lists)
+
+        if len(real_list_of_lists) > 1:
+            real_keyword_list = real_list_of_lists[0] + real_list_of_lists[1]
+        else:
+             real_keyword_list = real_list_of_lists[0]
+
+        pub = rospy.Publisher('/ai4hri/real_keywords', String_list, queue_size= 1) 
+        real_keyword_list_msg = String_list()
+        real_keyword_list_msg = real_keyword_list
+        pub.publish(real_keyword_list_msg)
+        
+
+        # For extracting the keywords of the typical uterances
+        """openai.organization = os.environ.get("OPENAI_ORG_ID")
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
         model = "text-embedding-ada-002"
@@ -54,6 +83,10 @@ def callback(msg):
         else:
              keyword_list = list_of_lists[0]
         
+        pub = rospy.Publisher('/ai4hri/keywords', String_list, queue_size= 1) 
+        keyword_list_msg = String_list()
+        keyword_list_msg = keyword_list
+        pub.publish(keyword_list_msg)"""
         
 
 
