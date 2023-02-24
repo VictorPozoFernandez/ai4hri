@@ -8,6 +8,7 @@ from ai4hri.msg import String_list
 from keybert import KeyBERT
 import mysql.connector
 import os
+from sklearn.metrics.pairwise import cosine_similarity
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 global list_of_lists
@@ -68,7 +69,6 @@ def similarity_callback(msg):
     utterance_dict = np.load('/home/victor/catkin_ws/src/ai4hri/scripts/utterance_dict.npy',allow_pickle='TRUE').item()
     kmeans = np.load('/home/victor/catkin_ws/src/ai4hri/scripts/kmeans_model.npy',allow_pickle='TRUE').item()
     y = kmeans.predict(arr)
-    print("Typical utterance: " + str(utterance_dict[y[0]]))
 
     db = mysql.connector.connect(
     host="localhost",
@@ -85,8 +85,35 @@ def similarity_callback(msg):
         utterances_to_compare.append(row[0])
 
     utterances_to_compare.insert(0,utterance_dict[y[0]])
-    print(utterances_to_compare)
-    
+
+    res = openai.Embedding.create( input = utterances_to_compare, engine=model)
+
+    embedded_columns=[]
+    for vec in res["data"]:
+        embedded_columns.append(vec["embedding"])
+
+    utterance = embedded_columns[0]
+    embedded_columns.pop(0)
+    utterances_to_compare.pop(0)
+
+    scores = []
+    for i, column_candidate in enumerate(embedded_columns):
+        score = cosine_similarity([utterance],[column_candidate])
+        scores.append(score)
+
+    selected_columns = []
+    best_scores = sorted(zip(scores, utterances_to_compare), reverse=True)[:3]
+
+    for score in best_scores:
+        selected_column= score[1].replace(" ", "_")
+        selected_columns.append(selected_column)
+
+    print("Topics: " + str(selected_columns))
+
+    pub = rospy.Publisher('/ai4hri/topics', String_list, queue_size= 1) 
+    topic_list_msg = String_list()
+    topic_list_msg = selected_columns
+    pub.publish(topic_list_msg)
 
 if __name__ == '__main__':
 
