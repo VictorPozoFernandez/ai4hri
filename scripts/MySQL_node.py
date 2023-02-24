@@ -19,7 +19,8 @@ def main():
 
     rospy.init_node("MySQL", anonymous=True)
     rospy.loginfo("Node MySQL initialized. Listening...")
-    rospy.Subscriber("/ai4hri/real_keywords", String_list, callback)
+    rospy.Subscriber("/ai4hri/keywords", String_list, callback)
+
 
     rospy.spin()
 
