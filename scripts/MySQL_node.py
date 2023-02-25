@@ -16,6 +16,7 @@ db = mysql.connector.connect(
 mycursor = db.cursor()
 mycursor2 = db.cursor(buffered=True)
 mycursor3 = db.cursor(buffered=True)
+mycursor4 = db.cursor(buffered=True)
 
 
 def main():
@@ -89,8 +90,12 @@ def search_callback(msg):
             
             for row2 in mycursor3:
                 print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
-            
-
+                
+                mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
+                #mycursor4.execute("SELECT Price FROM Camera WHERE Camera.Product_ID = %s", (camera_reference[0],))
+                #mycursor4.execute("SELECT Price FROM Camera WHERE Camera.Product_ID = 3;")
+                for finding in mycursor4:
+                    print(finding)
 
 if __name__ == '__main__':
 
