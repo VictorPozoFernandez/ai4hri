@@ -17,6 +17,7 @@ mycursor = db.cursor()
 mycursor2 = db.cursor(buffered=True)
 mycursor3 = db.cursor(buffered=True)
 
+
 def main():
 
     rospy.init_node("MySQL", anonymous=True)
@@ -29,20 +30,25 @@ def main():
 
 def callback(msg):
 
-    mycursor.execute("SELECT Model FROM Camera")
+    global keywords
+    global camera_reference
+
+    mycursor.execute("SELECT Product_ID,Model FROM Camera")
 
     models = []
     for row in mycursor:
-        models.append(row[0])
+        models.append(row)
 
     possible_models = []
     possible_models_2 = []    
     
+    keywords = msg.data
+
     for keyword in msg.data:
 
         for row in models:
 
-            if keyword in row.lower():
+            if keyword in row[1].lower():
                 possible_models.append(row)
 
     if len(possible_models)!=0:
@@ -55,24 +61,24 @@ def callback(msg):
                 possible_models_2.append(value)
         
         if len(possible_models_2) == 1:
-            model = possible_models_2[0] 
+            camera_reference = possible_models_2[0] 
         
         else:
             #Look the costumer and shopkeeper position to identify the camera they are refering to. For now, we choose random from the possible_models_2 list
-            model = random.choice(possible_models_2)
+            camera_reference = random.choice(possible_models_2)
 
 
     else:
         #Look the costumer and shopkeeper position to identify the camera they are refering to. For now, we choose random from the models list
-        model = random.choice(models)
+        camera_reference = random.choice(models)
 
-    # if model =! camera closest to costumer and shopkeeper position:
-            #model2 = (Look the costumer and shopkeeper position to identify the camera they are using as comparison)
-
-    print("Camera of reference: " + str(model))
-    #print(model2)
+    # if camera_reference =! camera closest to costumer and shopkeeper position:
+            #camera_reference_2 = (Look the costumer and shopkeeper position to identify the camera they are using as comparison)
 
 def search_callback(msg):
+
+    print("Camera of reference: " + camera_reference[1]) #See if there is a problem with paralel·l execution of ros nodes. If there is, execute nodes in a streamline way (see notes photo)
+    print(keywords)
     
     mycursor2.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = 'Camera_Store';")
     
@@ -82,7 +88,7 @@ def search_callback(msg):
             mycursor3.execute("SELECT table_name FROM information_schema.columns WHERE column_name = %s",search_row)
             
             for row2 in mycursor3:
-                print("Table to search: " + str(row2[0]))
+                print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
             
 
 
