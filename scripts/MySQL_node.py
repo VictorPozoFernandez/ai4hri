@@ -14,12 +14,15 @@ db = mysql.connector.connect(
   database="Camera_Store"
 )
 mycursor = db.cursor()
+mycursor2 = db.cursor(buffered=True)
+mycursor3 = db.cursor(buffered=True)
 
 def main():
 
     rospy.init_node("MySQL", anonymous=True)
     rospy.loginfo("Node MySQL initialized. Listening...")
     rospy.Subscriber("/ai4hri/keywords", String_list, callback)
+    rospy.Subscriber("/ai4hri/topics", String_list, search_callback)
 
 
     rospy.spin()
@@ -66,12 +69,22 @@ def callback(msg):
     # if model =! camera closest to costumer and shopkeeper position:
             #model2 = (Look the costumer and shopkeeper position to identify the camera they are using as comparison)
 
-    print(model)
+    print("Camera of reference: " + str(model))
     #print(model2)
 
+def search_callback(msg):
+    
+    mycursor2.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = 'Camera_Store';")
+    
+    for search_row in mycursor2:
 
+        if search_row[0] in msg.data:
+            mycursor3.execute("SELECT table_name FROM information_schema.columns WHERE column_name = %s",search_row)
+            
+            for row2 in mycursor3:
+                print("Table to search: " + str(row2[0]))
+            
 
-         
 
 if __name__ == '__main__':
 

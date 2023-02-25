@@ -20,7 +20,7 @@ def main():
     rospy.init_node("Ada", anonymous=True)
     rospy.loginfo("Node Ada initialized. Listening...")
     rospy.Subscriber("/ai4hri/utterance", String, keyword_callback)
-    rospy.Subscriber("/ai4hri/utterance", String, similarity_callback)
+    rospy.Subscriber("/ai4hri/utterance", String, topic_callback)
 
 
     rospy.spin()
@@ -51,7 +51,7 @@ def keyword_callback(msg):
         pub.publish(keyword_list_msg)
         
 
-def similarity_callback(msg):
+def topic_callback(msg):
      
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
