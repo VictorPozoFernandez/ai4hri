@@ -6,6 +6,9 @@ import numpy as np
 import mysql.connector
 from collections import Counter
 import random
+from keybert import KeyBERT
+
+kw_model = KeyBERT(model='all-mpnet-base-v2')
 
 db = mysql.connector.connect(
   host="localhost",
@@ -79,7 +82,6 @@ def callback(msg):
 def search_callback(msg):
 
     print("Camera of reference: " + camera_reference[1]) #See if there is a problem with paralel·l execution of ros nodes. If there is, execute nodes in a streamline way (see notes photo)
-    print(keywords)
     
     mycursor2.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = 'Camera_Store';")
     
@@ -89,13 +91,39 @@ def search_callback(msg):
             mycursor3.execute("SELECT table_name FROM information_schema.columns WHERE column_name = %s",search_row)
             
             for row2 in mycursor3:
+
                 print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
-                
                 mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
-                #mycursor4.execute("SELECT Price FROM Camera WHERE Camera.Product_ID = %s", (camera_reference[0],))
-                #mycursor4.execute("SELECT Price FROM Camera WHERE Camera.Product_ID = 3;")
+
                 for finding in mycursor4:
-                    print(finding)
+
+                    if isinstance(finding[0], float) or isinstance(finding[0], int):
+                        
+                        if str(int(finding[0])) in keywords:
+                            print(str(finding[0]) + " found!")
+                    
+                    else:
+
+                        count = 0
+                        digit_condition = False
+                        finding_keywords = kw_model.extract_keywords(finding[0], keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
+
+                        for keyword in keywords:
+
+                            if keyword.isdigit():
+                                digit_condition = True
+
+                                if keyword.lower() in finding[0].lower():
+                                    digit_condition = False
+                                    count +=1
+
+                            elif keyword.lower() in finding[0].lower():
+                                count +=1
+
+                        if (digit_condition == False) and ((count/len(finding_keywords))>0.60):
+                            print(finding[0] + " found!")
+                    
+
 
 if __name__ == '__main__':
 
