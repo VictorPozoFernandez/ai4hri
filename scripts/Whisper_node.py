@@ -12,7 +12,6 @@ import numpy as np
 def main():
 
     rospy.init_node("whisper", anonymous=True)
-    rospy.loginfo("Node whisper initialized. Listening...")
 
     pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1) 
 
@@ -39,6 +38,7 @@ def main():
         utterance = String()
         utterance = result_queue.get() 
         if len(utterance) > 15:
+            print("---------------------") 
             print(utterance)
             pub.publish(utterance)
         rate.sleep()
@@ -53,7 +53,7 @@ def record_audio(audio_queue, energy, pause, rate):
     r.pause_threshold = pause
 
     with sr.Microphone(sample_rate=16000,  device_index=13) as source:
-        print("Recording...")
+        rospy.loginfo("Node whisper initialized. Listening...")
         
         while not rospy.is_shutdown():
             audio = r.listen(source)

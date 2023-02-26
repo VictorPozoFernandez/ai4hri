@@ -27,6 +27,7 @@ def main():
 
 def keyword_callback(msg):
         
+        print("---------------------")  
         kw_model = KeyBERT(model='all-mpnet-base-v2')
         keywords = kw_model.extract_keywords(msg.data, keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
 

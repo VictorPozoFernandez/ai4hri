@@ -81,6 +81,7 @@ def callback(msg):
 
 def search_callback(msg):
 
+    print("---------------------")  
     print("Camera of reference: " + camera_reference[1]) #See if there is a problem with paralel·l execution of ros nodes. If there is, execute nodes in a streamline way (see notes photo)
     
     mycursor2.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = 'Camera_Store';")
@@ -92,7 +93,7 @@ def search_callback(msg):
             
             for row2 in mycursor3:
 
-                print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
+                #print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
                 mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
 
                 for finding in mycursor4:
@@ -100,7 +101,7 @@ def search_callback(msg):
                     if isinstance(finding[0], float) or isinstance(finding[0], int):
                         
                         if str(int(finding[0])) in keywords:
-                            print(str(finding[0]) + " found!")
+                            print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + "property")
                     
                     else:
 
@@ -121,8 +122,9 @@ def search_callback(msg):
                                 count +=1
 
                         if (digit_condition == False) and ((count/len(finding_keywords))>0.60):
-                            print(finding[0] + " found!")
-                    
+                            print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + finding[0] + " as " + str(search_row[0]) + " property")
+    
+                         
 
 
 if __name__ == '__main__':
