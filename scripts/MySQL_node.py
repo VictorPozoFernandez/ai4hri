@@ -7,6 +7,7 @@ import mysql.connector
 from collections import Counter
 import random
 from keybert import KeyBERT
+import re
 
 kw_model = KeyBERT(model='all-mpnet-base-v2')
 
@@ -84,7 +85,11 @@ def search_callback(msg):
     print("---------------------")  
     print("Camera of reference: " + camera_reference[1]) #See if there is a problem with paralel·l execution of ros nodes. If there is, execute nodes in a streamline way (see notes photo)
     
-    mycursor2.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = 'Camera_Store';")
+    last_utterance = msg.data[0]
+    last_utterance = last_utterance.split()
+    msg.data.pop(0)
+
+    mycursor2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
     
     for search_row in mycursor2:
 
@@ -93,36 +98,64 @@ def search_callback(msg):
             
             for row2 in mycursor3:
 
-                #print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
-                mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
+                if row2[0] == 'replication_asynchronous_connection_failover':
+                    pass
+                
+                else:
 
-                for finding in mycursor4:
+                    #print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
+                    mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
 
-                    if isinstance(finding[0], float) or isinstance(finding[0], int):
+                    for finding in mycursor4:
+
+                        if isinstance(finding[0], float) or isinstance(finding[0], int):
+                            
+                            if str(int(finding[0])) in keywords:
+                                print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + "property")
                         
-                        if str(int(finding[0])) in keywords:
-                            print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + "property")
-                    
-                    else:
+                        else:
 
-                        count = 0
-                        digit_condition = False
-                        finding_keywords = kw_model.extract_keywords(finding[0], keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
+                            finding_keywords = kw_model.extract_keywords(finding[0], keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
+                            count = 0
+                            digit_condition = False
+                            digit_already_met = False
+                            for keyword in keywords:
 
-                        for keyword in keywords:
+                                if keyword.isdigit():
+                                    digit_condition = True
+                                    pos = last_utterance.index(keyword)
 
-                            if keyword.isdigit():
-                                digit_condition = True
+                                    bag_of_words = []
+                                    try:
+                                        bag_of_words = last_utterance[pos-1] + " " + last_utterance[pos] + " " + last_utterance[pos+1]
+                                    except:
+                                        pass
+                                    
+                                    if bag_of_words == []:   
+                                        try:
+                                            bag_of_words = last_utterance[pos-1] + " " + last_utterance[pos]
+                                        except:
+                                            pass
+                                    
+                                    if bag_of_words == []:   
+                                        try:
+                                            bag_of_words = last_utterance[pos] + " " + last_utterance[pos+1]
+                                        except:
+                                            bag_of_words = last_utterance[pos] 
+                                    print(bag_of_words)
 
-                                if keyword.lower() in finding[0].lower():
-                                    digit_condition = False
+
+                                    if keyword.lower() in finding[0].lower():
+                                        digit_condition = False
+                                        digit_already_met=True
+                                        count +=1
+
+                                elif keyword.lower() in finding[0].lower():
                                     count +=1
-
-                            elif keyword.lower() in finding[0].lower():
-                                count +=1
-
-                        if (digit_condition == False) and ((count/len(finding_keywords))>0.60):
-                            print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + finding[0] + " as " + str(search_row[0]) + " property")
+                                
+                                #En caso de detectar isdigit, ver cual de las otras keywords está más cerca. Hacer cosine_similarity con el finding[0] y ver si tiene el valor maximo. Si no, no contabilizarlo
+                                if ((digit_condition == False) or (digit_already_met == True)) and ((count/len(finding_keywords))>0.60): 
+                                    print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + finding[0] + " as " + str(search_row[0]) + " property")
     
                          
 

@@ -79,7 +79,8 @@ def topic_callback(msg):
     )
 
     mycursor = db.cursor()
-    mycursor.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'Camera_Store';")
+    mycursor.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
+    
 
     utterances_to_compare = []
     for row in mycursor:
@@ -110,11 +111,14 @@ def topic_callback(msg):
         selected_columns.append(selected_column)
 
     print("Topics: " + str(selected_columns))
+    selected_columns.insert(0,str(msg.data))
 
     pub = rospy.Publisher('/ai4hri/topics', String_list, queue_size= 1) 
     topic_list_msg = String_list()
     topic_list_msg = selected_columns
     pub.publish(topic_list_msg)
+
+    
 
 if __name__ == '__main__':
 
