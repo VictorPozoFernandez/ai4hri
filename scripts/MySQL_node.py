@@ -8,6 +8,12 @@ from collections import Counter
 import random
 from keybert import KeyBERT
 import re
+import openai
+from sklearn.metrics.pairwise import cosine_similarity
+
+openai.organization = os.environ.get("OPENAI_ORG_ID")
+openai.api_key = os.environ.get("OPENAI_API_KEY")
+model = "text-embedding-ada-002"
 
 kw_model = KeyBERT(model='all-mpnet-base-v2')
 
@@ -47,9 +53,12 @@ def callback(msg):
     possible_models = []
     possible_models_2 = []    
     
-    keywords = msg.data
+    keywords = []
 
     for keyword in msg.data:
+
+        if keyword not in keywords:
+            keywords.append(keyword)
 
         for row in models:
 
@@ -108,54 +117,72 @@ def search_callback(msg):
 
                     for finding in mycursor4:
 
-                        if isinstance(finding[0], float) or isinstance(finding[0], int):
+                        finding_keywords = kw_model.extract_keywords(str(finding[0]), keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
+                        count = 0
+                        digit_condition = False
+                        candidates_digit = []
+                        candidates_bag = []
+
+                        for keyword in keywords:
+
+                            if keyword.isdigit():
                             
-                            if str(int(finding[0])) in keywords:
-                                print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + "property")
-                        
-                        else:
-
-                            finding_keywords = kw_model.extract_keywords(finding[0], keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
-                            count = 0
-                            digit_condition = False
-                            digit_already_met = False
-                            for keyword in keywords:
-
-                                if keyword.isdigit():
-                                    digit_condition = True
+                                try:   
                                     pos = last_utterance.index(keyword)
-
                                     bag_of_words = []
                                     try:
-                                        bag_of_words = last_utterance[pos-1] + " " + last_utterance[pos] + " " + last_utterance[pos+1]
+                                        bag_of_words = last_utterance[pos-1] + " " + last_utterance[pos+1]
                                     except:
-                                        pass
-                                    
-                                    if bag_of_words == []:   
                                         try:
-                                            bag_of_words = last_utterance[pos-1] + " " + last_utterance[pos]
+                                            bag_of_words = last_utterance[pos+1]
                                         except:
-                                            pass
+                                            try:
+                                               bag_of_words = last_utterance[pos-1]
+                                            except:
+                                                bag_of_words = last_utterance[pos]
+
+                                    candidates_digit.append(keyword)
+                                    candidates_bag.append(bag_of_words)
                                     
-                                    if bag_of_words == []:   
-                                        try:
-                                            bag_of_words = last_utterance[pos] + " " + last_utterance[pos+1]
-                                        except:
-                                            bag_of_words = last_utterance[pos] 
-                                    print(bag_of_words)
 
-
-                                    if keyword.lower() in finding[0].lower():
-                                        digit_condition = False
-                                        digit_already_met=True
+                                    if keyword.lower() in str(finding[0]).lower(): 
                                         count +=1
-
-                                elif keyword.lower() in finding[0].lower():
-                                    count +=1
+                                        selected_digit = keyword   
+                                        digit_condition = True   
+                                            
                                 
-                                #En caso de detectar isdigit, ver cual de las otras keywords está más cerca. Hacer cosine_similarity con el finding[0] y ver si tiene el valor maximo. Si no, no contabilizarlo
-                                if ((digit_condition == False) or (digit_already_met == True)) and ((count/len(finding_keywords))>0.60): 
-                                    print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + finding[0] + " as " + str(search_row[0]) + " property")
+                                except:
+                                    pass
+                                
+                            else:
+
+                                if keyword.lower() in str(finding[0]).lower(): 
+                                    count +=1
+
+                        if digit_condition == True:
+                            candidates_bag.insert(0,str(finding[0]))
+
+                            res = openai.Embedding.create( input = candidates_bag, engine=model)
+
+                            candidates_embedded = []
+                            scores = []
+                            for vec in res["data"]:
+                                candidates_embedded.append(vec["embedding"])
+                            finding_embedded = candidates_embedded[0]
+                            candidates_embedded.pop(0)
+                            candidates_bag.pop(0)
+
+                            for candidate_embedded in candidates_embedded:
+                                score = cosine_similarity([finding_embedded],[candidate_embedded])
+                                scores.append(score)
+                            
+                            best_score = sorted(zip(scores, candidates_digit), reverse=True)[:1]
+
+                            if best_score[0][1] == selected_digit:
+                                digit_condition = False
+                        
+                        if (digit_condition == False) and ((count/len(finding_keywords))>0.60): 
+                            print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
     
                          
 
