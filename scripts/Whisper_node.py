@@ -40,7 +40,8 @@ def main():
         if len(utterance) > 15:
             print("---------------------") 
             print(utterance)
-            pub.publish(utterance)
+            modified_utterance = utterance.replace(",", "")
+            pub.publish(modified_utterance)
         rate.sleep()
     
     
