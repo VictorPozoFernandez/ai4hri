@@ -175,8 +175,9 @@ def search_callback(msg):
                             for candidate_embedded in candidates_embedded:
                                 score = cosine_similarity([finding_embedded],[candidate_embedded])
                                 scores.append(score)
-                            
+
                             best_score = sorted(zip(scores, candidates_digit), reverse=True)[:1]
+                            
 
                             if best_score[0][1] == selected_digit:
                                 digit_condition = False
