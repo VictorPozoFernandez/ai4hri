@@ -1,0 +1,21 @@
+<launch>
+
+  <!-- Arguments -->
+
+  <arg name="DEBUG" default="False" />
+
+  <!-- Nodes -->
+
+  <node name="whisper" pkg="ai4hri" type="Whisper_node.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>
+
+  <node name="Ada" pkg="ai4hri" type="Ada_node.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>
+
+  <node name="MySQL" pkg="ai4hri" type="MySQL_node.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>
+
+</launch>

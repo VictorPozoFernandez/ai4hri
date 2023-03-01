@@ -10,6 +10,7 @@ import mysql.connector
 import os
 from sklearn.metrics.pairwise import cosine_similarity
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
+DEBUG = rospy.get_param('/whisper/DEBUG')
 
 global list_of_lists
 list_of_lists=[]
@@ -27,8 +28,10 @@ def main():
 
 def keyword_callback(msg):
         
-        print("---------------------")  
+        print("")
+        print("--------------------------------------------------------------")  
         kw_model = KeyBERT(model='all-mpnet-base-v2')
+        print("Detected utterance: " + msg.data)
         keywords = kw_model.extract_keywords(msg.data, keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
 
         keyword_list =[]
@@ -39,7 +42,8 @@ def keyword_callback(msg):
              list_of_lists.pop(0)
         list_of_lists.append(keyword_list)
 
-        print("Keywords: " + str(list_of_lists))
+        if DEBUG == True:
+            print("Keywords: " + str(list_of_lists))
 
         if len(list_of_lists) > 1:
             keyword_list = list_of_lists[0] + list_of_lists[1]
@@ -110,7 +114,9 @@ def topic_callback(msg):
         selected_column= score[1].replace(" ", "_")
         selected_columns.append(selected_column)
 
-    print("Topics: " + str(selected_columns))
+    if DEBUG == True:
+        print("Topics: " + str(selected_columns))
+    
     selected_columns.insert(0,str(msg.data))
 
     pub = rospy.Publisher('/ai4hri/topics', String_list, queue_size= 1) 

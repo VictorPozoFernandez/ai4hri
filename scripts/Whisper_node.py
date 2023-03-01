@@ -7,7 +7,7 @@ import threading
 import torch
 import numpy as np
 
-
+DEBUG = rospy.get_param('/whisper/DEBUG')
 
 def main():
 
@@ -38,8 +38,6 @@ def main():
         utterance = String()
         utterance = result_queue.get() 
         if len(utterance) > 15:
-            print("---------------------") 
-            print(utterance)
             modified_utterance = utterance.replace(",", "")
             pub.publish(modified_utterance)
         rate.sleep()

@@ -10,6 +10,7 @@ from keybert import KeyBERT
 import re
 import openai
 from sklearn.metrics.pairwise import cosine_similarity
+DEBUG = rospy.get_param('/whisper/DEBUG')
 
 openai.organization = os.environ.get("OPENAI_ORG_ID")
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -91,9 +92,10 @@ def callback(msg):
 
 def search_callback(msg):
 
-    print("---------------------")  
-    print("Camera of reference: " + camera_reference[1]) #See if there is a problem with paralel·l execution of ros nodes. If there is, execute nodes in a streamline way (see notes photo)
-    
+    if DEBUG == True: 
+        print("Camera of reference: " + camera_reference[1]) #See if there is a problem with paralel·l execution of ros nodes. If there is, execute nodes in a streamline way (see notes photo)
+        print(" ")
+        
     last_utterance = msg.data[0]
     last_utterance = last_utterance.split()
     msg.data.pop(0)
@@ -112,7 +114,9 @@ def search_callback(msg):
                 
                 else:
 
-                    #print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
+                    if DEBUG == True: 
+                        print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
+
                     mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
 
                     for finding in mycursor4:
@@ -183,7 +187,7 @@ def search_callback(msg):
                                 digit_condition = False
                         
                         if (digit_condition == False) and ((count/len(finding_keywords))>0.60): 
-                            print("The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
+                            print("      - The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
     
                          
 
