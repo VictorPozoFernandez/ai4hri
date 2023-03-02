@@ -101,7 +101,8 @@ def search_callback(msg):
     msg.data.pop(0)
 
     mycursor2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
-    
+    print(keywords)
+
     for search_row in mycursor2:
 
         if search_row[0] in msg.data:
@@ -124,69 +125,21 @@ def search_callback(msg):
                         finding_keywords = kw_model.extract_keywords(str(finding[0]), keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
                         count = 0
                         digit_condition = False
-                        candidates_digit = []
-                        candidates_bag = []
+                        condition_already_met = False
 
                         for keyword in keywords:
 
                             if keyword.isdigit():
-                            
-                                try:   
-                                    pos = last_utterance.index(keyword)
-                                    bag_of_words = []
-                                    try:
-                                        bag_of_words = last_utterance[pos-1] + " " + last_utterance[pos+1]
-                                    except:
-                                        try:
-                                            bag_of_words = last_utterance[pos+1]
-                                        except:
-                                            try:
-                                               bag_of_words = last_utterance[pos-1]
-                                            except:
-                                                bag_of_words = last_utterance[pos]
-
-                                    candidates_digit.append(keyword)
-                                    candidates_bag.append(bag_of_words)
-                                    
-
-                                    if keyword.lower() in str(finding[0]).lower(): 
-                                        count +=1
-                                        selected_digit = keyword   
-                                        digit_condition = True   
-                                            
+                                digit_condition = True  
                                 
-                                except:
-                                    pass
-                                
-                            else:
+                                if keyword.lower() in str(finding[0]).lower():   
+                                    digit_condition = False 
+                                    condition_already_met = True  
 
-                                if keyword.lower() in str(finding[0]).lower(): 
-                                    count +=1
-
-                        if digit_condition == True:
-                            candidates_bag.insert(0,str(finding[0]))
-
-                            res = openai.Embedding.create( input = candidates_bag, engine=model)
-
-                            candidates_embedded = []
-                            scores = []
-                            for vec in res["data"]:
-                                candidates_embedded.append(vec["embedding"])
-                            finding_embedded = candidates_embedded[0]
-                            candidates_embedded.pop(0)
-                            candidates_bag.pop(0)
-
-                            for candidate_embedded in candidates_embedded:
-                                score = cosine_similarity([finding_embedded],[candidate_embedded])
-                                scores.append(score)
-
-                            best_score = sorted(zip(scores, candidates_digit), reverse=True)[:1]
-                            
-
-                            if best_score[0][1] == selected_digit:
-                                digit_condition = False
+                            if keyword.lower() in str(finding[0]).lower(): 
+                                count +=1
                         
-                        if (digit_condition == False) and ((count/len(finding_keywords))>0.60): 
+                        if ((digit_condition == False) or (condition_already_met==True)) and ((count/len(finding_keywords))>0.60):
                             print("      - The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
     
                          

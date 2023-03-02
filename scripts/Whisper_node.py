@@ -37,7 +37,7 @@ def main():
 
         utterance = String()
         utterance = result_queue.get() 
-        if len(utterance) > 10:
+        if len(utterance) > 15:
             modified_utterance = utterance.replace(",", "")
             pub.publish(modified_utterance)
         rate.sleep()
@@ -52,10 +52,11 @@ def record_audio(audio_queue, energy, pause, rate):
     r.pause_threshold = pause
 
     with sr.Microphone(sample_rate=16000,  device_index=13) as source:
-        rospy.loginfo("Node whisper initialized. Listening...")
-        
+
         for x in range(30):
             print("")
+
+        rospy.loginfo("Node whisper initialized. Listening...")
 
         while not rospy.is_shutdown():
             audio = r.listen(source)
