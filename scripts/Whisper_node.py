@@ -37,7 +37,7 @@ def main():
 
         utterance = String()
         utterance = result_queue.get() 
-        if len(utterance) > 15:
+        if len(utterance) > 10:
             modified_utterance = utterance.replace(",", "")
             pub.publish(modified_utterance)
         rate.sleep()
@@ -54,6 +54,9 @@ def record_audio(audio_queue, energy, pause, rate):
     with sr.Microphone(sample_rate=16000,  device_index=13) as source:
         rospy.loginfo("Node whisper initialized. Listening...")
         
+        for x in range(30):
+            print("")
+
         while not rospy.is_shutdown():
             audio = r.listen(source)
             audio_data = torch.from_numpy(np.frombuffer(audio.get_raw_data(), np.int16).flatten().astype(np.float32) / 32768.0)
