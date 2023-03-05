@@ -7,24 +7,21 @@ import os
 
 system_message = """Imagine you are helping me to identify the camera model that is being discussed between a camera shopkeeper and a customer. You are required to output the following answers:
 
-- Camera model: All possible camera models that fit bests with the context of the conversation and previous conversations. 
-- Reason: After you output the Camera model answer, you should explain why you did what you did. 
+- Camera model: All possible camera models that fit best in the context of the current and previous conversations. 
 
 You have the following camera models to choose from. You are not to use any other hypothetical camera models:
 
 - Nikon Coolpix S2800
 - Sony Alpha a6000
-- Sony Alpha a5000
-- Sony DSC-RX100
 - Canon EOS 5D Mark III
 
 Here is an example scenario that illustrates how can you output your answer.:
 
-Customer: <Customer sentence> Shopkeeper: <Shopkeeper sentence>
-You: Camera Model - <chosen camera model>
-You: Reason - <explanation>
+(SCENARIO 1) Customer: <Customer sentence> Shopkeeper: <Shopkeeper sentence>
+You: (SCENARIO 1) Camera Model - <all possible camera models> 
 
-Remember to use the previous conversations to have more context of the camera model that is being discussed.
+The scenarios appear in cronological order. Remember to use the previous scenarios to have more context about the camera model that is being discussed at each moment. 
+In case of uncertainty about the camera model that is being discussed, output all the possible camera models instead.
 
 """
 
@@ -55,7 +52,7 @@ def callback(msg):
     )
 
     print(completion["choices"][0]["message"]["content"])
-    messages_history.append({"role": "assistant", "content": completion["choices"][0]["message"]["content"]})
+    #messages_history.append({"role": "assistant", "content": completion["choices"][0]["message"]["content"]})
     
 
 
