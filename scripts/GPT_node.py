@@ -38,8 +38,7 @@ def main():
 
     rospy.init_node("GPT", anonymous=True)
     rospy.loginfo("Node GPT initialized. Listening...")
-    rospy.Subscriber("/ai4hri/utterance", String, callback)
-    rospy.Subscriber("/ai4hri/utterance_simulator", String_list, callback_simulator)
+    rospy.Subscriber("/ai4hri/utterance_simulator", String_list, callback)
 
     rospy.spin()
 
@@ -47,7 +46,7 @@ def callback(msg):
         
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
-    messages_history.append({"role": "user", "content": msg.data})
+    messages_history.append({"role": "user", "content": "CUSTOMER: " + msg.data[0] + ". SHOPKEEPER: " + msg.data[1] + "."})
 
 
     completion = openai.ChatCompletion.create(
@@ -57,40 +56,13 @@ def callback(msg):
     )
 
     print("--------------------------------------------")
-    print(msg.data)
+    print("CUSTOMER: " + msg.data[0] + ". SHOPKEEPER: " + msg.data[1] + ".")
     print(completion["choices"][0]["message"]["content"])
 
     pub = rospy.Publisher('/ai4hri/detected_models', String, queue_size= 1) 
     detected_models= String()
     detected_models = completion["choices"][0]["message"]["content"]
     pub.publish(detected_models)
-
-def callback_simulator(msg):
-        
-    openai.organization = os.environ.get("OPENAI_ORG_ID")
-    openai.api_key = os.environ.get("OPENAI_API_KEY")
-
-    print(msg.data)
-
-
-    '''messages_history.append({"role": "user", "content": msg.data})
-
-
-    completion = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo", 
-    messages=messages_history,
-    temperature=0.0
-    )
-
-    print("--------------------------------------------")
-    print(msg.data)
-    print(completion["choices"][0]["message"]["content"])
-
-    pub = rospy.Publisher('/ai4hri/detected_models', String, queue_size= 1) 
-    detected_models= String()
-    detected_models = completion["choices"][0]["message"]["content"]
-    pub.publish(detected_models)'''
-
 
 
 if __name__ == '__main__':
