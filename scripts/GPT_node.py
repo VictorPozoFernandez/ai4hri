@@ -20,13 +20,10 @@ Here is an example conversation that illustrates how can you output your answer.
 
 CUSTOMER: <Customer sentence> SHOPKEEPER: <Shopkeeper sentence>
 CUSTOMER: <Customer sentence> SHOPKEEPER: <Shopkeeper sentence>
-You: CAMERA MODEL - <all possible models of the cameras> 
+You: CAMERA MODEL - <all possible camera models> 
 
-Output only the possible models of the cameras that are being discussed in the last interaction. Remember to use the previous interactions to have more context about the camera model that is being discussed right now.
+Output only the possible camera models that are being discussed in the last interaction. Remember to use the previous interactions to have more context about the camera model that is being discussed right now.
 In case of uncertainty about the camera model that is being discussed, output all the possible camera models instead.
-
-
-
 """
 
 messages_history=[
@@ -46,7 +43,7 @@ def callback(msg):
         
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
-    messages_history.append({"role": "user", "content": "CUSTOMER: " + msg.data[0] + ". SHOPKEEPER: " + msg.data[1] + "."})
+    messages_history.append({"role": "user", "content": "CUSTOMER: " + msg.data[0] + " SHOPKEEPER: " + msg.data[1]})
 
 
     completion = openai.ChatCompletion.create(
@@ -56,8 +53,10 @@ def callback(msg):
     )
 
     print("--------------------------------------------")
-    print("CUSTOMER: " + msg.data[0] + ". SHOPKEEPER: " + msg.data[1] + ".")
+    print("CUSTOMER: " + msg.data[0] + " SHOPKEEPER: " + msg.data[1])
+    
     print(completion["choices"][0]["message"]["content"])
+
 
     pub = rospy.Publisher('/ai4hri/detected_models', String, queue_size= 1) 
     detected_models= String()
