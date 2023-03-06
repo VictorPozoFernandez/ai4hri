@@ -1,5 +1,6 @@
 import rospy
 from std_msgs.msg import String
+from ai4hri.msg import String_list
 import openai
 import os
 
@@ -13,16 +14,15 @@ You have the following camera models to choose from. You are not to use any othe
 
 - Nikon Coolpix S2800
 - Sony Alpha a6000
-- Sony Alpha a5000
 - Canon EOS 5D Mark III
 
-Here is an example scenario that illustrates how can you output your answer. The scenarios appear in cronological order and toghether represent a full conversation between the camera shopkeeper and the costumer:
+Here is an example conversation that illustrates how can you output your answer. The interactions appear in cronological order and together they represent a full conversation between the camera shopkeeper and the costumer:
 
-Customer: <Customer sentence> Shopkeeper: <Shopkeeper sentence>
-Customer: <Customer sentence> Shopkeeper: <Shopkeeper sentence>
-You: Camera Model - <all possible camera models> 
+CUSTOMER: <Customer sentence> SHOPKEEPER: <Shopkeeper sentence>
+CUSTOMER: <Customer sentence> SHOPKEEPER: <Shopkeeper sentence>
+You: CAMERA MODEL - <all possible models of the cameras> 
 
-Remember to use the previous scenarios to have more context about the camera model that is being discussed at each moment. 
+Output only the possible models of the cameras that are being discussed in the last interaction. Remember to use the previous interactions to have more context about the camera model that is being discussed right now.
 In case of uncertainty about the camera model that is being discussed, output all the possible camera models instead.
 
 
@@ -39,6 +39,7 @@ def main():
     rospy.init_node("GPT", anonymous=True)
     rospy.loginfo("Node GPT initialized. Listening...")
     rospy.Subscriber("/ai4hri/utterance", String, callback)
+    rospy.Subscriber("/ai4hri/utterance_simulator", String_list, callback_simulator)
 
     rospy.spin()
 
@@ -56,13 +57,41 @@ def callback(msg):
     )
 
     print("--------------------------------------------")
+    print(msg.data)
     print(completion["choices"][0]["message"]["content"])
-    #messages_history.append({"role": "assistant", "content": completion["choices"][0]["message"]["content"]})
-    
 
+    pub = rospy.Publisher('/ai4hri/detected_models', String, queue_size= 1) 
+    detected_models= String()
+    detected_models = completion["choices"][0]["message"]["content"]
+    pub.publish(detected_models)
 
+def callback_simulator(msg):
         
-    
+    openai.organization = os.environ.get("OPENAI_ORG_ID")
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
+
+    print(msg.data)
+
+
+    '''messages_history.append({"role": "user", "content": msg.data})
+
+
+    completion = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo", 
+    messages=messages_history,
+    temperature=0.0
+    )
+
+    print("--------------------------------------------")
+    print(msg.data)
+    print(completion["choices"][0]["message"]["content"])
+
+    pub = rospy.Publisher('/ai4hri/detected_models', String, queue_size= 1) 
+    detected_models= String()
+    detected_models = completion["choices"][0]["message"]["content"]
+    pub.publish(detected_models)'''
+
+
 
 if __name__ == '__main__':
 
