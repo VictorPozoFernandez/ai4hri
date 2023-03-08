@@ -1,9 +1,13 @@
 import rospy
 from std_msgs.msg import String
 from ai4hri.msg import String_list
+from ai4hri.msg import String_list_list
 import openai
 import os
 import mysql.connector
+from keybert import KeyBERT
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 db = mysql.connector.connect(
   host="localhost",
@@ -85,11 +89,26 @@ def callback(msg):
         
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
+
+    detected_model_list = cameras_of_interest(msg)
+    keywords = keyword_extraction(msg)
+    topic = topic_extraction(msg)
+
+    pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1) 
+
+    extracted_info= String_list()
+    extracted_info = detected_model_list + topic + keywords  
+    extracted_info.append(len(detected_model_list))
+    extracted_info.append(len(topic))
+
+    pub.publish(extracted_info)
+
+def cameras_of_interest(msg):
+
     messages_history.append({"role": "user", "content": "CUSTOMER: " + msg.data[0] + " SHOPKEEPER: " + msg.data[1]})
 
     if len(messages_history) > 4:
         messages_history.pop(1)
-
 
     completion = openai.ChatCompletion.create(
     model="gpt-3.5-turbo", 
@@ -107,11 +126,67 @@ def callback(msg):
 
         if Product[1] in completion["choices"][0]["message"]["content"]:
             detected_model_list.append(Product[1])
-            
-    pub = rospy.Publisher('/ai4hri/detected_models', String_list, queue_size= 1) 
-    detected_models= String_list()
-    detected_models = detected_model_list
-    pub.publish(detected_models)
+    
+    return detected_model_list
+
+def keyword_extraction(msg):
+
+    kw_model = KeyBERT(model='all-mpnet-base-v2')
+    keywords = kw_model.extract_keywords(msg.data[1], keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
+
+    keyword_list =[]
+    for keyword in keywords:
+            keyword_list.append(keyword[0])
+
+    print("Keywords: " + str(keyword_list))
+
+    return keyword_list
+
+def topic_extraction(msg):
+
+    db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password=os.environ.get("MYSQL_PASSWRD"),
+    database="Camera_Store"
+    )
+
+    mycursor = db.cursor()
+    mycursor.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
+
+    utterances_to_compare = []
+    for row in mycursor:
+        utterances_to_compare.append(row[0])
+
+    utterances_to_compare.insert(0, msg.data[1])
+
+    model = "text-embedding-ada-002"
+    res = openai.Embedding.create( input = utterances_to_compare, engine=model)
+
+    embedded_columns=[]
+    for vec in res["data"]:
+        embedded_columns.append(vec["embedding"])
+
+    utterance = embedded_columns[0]
+    embedded_columns.pop(0)
+    utterances_to_compare.pop(0)
+
+    scores = []
+    for i, column_candidate in enumerate(embedded_columns):
+        score = cosine_similarity([utterance],[column_candidate])
+        scores.append(score)
+
+    selected_columns = []
+    best_scores = sorted(zip(scores, utterances_to_compare), reverse=True)[:3]
+
+    for score in best_scores:
+        selected_column= score[1].replace(" ", "_")
+        selected_columns.append(selected_column)
+
+    #if DEBUG == True:
+    print("Topics: " + str(selected_columns))
+
+    return selected_columns
 
 
 if __name__ == '__main__':

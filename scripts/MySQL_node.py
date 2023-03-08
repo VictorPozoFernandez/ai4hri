@@ -1,6 +1,7 @@
 import rospy
 from std_msgs.msg import String
 from ai4hri.msg import String_list
+from ai4hri.msg import String_list_list
 import os
 import numpy as np
 import mysql.connector
@@ -35,7 +36,7 @@ def main():
     rospy.init_node("MySQL", anonymous=True)
     rospy.loginfo("Node MySQL initialized. Listening...")
     rospy.Subscriber("/ai4hri/keywords", String_list, callback)
-    rospy.Subscriber("/ai4hri/topics", String_list, search_callback)
+    rospy.Subscriber("/ai4hri/extracted_info", String_list, search_callback)
 
 
     rospy.spin()
