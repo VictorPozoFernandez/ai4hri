@@ -14,7 +14,7 @@ def main():
 
     rospy.init_node("whisper", anonymous=True)
 
-    pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 1) 
+    pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1) 
 
     model = "small.en"  # ["tiny.en","base.en", "small.en","medium.en","large"]   Use the "large" model for detecting different languages other than English. 
     energy = 300
@@ -36,22 +36,15 @@ def main():
 
     while not rospy.is_shutdown():
 
-        utterance_and_position = String_list()
-
-        try:
-            previous_utterance = utterance
-        except:
-            previous_utterance = ""
-
+        utterance = String()
         utterance = result_queue.get() 
-        if len(utterance) > 15:
+        
+        if len(utterance) > 12:
             utterance = utterance.replace(",", "")
             utterance = utterance.replace("'", "")
-
-            utterance_and_position = get_current_position(previous_utterance, utterance)
-            print(utterance_and_position)
-
-            pub.publish(utterance_and_position)
+            pub.publish(utterance)
+            print(utterance)
+        
         rate.sleep()
     
     
@@ -84,19 +77,6 @@ def transcribe_audio(audio_queue, result_queue, audio_model, rate):
         predicted_text = result["text"]
         result_queue.put_nowait(predicted_text)
         rate.sleep()
-
-def get_current_position(previous_utterance, utterance):
-
-    localization1 = "NULL"
-    localization2 = "NULL"
-
-    utterance_and_position = []
-    utterance_and_position.append(previous_utterance)
-    utterance_and_position.append(utterance)
-    utterance_and_position.append(localization1)
-    utterance_and_position.append(localization2)
-
-    return utterance_and_position
 
 
 if __name__ == '__main__':
