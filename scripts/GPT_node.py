@@ -15,10 +15,10 @@ mycursorGPT = db.cursor(buffered=True)
 mycursorGPT2 = db.cursor(buffered=True)
 mycursorGPT3 = db.cursor(buffered=True)
 
-close_product_IDs = [1,2,3]
+close_products = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] # or the products that satify certain condition (ex.camera, objectives, etc.) Possibility of create a ML classifier for label the product type of conversation.
 characteristics_product_IDs = []
 
-for Product_ID in close_product_IDs:
+for Product in close_products:
 
     characterstics_model = []
     mycursorGPT.execute("SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID'")
@@ -31,7 +31,7 @@ for Product_ID in close_product_IDs:
         
             if column_name[0] != 'Product_ID':
 
-                mycursorGPT3.execute("SELECT " + column_name[0]+ " FROM " + table_name[0] + " WHERE Product_ID = " + str(Product_ID))
+                mycursorGPT3.execute("SELECT " + column_name[0]+ " FROM " + table_name[0] + " WHERE Product_ID = " + str(Product[0]))
 
                 column = []
                 for characteristic in mycursorGPT3:
@@ -101,11 +101,16 @@ def callback(msg):
     print("CUSTOMER: " + msg.data[0] + " SHOPKEEPER: " + msg.data[1])
     
     print(completion["choices"][0]["message"]["content"])
+    
+    detected_model_list = []
+    for Product in close_products:
 
-
-    pub = rospy.Publisher('/ai4hri/detected_models', String, queue_size= 1) 
-    detected_models= String()
-    detected_models = completion["choices"][0]["message"]["content"]
+        if Product[1] in completion["choices"][0]["message"]["content"]:
+            detected_model_list.append(Product[1])
+            
+    pub = rospy.Publisher('/ai4hri/detected_models', String_list, queue_size= 1) 
+    detected_models= String_list()
+    detected_models = detected_model_list
     pub.publish(detected_models)
 
 
