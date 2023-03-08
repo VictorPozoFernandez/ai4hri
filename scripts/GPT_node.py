@@ -77,7 +77,7 @@ def main():
 
     rospy.init_node("GPT", anonymous=True)
     rospy.loginfo("Node GPT initialized. Listening...")
-    rospy.Subscriber("/ai4hri/utterance_simulator", String_list, callback)
+    rospy.Subscriber("/ai4hri/utterance_and_position", String_list, callback)
 
     rospy.spin()
 

@@ -11,7 +11,7 @@ def main():
 
     rospy.init_node("simulator", anonymous=True)
     rospy.loginfo("Node simulator initialized...")
-    pub = rospy.Publisher('/ai4hri/utterance_simulator', String_list, queue_size= 10) 
+    pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 10) 
     rate = rospy.Rate(1)
 
 
