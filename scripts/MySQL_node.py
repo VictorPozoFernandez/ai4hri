@@ -35,72 +35,21 @@ def main():
 
     rospy.init_node("MySQL", anonymous=True)
     rospy.loginfo("Node MySQL initialized. Listening...")
-    rospy.Subscriber("/ai4hri/keywords", String_list, callback)
     rospy.Subscriber("/ai4hri/extracted_info", String_list, search_callback)
-
 
     rospy.spin()
 
-def callback(msg):
-
-    global keywords
-    global camera_reference
-
-    mycursor.execute("SELECT Product_ID,Model FROM Camera")
-
-    models = []
-    for row in mycursor:
-        models.append(row)
-
-    possible_models = []
-    possible_models_2 = []    
-    
-    keywords = []
-
-    for keyword in msg.data:
-
-        if keyword not in keywords:
-            keywords.append(keyword)
-
-        for row in models:
-
-            if keyword in row[1].lower():
-                possible_models.append(row)
-
-    if len(possible_models)!=0:
-
-        counts = Counter(possible_models)
-        max_count = counts.most_common(1)[0][1]
-
-        for value, count in counts.most_common():
-            if count == max_count:
-                possible_models_2.append(value)
-        
-        if len(possible_models_2) == 1:
-            camera_reference = possible_models_2[0] 
-        
-        else:
-            #Look the costumer and shopkeeper position to identify the camera they are refering to. For now, we choose random from the possible_models_2 list
-            camera_reference = random.choice(possible_models_2)
-
-
-    else:
-        #Look the costumer and shopkeeper position to identify the camera they are refering to. For now, we choose random from the models list
-        camera_reference = random.choice(models)
-
-    # if camera_reference =! camera closest to costumer and shopkeeper position:
-            #camera_reference_2 = (Look the costumer and shopkeeper position to identify the camera they are using as comparison)
-
 def search_callback(msg):
 
-    num_cameras = msg.data[-2]
+    num_cameras = int(msg.data[-2])/2
     num_topics = msg.data[-1]
     msg.data.pop(-1)
     msg.data.pop(-1)
 
     cameras_interest = []
     for i in range(int(num_cameras)):
-        cameras_interest.append(msg.data[0])
+        cameras_interest.append((msg.data[0],msg.data[1]))
+        msg.data.pop(0)
         msg.data.pop(0)
 
     topics_interest = []
@@ -110,6 +59,7 @@ def search_callback(msg):
 
     keywords_interest = msg.data
 
+    print("---------------------------------------------")
     print("Cameras of interest: " + str(cameras_interest))
     print("Topics of interest: " + str(topics_interest))
     print("keywords of interest: " + str(keywords_interest))
@@ -129,11 +79,11 @@ def search_callback(msg):
                 else:
 
                     #if DEBUG == True: 
-                    print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
+                        #print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
 
                     for camera_reference in cameras_interest:
 
-                        mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference,))
+                        mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
 
                         for finding in mycursor4:
 
@@ -155,7 +105,8 @@ def search_callback(msg):
                                     count +=1
                             
                             if ((digit_condition == False) or (condition_already_met==True)) and ((count/len(finding_keywords))>0.60):
-                                print("      - The shopkeeper knows that the " + str(camera_reference) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
+                                print("")
+                                print("KNOWLEDGE DETECTION: The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
     
                          
 

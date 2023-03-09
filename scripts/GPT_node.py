@@ -62,6 +62,7 @@ def cameras_of_interest(msg):
 
         if Product[1] in completion["choices"][0]["message"]["content"]:
             detected_model_list.append(str(Product[0]))
+            detected_model_list.append(str(Product[1]))
     
     return detected_model_list
 
