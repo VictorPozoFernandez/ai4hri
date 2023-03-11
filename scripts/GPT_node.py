@@ -1,13 +1,10 @@
 import rospy
-from std_msgs.msg import String
 from ai4hri.msg import String_list
-from ai4hri.msg import String_list_list
 import openai
 import os
 import mysql.connector
 from keybert import KeyBERT
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
 
 DEBUG = rospy.get_param('/GPT/DEBUG')
 
@@ -22,6 +19,7 @@ def main():
     rospy.Subscriber("/ai4hri/utterance_and_position", String_list, callback)
 
     rospy.spin()
+
 
 def callback(msg):
         
@@ -41,6 +39,7 @@ def callback(msg):
 
     pub.publish(extracted_info)
 
+
 def cameras_of_interest(msg):
 
     messages_history.append({"role": "user", "content": "CUSTOMER: " + msg.data[0] + " SHOPKEEPER: " + msg.data[1]})
@@ -55,6 +54,7 @@ def cameras_of_interest(msg):
     )
 
     if DEBUG == True:
+        print("")
         print(completion["choices"][0]["message"]["content"])
     
     detected_model_list = []
@@ -66,6 +66,7 @@ def cameras_of_interest(msg):
     
     return detected_model_list
 
+
 def keyword_extraction(msg):
 
     kw_model = KeyBERT(model='all-mpnet-base-v2')
@@ -73,12 +74,14 @@ def keyword_extraction(msg):
 
     keyword_list =[]
     for keyword in keywords:
+            
             keyword_list.append(str(keyword[0]))
 
     if DEBUG == True:
         print("Keywords: " + str(keyword_list))
 
     return keyword_list
+
 
 def topic_extraction(msg):
 
@@ -94,6 +97,7 @@ def topic_extraction(msg):
 
     utterances_to_compare = []
     for row in mycursor:
+
         utterances_to_compare.append(row[0])
 
     utterances_to_compare.insert(0, msg.data[1])
@@ -103,6 +107,7 @@ def topic_extraction(msg):
 
     embedded_columns=[]
     for vec in res["data"]:
+
         embedded_columns.append(vec["embedding"])
 
     utterance = embedded_columns[0]
@@ -110,7 +115,8 @@ def topic_extraction(msg):
     utterances_to_compare.pop(0)
 
     scores = []
-    for i, column_candidate in enumerate(embedded_columns):
+    for _, column_candidate in enumerate(embedded_columns):
+
         score = cosine_similarity([utterance],[column_candidate])
         scores.append(score)
 
@@ -118,14 +124,15 @@ def topic_extraction(msg):
     best_scores = sorted(zip(scores, utterances_to_compare), reverse=True)[:3]
 
     for score in best_scores:
+
         selected_column= score[1].replace(" ", "_")
         selected_columns.append(selected_column)
 
     if DEBUG == True:
         print("Topics: " + str(selected_columns))
-        print("")
 
     return selected_columns
+
 
 def generating_system_instructions(products_of_interest):
 
@@ -161,20 +168,20 @@ def generating_system_instructions(products_of_interest):
 
     return system_message
 
+
 def extraction_characteristics_products(products_of_interest):
 
     db = mysql.connector.connect(
     host="localhost",
     user="root",
     password=os.environ.get("MYSQL_PASSWRD"),
-    database="Camera_Store"
-    )
+    database="Camera_Store")
+
     mycursorGPT = db.cursor(buffered=True)
     mycursorGPT2 = db.cursor(buffered=True)
     mycursorGPT3 = db.cursor(buffered=True)
 
     characteristics_product_IDs = []
-
     for Product in products_of_interest:
 
         characterstics_model = []
@@ -204,7 +211,6 @@ def extraction_characteristics_products(products_of_interest):
 if __name__ == '__main__':
 
     try:
-
         system_message = generating_system_instructions(products_of_interest)
         messages_history=[{"role": "system", "content": system_message}]
         main()

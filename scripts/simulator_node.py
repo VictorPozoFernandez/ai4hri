@@ -1,12 +1,10 @@
 import rospy
-from std_msgs.msg import String
 from ai4hri.msg import String_list
-import os
 import pandas as pd
-import numpy as np
 
 DEBUG = rospy.get_param('/whisper/DEBUG')
 SIMULATOR = rospy.get_param('/whisper/SIMULATOR')
+
 
 def main():
 
@@ -15,13 +13,12 @@ def main():
     pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 10) 
     rate = rospy.Rate(1)
 
-
     while not rospy.is_shutdown():
         
         for _ in range(5):
             rate.sleep()
 
-        for x in range(30):
+        for _ in range(30):
             print("")
 
         num_interaction = input("Select interaction: ")
@@ -33,7 +30,6 @@ def main():
         interaction_no_trial = interaction.iloc[:,1:]
         
         num_rows = len(interaction_no_trial)
-
         for row in range(num_rows):
 
             utterance = String_list()
@@ -46,12 +42,9 @@ def main():
                 rate.sleep()
 
 
-
-
 if __name__ == '__main__':
 
     try:
-
         if SIMULATOR == True:
             main()
     

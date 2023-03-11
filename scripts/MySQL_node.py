@@ -1,31 +1,18 @@
 import rospy
-from std_msgs.msg import String
 from ai4hri.msg import String_list
-from ai4hri.msg import String_list_list
 import os
-import numpy as np
 import mysql.connector
-from collections import Counter
-import random
 from keybert import KeyBERT
-import re
-import openai
-from sklearn.metrics.pairwise import cosine_similarity
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
-
-openai.organization = os.environ.get("OPENAI_ORG_ID")
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-model = "text-embedding-ada-002"
-
 kw_model = KeyBERT(model='all-mpnet-base-v2')
 
 db = mysql.connector.connect(
   host="localhost",
   user="root",
   password=os.environ.get("MYSQL_PASSWRD"),
-  database="Camera_Store"
-)
+  database="Camera_Store")
+
 mycursor = db.cursor()
 mycursor2 = db.cursor(buffered=True)
 mycursor3 = db.cursor(buffered=True)
@@ -40,6 +27,7 @@ def main():
 
     rospy.spin()
 
+
 def search_callback(msg):
 
     num_cameras = int(msg.data[-2])/2
@@ -48,13 +36,15 @@ def search_callback(msg):
     msg.data.pop(-1)
 
     cameras_interest = []
-    for i in range(int(num_cameras)):
+    for _ in range(int(num_cameras)):
+
         cameras_interest.append((msg.data[0],msg.data[1]))
         msg.data.pop(0)
         msg.data.pop(0)
 
     topics_interest = []
-    for i in range(int(num_topics)):
+    for _ in range(int(num_topics)):
+
         topics_interest.append(msg.data[0])
         msg.data.pop(0)
 
@@ -73,9 +63,9 @@ def search_callback(msg):
                     pass
                 
                 else:
-
-                    #if DEBUG == True: 
-                        #print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
+                    if DEBUG == True: 
+                        print("")
+                        print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
 
                     for camera_reference in cameras_interest:
 
@@ -104,8 +94,6 @@ def search_callback(msg):
                                 print("KNOWLEDGE DETECTION: The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
 
                          
-
-
 if __name__ == '__main__':
 
     try:

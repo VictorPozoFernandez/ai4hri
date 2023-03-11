@@ -1,6 +1,5 @@
 import rospy
 from std_msgs.msg import String
-from ai4hri.msg import String_list
 import speech_recognition as sr
 import whisper
 import queue
@@ -11,18 +10,18 @@ import numpy as np
 DEBUG = rospy.get_param('/whisper/DEBUG')
 SIMULATOR = rospy.get_param('/whisper/SIMULATOR')
 
+
 def main():
 
     rospy.init_node("whisper", anonymous=True)
-
     pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1) 
 
     model = "small.en"  # ["tiny.en","base.en", "small.en","medium.en","large"]   Use the "large" model for detecting different languages other than English. 
     energy = 300
     pause = 0.5
 
-    ## Microphone detection. Uncomment to list available microphones
-    #for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
+    if DEBUG == True:
+        for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
 
     audio_model = whisper.load_model(model)
     audio_queue = queue.Queue()
@@ -46,8 +45,7 @@ def main():
             pub.publish(utterance)
         
         rate.sleep()
-    
-    
+
 
 def record_audio(audio_queue, energy, pause, rate):
 
@@ -63,6 +61,7 @@ def record_audio(audio_queue, energy, pause, rate):
         rospy.loginfo("Node whisper initialized. Listening...")
 
         while not rospy.is_shutdown():
+
             audio = r.listen(source)
             audio_data = torch.from_numpy(np.frombuffer(audio.get_raw_data(), np.int16).flatten().astype(np.float32) / 32768.0)
             audio_queue.put_nowait(audio_data)
@@ -72,6 +71,7 @@ def record_audio(audio_queue, energy, pause, rate):
 def transcribe_audio(audio_queue, result_queue, audio_model, rate):
     
     while not rospy.is_shutdown():
+
         audio_data = audio_queue.get()
         result = audio_model.transcribe(audio_data,language='english')
         predicted_text = result["text"]

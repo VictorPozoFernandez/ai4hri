@@ -1,18 +1,11 @@
 import rospy
 from std_msgs.msg import String
 from ai4hri.msg import String_list
-import speech_recognition as sr
-import whisper
-import queue
-import threading
-import torch
-import numpy as np
 import openai
 import os
 
 DEBUG = rospy.get_param('/classificator/DEBUG')
 
-pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 1) 
 
 def main():
 
@@ -21,9 +14,11 @@ def main():
     rospy.Subscriber("/ai4hri/utterance", String, callback)
     
     rospy.spin()
-    
+
+
 def callback(msg):
 
+    pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 1) 
     global new_utterance
     utterance_and_position = String_list()
 
@@ -39,7 +34,6 @@ def callback(msg):
     print(" - " + new_utterance + " (" + classification_result + ")")
 
     if "Shopkeeper" in classification_result:
-
         utterance_and_position = get_current_position(previous_utterance, new_utterance)
         
         if DEBUG == True:
