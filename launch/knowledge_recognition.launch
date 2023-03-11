@@ -10,7 +10,11 @@
     <param name="DEBUG" value="$(arg DEBUG)" />
   </node>
 
-  <node name="Ada" pkg="ai4hri" type="Ada_node.py" output="screen">
+  <node name="classificator" pkg="ai4hri" type="classificator_node.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>
+
+  <node name="GPT" pkg="ai4hri" type="GPT_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
   </node>
 

@@ -9,6 +9,8 @@ from keybert import KeyBERT
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
+DEBUG = rospy.get_param('/GPT/DEBUG')
+
 products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
 # Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives, etc. )
 
@@ -52,10 +54,8 @@ def cameras_of_interest(msg):
     temperature=0.0
     )
 
-    print("--------------------------------------------")
-    print("CUSTOMER: " + msg.data[0] + " SHOPKEEPER: " + msg.data[1])
-    
-    print(completion["choices"][0]["message"]["content"])
+    if DEBUG == True:
+        print(completion["choices"][0]["message"]["content"])
     
     detected_model_list = []
     for Product in products_of_interest:
@@ -75,7 +75,8 @@ def keyword_extraction(msg):
     for keyword in keywords:
             keyword_list.append(str(keyword[0]))
 
-    print("Keywords: " + str(keyword_list))
+    if DEBUG == True:
+        print("Keywords: " + str(keyword_list))
 
     return keyword_list
 
@@ -120,8 +121,8 @@ def topic_extraction(msg):
         selected_column= score[1].replace(" ", "_")
         selected_columns.append(selected_column)
 
-    #if DEBUG == True:
-    print("Topics: " + str(selected_columns))
+    if DEBUG == True:
+        print("Topics: " + str(selected_columns))
 
     return selected_columns
 
@@ -150,7 +151,12 @@ def generating_system_instructions(products_of_interest):
     """
 
     system_message = message1 + str(characteristics_product_IDs) + message2
-    print(system_message)
+    
+    if DEBUG == True:
+        print("")
+        print("Prompt sent to ChatGPT:")
+        print("")
+        print(system_message)
 
     return system_message
 

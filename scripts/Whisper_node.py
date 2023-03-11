@@ -8,7 +8,7 @@ import threading
 import torch
 import numpy as np
 
-#DEBUG = rospy.get_param('/whisper/DEBUG')
+DEBUG = rospy.get_param('/whisper/DEBUG')
 
 def main():
 
@@ -43,7 +43,6 @@ def main():
             utterance = utterance.replace(",", "")
             utterance = utterance.replace("'", "")
             pub.publish(utterance)
-            print(utterance)
         
         rate.sleep()
     

@@ -11,7 +11,8 @@ from keybert import KeyBERT
 import re
 import openai
 from sklearn.metrics.pairwise import cosine_similarity
-#DEBUG = rospy.get_param('/whisper/DEBUG')
+
+DEBUG = rospy.get_param('/MySQL/DEBUG')
 
 openai.organization = os.environ.get("OPENAI_ORG_ID")
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -58,11 +59,6 @@ def search_callback(msg):
         msg.data.pop(0)
 
     keywords_interest = msg.data
-
-    print("---------------------------------------------")
-    print("Cameras of interest: " + str(cameras_interest))
-    print("Topics of interest: " + str(topics_interest))
-    print("keywords of interest: " + str(keywords_interest))
     
     mycursor2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
  
@@ -107,7 +103,7 @@ def search_callback(msg):
                             if ((digit_condition == False) or (condition_already_met==True)) and ((count/len(finding_keywords))>0.60):
                                 print("")
                                 print("KNOWLEDGE DETECTION: The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
-    
+                                print("")
                          
 
 

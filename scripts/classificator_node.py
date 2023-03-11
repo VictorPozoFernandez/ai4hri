@@ -10,7 +10,7 @@ import numpy as np
 import openai
 import os
 
-#DEBUG = rospy.get_param('/whisper/DEBUG')
+DEBUG = rospy.get_param('/classificator/DEBUG')
 
 pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 1) 
 
@@ -34,13 +34,17 @@ def callback(msg):
     
     new_utterance = msg.data
     classification_result = sentence_classification(new_utterance)
-    print("--------------------------------")
-    print("The utterance '" + new_utterance + "' comes from the" + classification_result)
+
+    print("------------------------------------------")
+    print("- " + new_utterance + " (" + classification_result + ")")
 
     if "Shopkeeper" in classification_result:
 
         utterance_and_position = get_current_position(previous_utterance, new_utterance)
-        print("Publishing " + str(utterance_and_position))
+        
+        if DEBUG == True:
+            print("")
+            print("Publishing " + str(utterance_and_position))
 
         pub.publish(utterance_and_position)
 
