@@ -3,11 +3,13 @@
   <!-- Arguments -->
 
   <arg name="DEBUG" default="False" />
+   <arg name="SIMULATOR" default="False" />
 
   <!-- Nodes -->
 
   <node name="whisper" pkg="ai4hri" type="Whisper_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
+    <param name="SIMULATOR" value="$(arg SIMULATOR)" />
   </node>
 
   <node name="classificator" pkg="ai4hri" type="classificator_node.py" output="screen">
@@ -20,6 +22,11 @@
 
   <node name="MySQL" pkg="ai4hri" type="MySQL_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>
+
+  <node name="simulator" pkg="ai4hri" type="simulator_node.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+    <param name="SIMULATOR" value="$(arg SIMULATOR)" />
   </node>
 
 </launch>

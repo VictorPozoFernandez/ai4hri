@@ -9,6 +9,7 @@ import torch
 import numpy as np
 
 DEBUG = rospy.get_param('/whisper/DEBUG')
+SIMULATOR = rospy.get_param('/whisper/SIMULATOR')
 
 def main():
 
@@ -81,7 +82,8 @@ def transcribe_audio(audio_queue, result_queue, audio_model, rate):
 if __name__ == '__main__':
 
     try:
-        main()
+        if SIMULATOR == False:
+            main()
     
     except rospy.ROSInterruptException:
         pass

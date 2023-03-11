@@ -36,7 +36,7 @@ def callback(msg):
     classification_result = sentence_classification(new_utterance)
 
     print("------------------------------------------")
-    print("- " + new_utterance + " (" + classification_result + ")")
+    print(" - " + new_utterance + " (" + classification_result + ")")
 
     if "Shopkeeper" in classification_result:
 

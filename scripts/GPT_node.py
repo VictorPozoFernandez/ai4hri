@@ -123,6 +123,7 @@ def topic_extraction(msg):
 
     if DEBUG == True:
         print("Topics: " + str(selected_columns))
+        print("")
 
     return selected_columns
 

@@ -5,7 +5,8 @@ import os
 import pandas as pd
 import numpy as np
 
-#DEBUG = rospy.get_param('/whisper/DEBUG')
+DEBUG = rospy.get_param('/whisper/DEBUG')
+SIMULATOR = rospy.get_param('/whisper/SIMULATOR')
 
 def main():
 
@@ -16,6 +17,12 @@ def main():
 
 
     while not rospy.is_shutdown():
+        
+        for _ in range(5):
+            rate.sleep()
+
+        for x in range(30):
+            print("")
 
         num_interaction = input("Select interaction: ")
 
@@ -32,9 +39,10 @@ def main():
             utterance = String_list()
             utterance = interaction_no_trial.iloc[row,:].to_list()
             pub.publish(utterance) 
+            print("------------------------------------------")
             print(interaction_no_trial.iloc[row,:].to_list())
             
-            for _ in range(6):
+            for _ in range(10):
                 rate.sleep()
 
 
@@ -43,7 +51,9 @@ def main():
 if __name__ == '__main__':
 
     try:
-        main()
+
+        if SIMULATOR == True:
+            main()
     
     except rospy.ROSInterruptException:
         pass
