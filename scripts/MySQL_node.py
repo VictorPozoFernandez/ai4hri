@@ -90,7 +90,7 @@ def search_callback(msg):
                                 if keyword.lower() in str(finding[0]).lower(): 
                                     count +=1
                             
-                            if ((digit_condition == False) or (condition_already_met==True)) and ((count/len(finding_keywords))>0.60):
+                            if ((count/len(finding_keywords))>0.60):
                                 print("KNOWLEDGE DETECTION: The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
 
                          

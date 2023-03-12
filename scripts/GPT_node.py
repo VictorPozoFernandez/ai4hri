@@ -42,7 +42,7 @@ def callback(msg):
 
 def cameras_of_interest(msg):
 
-    messages_history.append({"role": "user", "content": "CUSTOMER: " + msg.data[0] + " SHOPKEEPER: " + msg.data[1]})
+    messages_history.append({"role": "user", "content": "CURRENT INTERACTION: " + msg.data[0] + " ### " + msg.data[1]})
 
     if len(messages_history) > 4:
         messages_history.pop(1)
@@ -63,6 +63,9 @@ def cameras_of_interest(msg):
         if Product[1] in completion["choices"][0]["message"]["content"]:
             detected_model_list.append(str(Product[0]))
             detected_model_list.append(str(Product[1]))
+
+    messages_history.pop(-1)
+    messages_history.append({"role": "user", "content": "PREVIOUS INTERACTION: " + msg.data[0] + " ### " + msg.data[1]})
     
     return detected_model_list
 
@@ -139,7 +142,7 @@ def generating_system_instructions(products_of_interest):
 
     message1 = """Imagine you are helping me to identify the camera model that a shopkeeper is presenting to a customer. You are required to output the following answers:
 
-    - Camera model: All possible camera models that the shopkeeper is presenting.
+    - CAMERA MODEL: All possible camera models that the shopkeeper is presenting in the CURRENT INTERACTION.
 
     You have the following camera models to choose from. You are not to use any other hypothetical camera models:
 
@@ -149,13 +152,14 @@ def generating_system_instructions(products_of_interest):
 
     message2 = """ 
 
-    Here is an example conversation that illustrates how can you output your answer. The interactions appear in cronological order, and together they represent a full conversation between the camera shopkeeper and the costumer:
+    Here is an example that illustrates how can you output your answer. The PREVIOUS INTERACTIONS appear in cronological order:
 
-    CUSTOMER: <Customer sentence> SHOPKEEPER: <Shopkeeper sentence>
+    PREVIOUS INTERACTION: <Customer sentence> ### <Shopkeeper sentence>;
+    CURRENT INTERACTION: <Customer sentence> ### <Shopkeeper sentence>;
     You: CAMERA MODEL - <all possible camera model names> 
 
-    Remember to use the previous interactions to have more context about all the possible camera models that the shopkeeper is presenting right now.
-    Output only the camera model name that the shopkeeper is presenting in the last interaction. 
+    Remember to use the PREVIOUS INTERACTIONS to have more context about all the possible camera models that the shopkeeper is presenting in the CURRENT INTERACTION
+    Output only the camera model name that the shopkeeper is presenting in the CURRENT INTERACTION 
     Aproximate the characteristics of the camera that appear in <Shopkeeper sentence> with the characteristics of the camera models to identify them.
     """
 
