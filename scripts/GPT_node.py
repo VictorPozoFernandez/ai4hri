@@ -100,7 +100,8 @@ def topic_extraction(msg):
 
         utterances_to_compare.append(row[0])
 
-    utterances_to_compare.insert(0, msg.data[1])
+    interaction = msg.data[0] + msg.data[1]
+    utterances_to_compare.insert(0, interaction)
 
     model = "text-embedding-ada-002"
     res = openai.Embedding.create( input = utterances_to_compare, engine=model)
