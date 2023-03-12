@@ -44,7 +44,7 @@ def cameras_of_interest(msg):
 
     messages_history.append({"role": "user", "content": "CURRENT INTERACTION: " + msg.data[0] + " ### " + msg.data[1]})
 
-    if len(messages_history) > 4:
+    if len(messages_history) > 10:
         messages_history.pop(1)
 
     completion = openai.ChatCompletion.create(
