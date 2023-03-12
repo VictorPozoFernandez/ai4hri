@@ -30,15 +30,15 @@ def main():
 
 def search_callback(msg):
 
-    num_cameras = int(msg.data[-2])/2
+    num_models = int(msg.data[-2])/2
     num_topics = msg.data[-1]
     msg.data.pop(-1)
     msg.data.pop(-1)
 
-    cameras_interest = []
-    for _ in range(int(num_cameras)):
+    models_interest = []
+    for _ in range(int(num_models)):
 
-        cameras_interest.append((msg.data[0],msg.data[1]))
+        models_interest.append((msg.data[0],msg.data[1]))
         msg.data.pop(0)
         msg.data.pop(0)
 
@@ -67,31 +67,22 @@ def search_callback(msg):
                         print("")
                         print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
 
-                    for camera_reference in cameras_interest:
+                    for model_reference in models_interest:
 
-                        mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (camera_reference[0],))
+                        mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (model_reference[0],))
 
                         for finding in mycursor4:
 
                             finding_keywords = kw_model.extract_keywords(str(finding[0]), keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
                             count = 0
-                            digit_condition = False
-                            condition_already_met = False
 
                             for keyword in keywords_interest:
-
-                                if keyword.isdigit():
-                                    digit_condition = True  
-                                    
-                                    if keyword.lower() in str(finding[0]).lower():   
-                                        digit_condition = False 
-                                        condition_already_met = True  
 
                                 if keyword.lower() in str(finding[0]).lower(): 
                                     count +=1
                             
                             if ((count/len(finding_keywords))>0.60):
-                                print("KNOWLEDGE DETECTION: The shopkeeper knows that the " + str(camera_reference[1]) + " camera has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
+                                print("KNOWLEDGE DETECTION: The shopkeeper knows that the " + str(model_reference[1]) + " model has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
 
                          
 if __name__ == '__main__':

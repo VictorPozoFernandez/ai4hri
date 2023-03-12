@@ -26,7 +26,7 @@ def callback(msg):
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-    detected_model_list = cameras_of_interest(msg)
+    detected_model_list = models_of_interest(msg)
     keywords = keyword_extraction(msg)
     topic = topic_extraction(msg)
 
@@ -40,7 +40,7 @@ def callback(msg):
     pub.publish(extracted_info)
 
 
-def cameras_of_interest(msg):
+def models_of_interest(msg):
 
     messages_history.append({"role": "user", "content": "CURRENT INTERACTION: " + msg.data[0] + " ### " + msg.data[1]})
 
