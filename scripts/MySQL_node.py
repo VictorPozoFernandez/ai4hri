@@ -3,6 +3,7 @@ from ai4hri.msg import String_list
 import os
 import mysql.connector
 from keybert import KeyBERT
+import openai
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
 kw_model = KeyBERT(model='all-mpnet-base-v2')
@@ -30,8 +31,10 @@ def main():
 
 def search_callback(msg):
 
+    shopkeeper_sentence = msg.data[0]
     num_models = int(msg.data[-2])/2
     num_topics = msg.data[-1]
+    msg.data.pop(0)
     msg.data.pop(-1)
     msg.data.pop(-1)
 
@@ -47,15 +50,15 @@ def search_callback(msg):
 
         topics_interest.append(msg.data[0])
         msg.data.pop(0)
-
-    keywords_interest = msg.data
     
     mycursor2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
  
+    relevant_info = []
     for search_row in mycursor2:
 
         if search_row[0] in topics_interest:
             mycursor3.execute("SELECT table_name FROM information_schema.columns WHERE column_name = %s",search_row)
+            
             
             for row2 in mycursor3:
                 
@@ -63,28 +66,65 @@ def search_callback(msg):
                     pass
                 
                 else:
-                    if DEBUG == True: 
-                        print("")
-                        print("Searching column '" + search_row[0] + "' in table '" + str(row2[0])+"':")
 
-                    for model_reference in models_interest:
+                    for i, model_reference in enumerate(models_interest):
+                        relevant_info.append([])
 
                         mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (model_reference[0],))
 
                         for finding in mycursor4:
 
-                            finding_keywords = kw_model.extract_keywords(str(finding[0]), keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
-                            count = 0
+                            relevant_info[i].append(str(search_row[0]) + ": " + str(finding[0]))
 
-                            for keyword in keywords_interest:
+    openai.organization = os.environ.get("OPENAI_ORG_ID")
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-                                if keyword.lower() in str(finding[0]).lower(): 
-                                    count +=1
-                            
-                            if ((count/len(finding_keywords))>0.60):
-                                print("KNOWLEDGE DETECTION: The shopkeeper knows that the " + str(model_reference[1]) + " model has " + str(finding[0]) + " as " + str(search_row[0]) + " property")
+    messages_history = generating_system_instructions(models_interest,relevant_info)
+    messages_history.append({"role": "user", "content": "Shopkeeper utterance: " + str(shopkeeper_sentence)})
 
-                         
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo", 
+        messages=messages_history,
+        temperature=0.0
+    )
+
+    print(completion["choices"][0]["message"]["content"])
+    messages_history.pop(-1)
+
+def generating_system_instructions(models_interest,relevant_info):
+
+    message1 = """Imagine you are helping me to identify if a shopkeeper is right or mistaken when he presents the characteristics of a camera model. You are required to output the following answers:
+
+    - SHOPKEEPER IS RIGHT: <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>
+    - SHOPKEEPER IS MISTAKEN: <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>
+
+    You have the following camera models and their characteristics to choose from. You are not to use any other hypothetical camera models:
+
+    """
+
+    characteristics_products=[]
+    for i, model_reference in  enumerate(models_interest):
+        characteristics_products.append(str(model_reference[1]) + ": " + str(relevant_info[i]))
+
+    message2 = """ 
+
+    Here is an example that illustrates how can you output your answer:
+
+    Shopkeeper utterance: <Shopkeeper utterance>;
+    You: SHOPKEEPER IS RIGHT - <presented camera model>, <presented characteristic 1>, <Reason of why the shopkeeper is right>
+    You: SHOPKEEPER IS RIGHT - <presented camera model>, <presented characteristic 2>, <Reason of why the shopkeeper is right>
+    You: SHOPKEEPER IS MISTAKEN - <presented camera model>, <presented characteristic 3>, <Reason of why the shopkeeper is mistaken>
+
+    Remember to output multiple outputs if you detect that multiple characteristics are presented at the same time.
+    Remember that the shopkeeper utterances are recorded using a microphone and there may be some Automatic Speech Recognition errors. 
+    """
+
+    system_message = message1 + str(characteristics_products) + message2
+    messages_history=[{"role": "system", "content": system_message}]
+
+    return messages_history
+
+
 if __name__ == '__main__':
 
     try:

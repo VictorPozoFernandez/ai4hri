@@ -36,6 +36,7 @@ def callback(msg):
     extracted_info = detected_model_list + topic + keywords  
     extracted_info.append(str(len(detected_model_list)))
     extracted_info.append(str(len(topic)))
+    extracted_info.insert(0, msg.data[1])
 
     pub.publish(extracted_info)
 
