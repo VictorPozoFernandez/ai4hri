@@ -27,13 +27,12 @@ def callback(msg):
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     detected_model_list = models_of_interest(msg)
-    keywords = keyword_extraction(msg)
     topic = topic_extraction(msg)
 
     pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1) 
 
     extracted_info= String_list()
-    extracted_info = detected_model_list + topic + keywords  
+    extracted_info = detected_model_list + topic  
     extracted_info.append(str(len(detected_model_list)))
     extracted_info.append(str(len(topic)))
     extracted_info.insert(0, msg.data[1])
@@ -69,22 +68,6 @@ def models_of_interest(msg):
     messages_history.append({"role": "user", "content": "PREVIOUS INTERACTION: " + msg.data[0] + " ### " + msg.data[1]})
     
     return detected_model_list
-
-
-def keyword_extraction(msg):
-
-    kw_model = KeyBERT(model='all-mpnet-base-v2')
-    keywords = kw_model.extract_keywords(msg.data[1], keyphrase_ngram_range=(1,1), use_maxsum=False, top_n=10)
-
-    keyword_list =[]
-    for keyword in keywords:
-            
-            keyword_list.append(str(keyword[0]))
-
-    if DEBUG == True:
-        print("Keywords: " + str(keyword_list))
-
-    return keyword_list
 
 
 def topic_extraction(msg):
