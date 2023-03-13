@@ -4,6 +4,7 @@ import os
 import mysql.connector
 from keybert import KeyBERT
 import openai
+import ast
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
 kw_model = KeyBERT(model='all-mpnet-base-v2')
@@ -87,17 +88,31 @@ def search_callback(msg):
         temperature=0.0
     )
 
-    print("")
-    print(completion["choices"][0]["message"]["content"])
     messages_history.pop(-1)
+
+    try:
+        result = ast.literal_eval(completion["choices"][0]["message"]["content"])
+
+        if isinstance((result), list):
+            for j in range(len(list(result))):
+                print("")
+                print(result[j][0])
+                print("Product: " + result[j][1])
+                print("Feature: " + result[j][2])
+                print("Reason: " + result[j][3])
+    
+    except:
+        print("")
+        print("ChatGPT: " + str(completion["choices"][0]["message"]["content"]))
+
 
 
 def generating_system_instructions(models_interest,relevant_info):
 
-    message1 = """Imagine you are helping me to identify if a shopkeeper is right or mistaken when he presents the characteristics of a camera model. You are required to output the following answers:
+    message1 = """Imagine you are helping me to identify if a shopkeeper is right or mistaken when he presents the characteristics of a camera model. You are required to output the following lists:
 
-    - SHOPKEEPER IS RIGHT: <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>
-    - SHOPKEEPER IS MISTAKEN: <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>
+    ['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>]
+    ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]
 
     You have the following camera models and their characteristics to choose from. You are not to use any other hypothetical camera models:
 
@@ -112,11 +127,7 @@ def generating_system_instructions(models_interest,relevant_info):
     Here is an example that illustrates how can you output your answer:
 
     Shopkeeper utterance: <Shopkeeper utterance>;
-
-    You: SHOPKEEPER IS RIGHT - <presented camera model>, <presented characteristic 1>, <Reason of why the shopkeeper is right>
-    You: SHOPKEEPER IS RIGHT - <presented camera model>, <presented characteristic 2>, <Reason of why the shopkeeper is right>
-    You: SHOPKEEPER IS MISTAKEN - <presented camera model>, <presented characteristic 3>, <Reason of why the shopkeeper is mistaken>
-    You: SHOPKEEPER IS MISTAKEN - <presented camera model>, <presented characteristic 4>, <Reason of why the shopkeeper is mistaken>
+    You: [['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>], ['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>],['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>],['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]]
 
     Output multiple outputs if you detect that multiple characteristics are presented at the same time. Do not consider the characteristics that don't appear in the Shopkeeper utterance.
     Remember that the shopkeeper utterances are recorded using a microphone and there may be some Automatic Speech Recognition errors. 
