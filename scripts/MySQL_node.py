@@ -59,7 +59,6 @@ def search_callback(msg):
         if search_row[0] in topics_interest:
             mycursor3.execute("SELECT table_name FROM information_schema.columns WHERE column_name = %s",search_row)
             
-            
             for row2 in mycursor3:
                 
                 if row2[0] == 'replication_asynchronous_connection_failover':
@@ -88,8 +87,10 @@ def search_callback(msg):
         temperature=0.0
     )
 
+    print("")
     print(completion["choices"][0]["message"]["content"])
     messages_history.pop(-1)
+
 
 def generating_system_instructions(models_interest,relevant_info):
 
@@ -111,11 +112,13 @@ def generating_system_instructions(models_interest,relevant_info):
     Here is an example that illustrates how can you output your answer:
 
     Shopkeeper utterance: <Shopkeeper utterance>;
+
     You: SHOPKEEPER IS RIGHT - <presented camera model>, <presented characteristic 1>, <Reason of why the shopkeeper is right>
     You: SHOPKEEPER IS RIGHT - <presented camera model>, <presented characteristic 2>, <Reason of why the shopkeeper is right>
     You: SHOPKEEPER IS MISTAKEN - <presented camera model>, <presented characteristic 3>, <Reason of why the shopkeeper is mistaken>
+    You: SHOPKEEPER IS MISTAKEN - <presented camera model>, <presented characteristic 4>, <Reason of why the shopkeeper is mistaken>
 
-    Remember to output multiple outputs if you detect that multiple characteristics are presented at the same time.
+    Output multiple outputs if you detect that multiple characteristics are presented at the same time. Do not consider the characteristics that don't appear in the Shopkeeper utterance.
     Remember that the shopkeeper utterances are recorded using a microphone and there may be some Automatic Speech Recognition errors. 
     """
 
