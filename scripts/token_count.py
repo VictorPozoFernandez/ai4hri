@@ -6,7 +6,6 @@ def count_tokens(text):
     tokens = word_tokenize(text)
     return len(tokens)
 
-# Example usage:
 text = '''Make a summary of the method explained in the text given as INPUT, it's characteristics, pros and cons, why is was created and it's possible applications in Human Machine Interface.
 
 INPUT: Abstract

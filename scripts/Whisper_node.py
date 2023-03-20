@@ -64,6 +64,7 @@ def record_audio(audio_queue, energy, pause, rate):
     # Open the microphone with the specified sample rate and device index
     with sr.Microphone(sample_rate=16000,  device_index=12) as source:
 
+        # Clear the console
         for x in range(30):
             print("")
 
