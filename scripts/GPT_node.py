@@ -8,8 +8,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 DEBUG = rospy.get_param('/GPT/DEBUG')
 
-products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
 # Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives, etc. )
+# In this case the position tracker is not implemented yet, all cameras from Malcom's experiment are considered.
+products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
 
 
 def main():
@@ -23,47 +24,58 @@ def main():
 
 def callback(msg):
         
+    # Set OpenAI API credentials
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
+    # Extract relevant modelS and topic from the message
     detected_model_list = models_of_interest(msg)
     topic = topic_extraction(msg)
 
+    # Initialize the publisher for extracted_info ROS topic
     pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1) 
 
+    # Combine models and topic into a single list. Append number of detected models and topics
     extracted_info= String_list()
     extracted_info = detected_model_list + topic  
     extracted_info.append(str(len(detected_model_list)))
     extracted_info.append(str(len(topic)))
+
+    #Insert the second element of message data (shopkeeper utterance) at the beginning of the list
     extracted_info.insert(0, msg.data[1])
 
+    # Publish the extracted information
     pub.publish(extracted_info)
 
 
 def models_of_interest(msg):
 
+    # Append the current interaction between the customer and shopkeeper to messages_history
     messages_history.append({"role": "user", "content": "CURRENT INTERACTION: " + msg.data[0] + " ### " + msg.data[1]})
 
+    # Remove the oldest interaction in messages_history if it contains more that 10 interactions (used to define the long-term memory of Chat-GPT in a given context)
     if len(messages_history) > 10:
         messages_history.pop(1)
 
+    # Get the generated text from OpenAI's GPT-3.5-turbo model
     completion = openai.ChatCompletion.create(
     model="gpt-3.5-turbo", 
     messages=messages_history,
-    temperature=0.0
-    )
+    temperature=0.0)
 
     if DEBUG == True:
         print("")
         print(completion["choices"][0]["message"]["content"])
     
     detected_model_list = []
+    # Iterate through products_of_interest and check if they are mentioned in the generated text from ChatGPT
     for Product in products_of_interest:
 
         if Product[1] in completion["choices"][0]["message"]["content"]:
             detected_model_list.append(str(Product[0]))
             detected_model_list.append(str(Product[1]))
 
+    # Update messages_history with the previous interaction
     messages_history.pop(-1)
     messages_history.append({"role": "user", "content": "PREVIOUS INTERACTION: " + msg.data[0] + " ### " + msg.data[1]})
     
@@ -72,47 +84,49 @@ def models_of_interest(msg):
 
 def topic_extraction(msg):
 
+    # Connect to the Camera_Store database
     db = mysql.connector.connect(
     host="localhost",
     user="root",
     password=os.environ.get("MYSQL_PASSWRD"),
-    database="Camera_Store"
-    )
+    database="Camera_Store")
 
+    # Initialize the cursor for querying the database. Get column names of tables containing the 'Product_ID' column
     mycursor = db.cursor()
     mycursor.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
 
+    # Create a list with all the the found column names in the database that can be considered as topic
     utterances_to_compare = []
     for row in mycursor:
-
         utterances_to_compare.append(row[0])
 
+    # Insert the current interaction between the customer and shopkeeper at the beginning of the list (it will be used to compare it with the previous column names)
     interaction = msg.data[0] + msg.data[1]
     utterances_to_compare.insert(0, interaction)
 
+    # Define the text embedding model and create the corresponding embeddings from the stored utterance and colum names
     model = "text-embedding-ada-002"
     res = openai.Embedding.create( input = utterances_to_compare, engine=model)
-
     embedded_columns=[]
     for vec in res["data"]:
-
         embedded_columns.append(vec["embedding"])
 
+    # Separate the utterance embedding from the column embeddings
     utterance = embedded_columns[0]
     embedded_columns.pop(0)
     utterances_to_compare.pop(0)
 
+    # Calculate cosine similarity scores between the utterance and column embedding
     scores = []
     for _, column_candidate in enumerate(embedded_columns):
-
         score = cosine_similarity([utterance],[column_candidate])
         scores.append(score)
 
+    # Select the top 3 scoring columns
     selected_columns = []
     best_scores = sorted(zip(scores, utterances_to_compare), reverse=True)[:3]
 
     for score in best_scores:
-
         selected_column= score[1].replace(" ", "_")
         selected_columns.append(selected_column)
 
@@ -132,6 +146,8 @@ def generating_system_instructions(products_of_interest):
 
     """
 
+    # Extract all the characteristics of the selected products from the SQL Database. 
+    # It will be used by ChatGPT to reason which product is the shopkeeper presenting, even if the name of the model is not explicitly said. 
     characteristics_product_IDs = extraction_characteristics_products(products_of_interest)
 
     message2 = """ 
@@ -147,6 +163,7 @@ def generating_system_instructions(products_of_interest):
     Aproximate the characteristics of the camera that appear in <Shopkeeper sentence> with the characteristics of the camera models to identify them.
     """
 
+    # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
     system_message = message1 + str(characteristics_product_IDs) + message2
     
     if DEBUG == True:
@@ -160,40 +177,57 @@ def generating_system_instructions(products_of_interest):
 
 def extraction_characteristics_products(products_of_interest):
 
+    # Connect to the Camera_Store database
     db = mysql.connector.connect(
     host="localhost",
     user="root",
     password=os.environ.get("MYSQL_PASSWRD"),
     database="Camera_Store")
 
+    # Initialize multiple cursors for the database
     mycursorGPT = db.cursor(buffered=True)
     mycursorGPT2 = db.cursor(buffered=True)
     mycursorGPT3 = db.cursor(buffered=True)
 
+    # List to store extracted characteristics for each product
     characteristics_product_IDs = []
+
+    # Loop through each product in the list of products of interest
     for Product in products_of_interest:
 
+        # List to store characteristics for the current product
         characterstics_model = []
+
+        # Get table names that have a 'Product_ID' column
         mycursorGPT.execute("SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID'")
 
+        # Loop through each table that contains product information
         for table_name in mycursorGPT:
 
+            # Get column names for the current table
             mycursorGPT2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + table_name[0] + "'")
             
+            # Loop through each column in the current table
             for column_name in mycursorGPT2:
             
                 if column_name[0] != 'Product_ID':
+                    # Get the value of the current column for the current product
                     mycursorGPT3.execute("SELECT " + column_name[0]+ " FROM " + table_name[0] + " WHERE Product_ID = " + str(Product[0]))
                     column = []
 
+                    # Loop through the characteristics of the current column
                     for characteristic in mycursorGPT3:
 
+                        # Add the characteristic value to the column list
                         column.append(characteristic[0])
                     
+                    # Append the column name and its values as a tuple to the characterstics_model list
                     characterstics_model.append((column_name[0], column))
                 
+        # Append the characteristics for the current product to the main list
         characteristics_product_IDs.append(characterstics_model)
 
+    # Return the list containing extracted characteristics for each product
     return characteristics_product_IDs
 
 
