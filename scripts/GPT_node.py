@@ -15,6 +15,7 @@ products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Can
 
 def main():
 
+    # Initialize the GPT ROS node and subscribe to utterance_and_position topic
     rospy.init_node("GPT", anonymous=True)
     rospy.loginfo("Node GPT initialized. Listening...")
     rospy.Subscriber("/ai4hri/utterance_and_position", String_list, callback)
@@ -192,7 +193,6 @@ def extraction_characteristics_products(products_of_interest):
     # List to store extracted characteristics for each product
     characteristics_product_IDs = []
 
-    # Loop through each product in the list of products of interest
     for Product in products_of_interest:
 
         # List to store characteristics for the current product
@@ -201,13 +201,11 @@ def extraction_characteristics_products(products_of_interest):
         # Get table names that have a 'Product_ID' column
         mycursorGPT.execute("SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID'")
 
-        # Loop through each table that contains product information
         for table_name in mycursorGPT:
 
             # Get column names for the current table
             mycursorGPT2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + table_name[0] + "'")
             
-            # Loop through each column in the current table
             for column_name in mycursorGPT2:
             
                 if column_name[0] != 'Product_ID':
@@ -215,7 +213,6 @@ def extraction_characteristics_products(products_of_interest):
                     mycursorGPT3.execute("SELECT " + column_name[0]+ " FROM " + table_name[0] + " WHERE Product_ID = " + str(Product[0]))
                     column = []
 
-                    # Loop through the characteristics of the current column
                     for characteristic in mycursorGPT3:
 
                         # Add the characteristic value to the column list

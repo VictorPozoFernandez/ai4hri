@@ -9,12 +9,14 @@ import ast
 DEBUG = rospy.get_param('/MySQL/DEBUG')
 kw_model = KeyBERT(model='all-mpnet-base-v2')
 
+# Connect to the Camera_Store database
 db = mysql.connector.connect(
   host="localhost",
   user="root",
   password=os.environ.get("MYSQL_PASSWRD"),
   database="Camera_Store")
 
+# Initialize multiple cursors for the database
 mycursor = db.cursor()
 mycursor2 = db.cursor(buffered=True)
 mycursor3 = db.cursor(buffered=True)
@@ -23,6 +25,7 @@ mycursor4 = db.cursor(buffered=True)
 
 def main():
 
+    # Initialize the MySQL ROS node and subscribe to extracted_info topic
     rospy.init_node("MySQL", anonymous=True)
     rospy.loginfo("Node MySQL initialized. Listening...")
     rospy.Subscriber("/ai4hri/extracted_info", String_list, search_callback)
@@ -32,6 +35,7 @@ def main():
 
 def search_callback(msg):
 
+    # Extract relevant data from the received message
     shopkeeper_sentence = msg.data[0]
     num_models = int(msg.data[-2])/2
     num_topics = msg.data[-1]
@@ -39,6 +43,7 @@ def search_callback(msg):
     msg.data.pop(-1)
     msg.data.pop(-1)
 
+    # Extract the camera models and topics of interest
     models_interest = []
     for _ in range(int(num_models)):
 
@@ -52,6 +57,7 @@ def search_callback(msg):
         topics_interest.append(msg.data[0])
         msg.data.pop(0)
     
+    # Query the database for the characteristics of the detected topics for each of the presented cameras models. 
     mycursor2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
  
     relevant_info = []
@@ -76,20 +82,25 @@ def search_callback(msg):
 
                             relevant_info[i].append(str(search_row[0]) + ": " + str(finding[0]))
 
+    # Set OpenAI API credentials
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
+    # Generate message history with system instructions as first prompt. Append shopkeeper utterance. 
     messages_history = generating_system_instructions(models_interest,relevant_info)
     messages_history.append({"role": "user", "content": "Shopkeeper utterance: " + str(shopkeeper_sentence)})
 
+    # Get the generated text from OpenAI's GPT-3.5-turbo model
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo", 
         messages=messages_history,
         temperature=0.0
     )
 
+    #Remove the last message (shopkeeper message) from the message history
     messages_history.pop(-1)
 
+    # Process and print the identified knowledge
     try:
         result = ast.literal_eval(completion["choices"][0]["message"]["content"])
 
@@ -101,6 +112,7 @@ def search_callback(msg):
                 print("Feature: " + result[j][2])
                 print("Reason: " + result[j][3])
     
+    # If the knowledge can't be idetified, print the comment that ChatGPT has generated
     except:
         print("")
         print("ChatGPT: " + str(completion["choices"][0]["message"]["content"]))
@@ -118,6 +130,7 @@ def generating_system_instructions(models_interest,relevant_info):
 
     """
 
+    # Create a list to store characteristics of products
     characteristics_products=[]
     for i, model_reference in  enumerate(models_interest):
         characteristics_products.append(str(model_reference[1]) + ": " + str(relevant_info[i]))
@@ -133,6 +146,7 @@ def generating_system_instructions(models_interest,relevant_info):
     Remember that the shopkeeper utterances are recorded using a microphone and there may be some Automatic Speech Recognition errors. 
     """
 
+    # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
     system_message = message1 + str(characteristics_products) + message2
     messages_history=[{"role": "system", "content": system_message}]
 
