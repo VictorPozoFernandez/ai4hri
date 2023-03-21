@@ -2,8 +2,7 @@ import rospy
 from ai4hri.msg import String_list
 import openai
 import os
-import mysql.connector
-from keybert import KeyBERT
+import sqlite3
 from sklearn.metrics.pairwise import cosine_similarity
 
 DEBUG = rospy.get_param('/GPT/DEBUG')
@@ -19,7 +18,6 @@ def main():
     rospy.init_node("GPT", anonymous=True)
     rospy.loginfo("Node GPT initialized. Listening...")
     rospy.Subscriber("/ai4hri/utterance_and_position", String_list, callback)
-
     rospy.spin()
 
 
@@ -85,21 +83,24 @@ def models_of_interest(msg):
 
 def topic_extraction(msg):
 
-    # Connect to the Camera_Store database
-    db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password=os.environ.get("MYSQL_PASSWRD"),
-    database="Camera_Store")
-
-    # Initialize the cursor for querying the database. Get column names of tables containing the 'Product_ID' column
+    # Connect to the Camera_Store database. Initialize the cursor for querying the database.
+    db = sqlite3.connect("/home/victor/catkin_ws/src/ai4hri/scripts/Camera_Store.db")
     mycursor = db.cursor()
-    mycursor.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
 
-    # Create a list with all the the found column names in the database that can be considered as topic
+    # Get all table names in the database
+    mycursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = mycursor.fetchall()
+
+    # Iterate through tables. Get all column names. Create a list with all the the found column names in the database that can be considered as topic
     utterances_to_compare = []
-    for row in mycursor:
-        utterances_to_compare.append(row[0])
+    for table in tables:
+        table_name = table[0]
+        mycursor.execute(f"PRAGMA table_info({table_name});")
+        columns = mycursor.fetchall()
+        column_names = [column[1] for column in columns]
+
+        if 'Product_ID' in column_names:
+            utterances_to_compare = utterances_to_compare + column_names  
 
     # Insert the current interaction between the customer and shopkeeper at the beginning of the list (it will be used to compare it with the previous column names)
     interaction = msg.data[0] + msg.data[1]
@@ -178,17 +179,11 @@ def generating_system_instructions(products_of_interest):
 
 def extraction_characteristics_products(products_of_interest):
 
-    # Connect to the Camera_Store database
-    db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password=os.environ.get("MYSQL_PASSWRD"),
-    database="Camera_Store")
-
-    # Initialize multiple cursors for the database
-    mycursorGPT = db.cursor(buffered=True)
-    mycursorGPT2 = db.cursor(buffered=True)
-    mycursorGPT3 = db.cursor(buffered=True)
+    # Connect to the Camera_Store database. Initialize the cursor for querying the database.
+    db = sqlite3.connect("/home/victor/catkin_ws/src/ai4hri/scripts/Camera_Store.db")
+    mycursorGPT = db.cursor()
+    mycursorGPT2 = db.cursor()
+    mycursorGPT3 = db.cursor()
 
     # List to store extracted characteristics for each product
     characteristics_product_IDs = []
@@ -199,28 +194,31 @@ def extraction_characteristics_products(products_of_interest):
         characterstics_model = []
 
         # Get table names that have a 'Product_ID' column
-        mycursorGPT.execute("SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID'")
+        mycursorGPT.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = mycursorGPT.fetchall()
 
-        for table_name in mycursorGPT:
+        for table in tables:
+            table_name = table[0]
+            mycursorGPT2.execute(f"PRAGMA table_info({table_name});")
+            columns = mycursorGPT2.fetchall()
+            column_names = [column[1] for column in columns]
 
-            # Get column names for the current table
-            mycursorGPT2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + table_name[0] + "'")
-            
-            for column_name in mycursorGPT2:
-            
-                if column_name[0] != 'Product_ID':
-                    # Get the value of the current column for the current product
-                    mycursorGPT3.execute("SELECT " + column_name[0]+ " FROM " + table_name[0] + " WHERE Product_ID = " + str(Product[0]))
-                    column = []
+            # Check if 'Product_ID' exists in the table
+            if 'Product_ID' in column_names:
+                for column_name in column_names:
+                    if column_name != 'Product_ID':
+                        # Get the value of the current column for the current product
+                        mycursorGPT3.execute(f"SELECT {column_name} FROM {table_name} WHERE Product_ID = ?", (Product[0],))
+                        column = []
 
-                    for characteristic in mycursorGPT3:
+                        for characteristic in mycursorGPT3:
 
-                        # Add the characteristic value to the column list
-                        column.append(characteristic[0])
-                    
-                    # Append the column name and its values as a tuple to the characterstics_model list
-                    characterstics_model.append((column_name[0], column))
-                
+                            # Add the characteristic value to the column list
+                            column.append(characteristic[0])
+
+                        # Append the column name and its values as a tuple to the characterstics_model list
+                        characterstics_model.append((column_name, column))
+
         # Append the characteristics for the current product to the main list
         characteristics_product_IDs.append(characterstics_model)
 

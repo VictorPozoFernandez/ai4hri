@@ -68,6 +68,26 @@ def fetch_all_cameras(conn):
     cursor.execute("SELECT * FROM Camera")
     return cursor.fetchall()
 
+def topic_extraction(conn):
+
+
+    # Initialize the cursor for querying the database. Get column names of tables containing the 'Product_ID' column
+    mycursor = conn.cursor()
+    
+    # Get all table names in the database
+    mycursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = mycursor.fetchall()
+
+    # Iterate through tables, check if 'Product_ID' column exists and then get all column names
+    for table in tables:
+        table_name = table[0]
+        mycursor.execute(f"PRAGMA table_info({table_name});")
+        columns = mycursor.fetchall()
+        column_names = [column[1] for column in columns]
+
+        # Check if 'Product_ID' exists in the table
+        if 'Product_ID' in column_names:
+            print(f"Table: {table_name} - Columns: {', '.join(column_names)}")
 
 if __name__ == "__main__":
     conn = sqlite3.connect("/home/victor/catkin_ws/src/ai4hri/scripts/Camera_Store.db")
@@ -83,5 +103,11 @@ if __name__ == "__main__":
     for camera in cameras:
         print(camera)
 
+    print("All topics:")
+    topics = topic_extraction(conn)
+
 
     conn.close()
+
+
+

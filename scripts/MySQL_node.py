@@ -1,7 +1,7 @@
 import rospy
 from ai4hri.msg import String_list
 import os
-import mysql.connector
+import sqlite3
 from keybert import KeyBERT
 import openai
 import ast
@@ -9,18 +9,14 @@ import ast
 DEBUG = rospy.get_param('/MySQL/DEBUG')
 kw_model = KeyBERT(model='all-mpnet-base-v2')
 
-# Connect to the Camera_Store database
-db = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password=os.environ.get("MYSQL_PASSWRD"),
-  database="Camera_Store")
+# Connect to the Camera_Store database. Initialize the cursor for querying the database.
+db2 = sqlite3.connect("/home/victor/catkin_ws/src/ai4hri/scripts/Camera_Store.db", check_same_thread=False)
 
 # Initialize multiple cursors for the database
-mycursor = db.cursor()
-mycursor2 = db.cursor(buffered=True)
-mycursor3 = db.cursor(buffered=True)
-mycursor4 = db.cursor(buffered=True)
+mycursor = db2.cursor()
+mycursor2 = db2.cursor()
+mycursor3 = db2.cursor()
+mycursor4 = db2.cursor()
 
 
 def main():
@@ -57,30 +53,25 @@ def search_callback(msg):
         topics_interest.append(msg.data[0])
         msg.data.pop(0)
     
-    # Query the database for the characteristics of the detected topics for each of the presented cameras models. 
-    mycursor2.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'Camera_Store' AND TABLE_NAME IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'Product_ID')")
- 
+    # Query the database for the characteristics of the detected topics for each of the presented cameras models.
+    mycursor2.execute("SELECT name FROM sqlite_master WHERE type='table'")
+
     relevant_info = []
-    for search_row in mycursor2:
+    for table_name in mycursor2:
 
-        if search_row[0] in topics_interest:
-            mycursor3.execute("SELECT table_name FROM information_schema.columns WHERE column_name = %s",search_row)
-            
-            for row2 in mycursor3:
-                
-                if row2[0] == 'replication_asynchronous_connection_failover':
-                    pass
-                
-                else:
+        mycursor3.execute("PRAGMA table_info({})".format(table_name[0]))
 
-                    for i, model_reference in enumerate(models_interest):
-                        relevant_info.append([])
+        for column_info in mycursor3:
 
-                        mycursor4.execute("SELECT " + search_row[0] + " FROM " + row2[0] + " WHERE Product_ID = %s", (model_reference[0],))
+            if column_info[1] in topics_interest:
+                for i, model_reference in enumerate(models_interest):
+                    relevant_info.append([])
 
-                        for finding in mycursor4:
+                    mycursor4.execute("SELECT {} FROM {} WHERE Product_ID = ?".format(column_info[1], table_name[0]), (model_reference[0],))
 
-                            relevant_info[i].append(str(search_row[0]) + ": " + str(finding[0]))
+                    for finding in mycursor4:
+
+                        relevant_info[i].append(str(column_info[1]) + ": " + str(finding[0]))
 
     # Set OpenAI API credentials
     openai.organization = os.environ.get("OPENAI_ORG_ID")
