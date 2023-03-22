@@ -10,7 +10,9 @@ DEBUG = rospy.get_param('/MySQL/DEBUG')
 kw_model = KeyBERT(model='all-mpnet-base-v2')
 
 # Connect to the Camera_Store database. Initialize the cursor for querying the database.
-db2 = sqlite3.connect("/home/victor/catkin_ws/src/ai4hri/scripts/Camera_Store.db", check_same_thread=False)
+parent_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(parent_dir, "Camera_Store.db")
+db2 = sqlite3.connect(db_path, check_same_thread=False)
 
 # Initialize multiple cursors for the database
 mycursor = db2.cursor()

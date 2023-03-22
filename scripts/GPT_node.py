@@ -84,7 +84,10 @@ def models_of_interest(msg):
 def topic_extraction(msg):
 
     # Connect to the Camera_Store database. Initialize the cursor for querying the database.
-    db = sqlite3.connect("/home/victor/catkin_ws/src/ai4hri/scripts/Camera_Store.db")
+    parent_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(parent_dir, "Camera_Store.db")
+    db = sqlite3.connect(db_path)
+    
     mycursor = db.cursor()
 
     # Get all table names in the database
@@ -180,7 +183,10 @@ def generating_system_instructions(products_of_interest):
 def extraction_characteristics_products(products_of_interest):
 
     # Connect to the Camera_Store database. Initialize the cursor for querying the database.
-    db = sqlite3.connect("/home/victor/catkin_ws/src/ai4hri/scripts/Camera_Store.db")
+    parent_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(parent_dir, "Camera_Store.db")
+    db = sqlite3.connect(db_path)
+    
     mycursorGPT = db.cursor()
     mycursorGPT2 = db.cursor()
     mycursorGPT3 = db.cursor()
