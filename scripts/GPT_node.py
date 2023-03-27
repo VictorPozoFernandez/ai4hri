@@ -29,23 +29,27 @@ def callback(msg):
 
     # Extract relevant modelS and topic from the message
     detected_model_list = models_of_interest(msg)
-    topic = topic_extraction(msg)
 
-    # Initialize the publisher for extracted_info ROS topic
-    pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1) 
+    if "NULL" not in detected_model_list:
+        topic = topic_extraction(msg)
 
-    # Combine models and topic into a single list. Append number of detected models and topics
-    extracted_info= String_list()
-    extracted_info = detected_model_list + topic  
-    extracted_info.append(str(len(detected_model_list)))
-    extracted_info.append(str(len(topic)))
+        # Initialize the publisher for extracted_info ROS topic
+        pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1, latch=True) 
 
-    #Insert the second element of message data (shopkeeper utterance) at the beginning of the list
-    extracted_info.insert(0, msg.data[1])
+        # Combine models and topic into a single list. Append number of detected models and topics
+        extracted_info= String_list()
+        extracted_info = detected_model_list + topic  
+        extracted_info.append(str(len(detected_model_list)))
+        extracted_info.append(str(len(topic)))
 
-    # Publish the extracted information
-    pub.publish(extracted_info)
+        #Insert the second element of message data (shopkeeper utterance) at the beginning of the list
+        extracted_info.insert(0, msg.data[1])
 
+        # Publish the extracted information
+        pub.publish(extracted_info)
+    
+    else: 
+        print("Unrecognized model")  
 
 def models_of_interest(msg):
 
@@ -64,15 +68,19 @@ def models_of_interest(msg):
 
     if DEBUG == True:
         print("")
-        print(completion["choices"][0]["message"]["content"])
+        print("ChatGPT1: " + str(completion["choices"][0]["message"]["content"]))
     
     detected_model_list = []
     # Iterate through products_of_interest and check if they are mentioned in the generated text from ChatGPT
+    
     for Product in products_of_interest:
 
         if Product[1] in completion["choices"][0]["message"]["content"]:
             detected_model_list.append(str(Product[0]))
             detected_model_list.append(str(Product[1]))
+    
+    if len(detected_model_list) == 0:
+        detected_model_list.append(str("NULL"))
 
     # Update messages_history with the previous interaction
     messages_history.pop(-1)
@@ -129,7 +137,7 @@ def topic_extraction(msg):
 
     # Select the top 3 scoring columns
     selected_columns = []
-    best_scores = sorted(zip(scores, utterances_to_compare), reverse=True)[:3]
+    best_scores = sorted(zip(scores, utterances_to_compare), reverse=True)[:4]
 
     for score in best_scores:
         selected_column= score[1].replace(" ", "_")
@@ -145,27 +153,22 @@ def generating_system_instructions(products_of_interest):
 
     message1 = """Imagine you are helping me to identify the camera model that a shopkeeper is presenting to a customer. You are required to output the following answers:
 
-    - CAMERA MODEL: All possible camera models that the shopkeeper is presenting in the CURRENT INTERACTION.
+    - Camera model: All possible camera models from the Authorized list that the shopkeeper is presenting in the current interaction. Remember to use the previous interactions to have more context about all the possible camera models that the shopkeeper is presenting in the CURRENT INTERACTION
 
-    You have the following camera models to choose from. You are not to use any other hypothetical camera models:
-
+    Authorized list:
     """
 
     # Extract all the characteristics of the selected products from the SQL Database. 
     # It will be used by ChatGPT to reason which product is the shopkeeper presenting, even if the name of the model is not explicitly said. 
     characteristics_product_IDs = extraction_characteristics_products(products_of_interest)
 
-    message2 = """ 
+    message2 = """ Here is an example that illustrates how can you output your answer. The interactions appear in cronological order:
 
-    Here is an example that illustrates how can you output your answer. The PREVIOUS INTERACTIONS appear in cronological order:
+    Previous interaction: <Customer sentence> ### <Shopkeeper sentence>;
+    Current interaction <Customer sentence> ### <Shopkeeper sentence>;
+    You: Camera model - <all possible authorized camera model names from the Authorized list> 
 
-    PREVIOUS INTERACTION: <Customer sentence> ### <Shopkeeper sentence>;
-    CURRENT INTERACTION: <Customer sentence> ### <Shopkeeper sentence>;
-    You: CAMERA MODEL - <all possible camera model names> 
-
-    Remember to use the PREVIOUS INTERACTIONS to have more context about all the possible camera models that the shopkeeper is presenting in the CURRENT INTERACTION
-    Output only the camera model name that the shopkeeper is presenting in the CURRENT INTERACTION 
-    Aproximate the characteristics of the camera that appear in <Shopkeeper sentence> with the characteristics of the camera models to identify them.
+    Output only the camera model name that the shopkeeper is presenting in the current interaction. Output only the model's name. Be concise.
     """
 
     # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
