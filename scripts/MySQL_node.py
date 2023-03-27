@@ -108,19 +108,20 @@ def search_callback(msg):
     # If the knowledge can't be idetified, print the comment that ChatGPT has generated
     except:
         print("")
-        print("ChatGPT: " + str(completion["choices"][0]["message"]["content"]))
+        print("ChatGPT2: " + str(completion["choices"][0]["message"]["content"]))
 
 
 
 def generating_system_instructions(models_interest,relevant_info):
 
-    message1 = """Imagine you are helping me to identify if a shopkeeper is right or mistaken when he presents the characteristics of a camera model. You are required to output the following lists:
+    message1 = """Imagine you are helping me determine if a shopkeeper is right or mistaken when presenting the characteristics of a camera model. Your task is to analyze the shopkeeper's statements and output the relevant lists based on the characteristics mentioned by the shopkeeper:
 
-    ['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>]
-    ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]
+    1. If the shopkeeper is right about a characteristic, output: ['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>]
+    2. If the shopkeeper is mistaken about a characteristic, output: ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]
 
-    You have the following camera models and their characteristics to choose from. You are not to use any other hypothetical camera models:
+    Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
 
+    Model list:
     """
 
     # Create a list to store characteristics of products
@@ -130,13 +131,14 @@ def generating_system_instructions(models_interest,relevant_info):
 
     message2 = """ 
 
-    Here is an example that illustrates how can you output your answer:
+    When the shopkeeper presents multiple characteristics, output a separate list for each characteristic. If the shopkeeper does not mention a specific characteristic, do not output a list about it.
 
-    Shopkeeper utterance: <Shopkeeper utterance>;
-    You: [['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>], ['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>],['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>],['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]]
+    Here's an example of how to format your answer (always in list format):
 
-    Output multiple outputs if you detect that multiple characteristics are presented at the same time. Do not consider the characteristics that don't appear in the Shopkeeper utterance.
-    Remember that the shopkeeper utterances are recorded using a microphone and there may be some Automatic Speech Recognition errors. 
+    Shopkeeper utterance: <Shopkeeper utterance>
+    [['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>], ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]]
+
+    Keep your response concise.
     """
 
     # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
