@@ -649,3 +649,340 @@
 {"prompt":"no that one comes only in Black ### ","completion":" Shopkeeper END"}
 {"prompt":"yes the Canon camera is design for high end photojournalism and going out into high quality print magazines, it's used in a lot of studio, this camera design for travel so its light, it's easy to handle, it will still take great studio shoots but it lacks a lot of that manual controls ### ","completion":" Shopkeeper END"}
 {"prompt":"this is point and shoot camera, it comes in a 18 preset mode and it is 20.1 megapixels ### ","completion":" Shopkeeper END"}
+{"prompt":"the built-in Wi-Fi allows you to transfer images easily to your smartphone or tablet ### ","completion":" Shopkeeper END"}
+{"prompt":"this camera has a touch screen for easy navigation ### ","completion":" Shopkeeper END"}
+{"prompt":"the battery life should last for around 400 shots per charge ### ","completion":" Shopkeeper END"}
+{"prompt":"do you need a camera bag or any other accessories ### ","completion":" Shopkeeper END"}
+{"prompt":"we offer a one-year warranty on all cameras ### ","completion":" Shopkeeper END"}
+{"prompt":"the image stabilization helps to reduce blur in your photos ### ","completion":" Shopkeeper END"}
+{"prompt":"would you like a demonstration of how to use the camera ### ","completion":" Shopkeeper END"}
+{"prompt":"we also have a selection of lenses available for this model ### ","completion":" Shopkeeper END"}
+{"prompt":"this camera is compatible with a variety of memory cards ### ","completion":" Shopkeeper END"}
+{"prompt":"do you have a specific budget in mind ### ","completion":" Shopkeeper END"}
+{"prompt":"this camera is great for portrait photography ### ","completion":" Shopkeeper END"}
+{"prompt":"the 4K video recording is perfect for capturing high-quality videos ### ","completion":" Shopkeeper END"}
+{"prompt":"we have a special promotion on tripods right now ### ","completion":" Shopkeeper END"}
+{"prompt":"you can also trade in your old camera for a discount on a new one ### ","completion":" Shopkeeper END"}
+{"prompt":"we offer financing options if you'd like to make monthly payments ### ","completion":" Shopkeeper END"}
+{"prompt":"this camera has a burst mode that can take multiple shots in quick succession ### ","completion":" Shopkeeper END"}
+{"prompt":"feel free to test the cameras on display ### ","completion":" Shopkeeper END"}
+{"prompt":"do you prefer a compact or a more advanced camera ### ","completion":" Shopkeeper END"}
+{"prompt":"is this camera waterproof ### ","completion":" Customer END"}
+{"prompt":"what's the difference between a mirrorless and a DSLR camera ### ","completion":" Customer END"}
+{"prompt":"how long does the battery last on this camera ### ","completion":" Customer END"}
+{"prompt":"are there any compatible lenses for this camera ### ","completion":" Customer END"}
+{"prompt":"what's the maximum ISO on this model ### ","completion":" Customer END"}
+{"prompt":"how many megapixels does this camera have ### ","completion":" Customer END"}
+{"prompt":"is the image quality good in low light conditions ### ","completion":" Customer END"}
+{"prompt":"does this camera have built-in Wi-Fi ### ","completion":" Customer END"}
+{"prompt":"can I connect this camera to my smartphone ### ","completion":" Customer END"}
+{"prompt":"what are the available artistic modes on this camera ### ","completion":" Customer END"}
+{"prompt":"can I shoot in RAW format with this camera ### ","completion":" Customer END"}
+{"prompt":"is there a built-in flash ### ","completion":" Customer END"}
+{"prompt":"does this camera have a panorama mode ### ","completion":" Customer END"}
+{"prompt":"how much does this camera weigh ### ","completion":" Customer END"}
+{"prompt":"can I take time-lapse videos with this model ### ","completion":" Customer END"}
+{"prompt":"what kind of warranty comes with this camera ### ","completion":" Customer END"}
+{"prompt":"do you have any deals or promotions going on ### ","completion":" Customer END"}
+{"prompt":"is this camera suitable for a beginner ### ","completion":" Customer END"}
+{"prompt":"how do I clean the camera sensor ### ","completion":" Customer END"}
+{"prompt":"what are the available shutter speeds ### ","completion":" Customer END"}
+{"prompt":"how much does this camera cost ### ","completion":" Customer END"}
+{"prompt":"do you have any discounts for students ### ","completion":" Customer END"}
+{"prompt":"is this camera good for travel photography ### ","completion":" Customer END"}
+{"prompt":"does it come with a carrying case ### ","completion":" Customer END"}
+{"prompt":"what's the maximum video resolution ### ","completion":" Customer END"}
+{"prompt":"can I attach an external microphone ### ","completion":" Customer END"}
+{"prompt":"do you have any photography workshops or classes ### ","completion":" Customer END"}
+{"prompt":"what's the difference between optical and digital zoom ### ","completion":" Customer END"}
+{"prompt":"how durable is this camera ### ","completion":" Customer END"}
+{"prompt":"can I take underwater photos with this camera ### ","completion":" Customer END"}
+{"prompt":"what's the continuous shooting speed ### ","completion":" Customer END"}
+{"prompt":"do you have any recommendations for a tripod ### ","completion":" Customer END"}
+{"prompt":"how can I protect the camera from dust and moisture ### ","completion":" Customer END"}
+{"prompt":"does this camera have any face detection features ### ","completion":" Customer END"}
+{"prompt":"can I use filters with this camera ### ","completion":" Customer END"}
+{"prompt":"is there any in-camera editing options ### ","completion":" Customer END"}
+{"prompt":"how do I update the firmware on this camera ### ","completion":" Customer END"}
+{"prompt":"what type of memory card does it use ### ","completion":" Customer END"}
+{"prompt":"do you have any refurbished cameras for sale ### ","completion":" Customer END"}
+{"prompt":"what's the battery charging time ### ","completion":" Customer END"}
+{"prompt":"are there any special lenses for macro photography ### ","completion":" Customer END"}
+{"prompt":"can I use a remote control with this camera ### ","completion":" Customer END"}
+{"prompt":"what's the minimum focusing distance ### ","completion":" Customer END"}
+{"prompt":"does this camera have a self-timer function ### ","completion":" Customer END"}
+{"prompt":"what are the dimensions of this camera ### ","completion":" Customer END"}
+{"prompt":"can I use this camera for astrophotography ### ","completion":" Customer END"}
+{"prompt":"is there any built-in GPS for geotagging ### ","completion":" Customer END"}
+{"prompt":"do you offer a layaway plan ### ","completion":" Customer END"}
+{"prompt":"what's the best camera for sports photography ### ","completion":" Customer END"}
+{"prompt":"how do I calibrate the camera's autofocus ### ","completion":" Customer END"}
+{"prompt":"do you have any financing options available ### ","completion":" Shopkeeper END"}
+{"prompt":"this camera features a tilting LCD screen for easy shooting at different angles ### ","completion":" Shopkeeper END"}
+{"prompt":"we have a range of camera straps to choose from ### ","completion":" Shopkeeper END"}
+{"prompt":"this camera is compatible with an external flash for better lighting control ### ","completion":" Shopkeeper END"}
+{"prompt":"the camera's menu system is very user-friendly ### ","completion":" Shopkeeper END"}
+{"prompt":"we offer free sensor cleaning for the first year ### ","completion":" Shopkeeper END"}
+{"prompt":"Can you recommend a good tripod for this camera? ### ","completion":" Customer END"}
+{"prompt":"What is the battery life like for this model? ### ","completion":" Customer END"}
+{"prompt":"Do you have any bundles or deals for this camera? ### ","completion":" Customer END"}
+{"prompt":"How is the low-light performance on this camera? ### ","completion":" Customer END"}
+{"prompt":"Can I use my old lenses with this camera? ### ","completion":" Customer END"}
+{"prompt":"Is this camera waterproof or weather resistant? ### ","completion":" Customer END"}
+{"prompt":"What is the warranty period for this camera? ### ","completion":" Customer END"}
+{"prompt":"Does this camera have built-in Wi-Fi or Bluetooth for easy photo transfer? ### ","completion":" Customer END"}
+{"prompt":"Can you show me how to change the lenses on this camera? ### ","completion":" Customer END"}
+{"prompt":"Do you offer any photography classes or workshops? ### ","completion":" Customer END"}
+{"prompt":"We do offer photography classes and workshops. You can check our schedule and sign up at the front desk. ### ","completion":" Shopkeeper END"}
+{"prompt":"How does this camera perform for video recording? ### ","completion":" Customer END"}
+{"prompt":"Does this camera have image stabilization? ### ","completion":" Customer END"}
+{"prompt":"What is the difference between a DSLR and a mirrorless camera? ### ","completion":" Customer END"}
+{"prompt":"Do you offer financing options for this camera? ### ","completion":" Customer END"}
+{"prompt":"Can I try this camera out in the store? ### ","completion":" Customer END"}
+{"prompt":"What kind of memory card does this camera use? ### ","completion":" Customer END"}
+{"prompt":"How durable is this camera? ### ","completion":" Customer END"}
+{"prompt":"What's the difference between optical zoom and digital zoom? ### ","completion":" Customer END"}
+{"prompt":"Is this camera suitable for beginners? ### ","completion":" Customer END"}
+{"prompt":"How long does it take to charge the battery? ### ","completion":" Customer END"}
+{"prompt":"This camera is perfect for travel photography ### ","completion":" Shopkeeper END"}
+{"prompt":"What's the difference between mirrorless and DSLR cameras? ### ","completion":" Customer END"}
+{"prompt":"Does this camera have a touchscreen? ### ","completion":" Customer END"}
+{"prompt":"Is this camera compatible with my existing lenses? ### ","completion":" Customer END"}
+{"prompt":"What's the warranty on this camera? ### ","completion":" Customer END"}
+{"prompt":"Do you have any special promotions going on right now? ### ","completion":" Customer END"}
+{"prompt":"How long does the battery last on a single charge? ### ","completion":" Customer END"}
+{"prompt":"Can I connect this camera to my smartphone? ### ","completion":" Customer END"}
+{"prompt":"What's the best camera for wildlife photography? ### ","completion":" Customer END"}
+{"prompt":"Do you offer photography classes or workshops? ### ","completion":" Customer END"}
+{"prompt":"Can this camera shoot 4K video? ### ","completion":" Customer END"}
+{"prompt":"Is there a discount if I trade in my old camera? ### ","completion":" Customer END"}
+{"prompt":"What's the best camera for a beginner photographer? ### ","completion":" Customer END"}
+{"prompt":"Are there any additional accessories I should consider purchasing? ### ","completion":" Customer END"}
+{"prompt":"Our store offers a wide range of tripods suitable for different camera models ### ","completion":" Shopkeeper END"}
+{"prompt":"Can I see some sample photos taken with this camera ### ","completion":" Customer END"}
+{"prompt":"What's the warranty on this camera ### ","completion":" Customer END"}
+{"prompt":"Is this camera weather resistant ### ","completion":" Customer END"}
+{"prompt":"Can you recommend a good camera bag for this model ### ","completion":" Customer END"}
+{"prompt":"Are there any available discounts or promotions for this camera ### ","completion":" Customer END"}
+{"prompt":"Do you have any bundle deals with lenses ### ","completion":" Customer END"}
+{"prompt":"Can I use my old lenses with this camera ### ","completion":" Customer END"}
+{"prompt":"What's the difference between mirrorless and DSLR cameras ### ","completion":" Customer END"}
+{"prompt":"How long does the battery last on this camera ### ","completion":" Customer END"}
+{"prompt":"Is there a beginner-friendly camera that you would recommend ### ","completion":" Customer END"}
+{"prompt":"Do you have any waterproof cameras ### ","completion":" Customer END"}
+{"prompt":"What's the video quality like on this camera ### ","completion":" Customer END"}
+{"prompt":"Can I connect this camera to my smartphone ### ","completion":" Customer END"}
+{"prompt":"How much storage does it come with ### ","completion":" Customer END"}
+{"prompt":"Is there an option for external microphone attachment ### ","completion":" Customer END"}
+{"prompt":"There is a hot shoe on this camera where you can attach an external microphone for better audio quality ### ","completion":" Shopkeeper END"}
+{"prompt":"Do you offer any discounts on this model ### ","completion":" Customer END"}
+{"prompt":"Are there any bundles available with this camera ### ","completion":" Customer END"}
+{"prompt":"Does it have built-in Wi-Fi for easy photo transfer ### ","completion":" Customer END"}
+{"prompt":"Can I use an external microphone with this camera ### ","completion":" Customer END"}
+{"prompt":"Do you sell tripods and other accessories ### ","completion":" Customer END"}
+{"prompt":"Is this camera good for vlogging ### ","completion":" Customer END"}
+{"prompt":"How long does the battery last on a full charge ### ","completion":" Customer END"}
+{"prompt":"Does this camera have a touch screen ### ","completion":" Customer END"}
+{"prompt":"What type of memory card does it use ### ","completion":" Customer END"}
+{"prompt":"How long does it take to charge the battery ### ","completion":" Customer END"}
+{"prompt":"Is this camera compatible with my smartphone ### ","completion":" Customer END"}
+{"prompt":"Do you have any financing options available ### ","completion":" Shopkeeper END"}
+{"prompt":"Do you have any recommendations for a beginner photographer? ### ","completion":" Customer END"}
+{"prompt":"I'm interested in taking landscape photos. Which camera would be best for that? ### ","completion":" Customer END"}
+{"prompt":"What's the difference between a DSLR and a mirrorless camera? ### ","completion":" Customer END"}
+{"prompt":"How long does it take to charge the camera's battery? ### ","completion":" Customer END"}
+{"prompt":"Is this camera waterproof or weather-resistant? ### ","completion":" Customer END"}
+{"prompt":"Are there any discounts or promotions going on right now? ### ","completion":" Customer END"}
+{"prompt":"What's the return policy if I'm not satisfied with my purchase? ### ","completion":" Customer END"}
+{"prompt":"Can I trade in my old camera for a discount on a new one? ### ","completion":" Customer END"}
+{"prompt":"Does this camera have a silent shutter mode for discreet photography? ### ","completion":" Customer END"}
+{"prompt":"Is there a monthly payment plan available for this camera? ### ","completion":" Customer END"}
+{"prompt":"What type of memory card does this camera require? ### ","completion":" Customer END"}
+{"prompt":"Our current promotion offers a 10% discount on select camera models ### ","completion":" Shopkeeper END"}
+{"prompt":"It typically takes about 2-3 hours to fully charge the camera's battery ### ","completion":" Shopkeeper END"}
+{"prompt":"Does this camera have built-in Wi-Fi? ### ","completion":" Customer END"}
+{"prompt":"Can I connect it to my smartphone? ### ","completion":" Customer END"}
+{"prompt":"How's the battery life on this model? ### ","completion":" Customer END"}
+{"prompt":"Is this camera good for vlogging? ### ","completion":" Customer END"}
+{"prompt":"Do you have any tripods available? ### ","completion":" Customer END"}
+{"prompt":"Do you offer any financing options? ### ","completion":" Customer END"}
+{"prompt":"Can you recommend a good camera bag? ### ","completion":" Customer END"}
+{"prompt":"Is this camera water-resistant? ### ","completion":" Customer END"}
+{"prompt":"What are the available memory card options? ### ","completion":" Customer END"}
+{"prompt":"Do you have any camera cleaning kits? ### ","completion":" Customer END"}
+{"prompt":"Can you show me how to change the lens? ### ","completion":" Customer END"}
+{"prompt":"What's the difference between optical and digital zoom? ### ","completion":" Customer END"}
+{"prompt":"Is this camera good for beginners? ### ","completion":" Customer END"}
+{"prompt":"Are there any discounts or promotions going on? ### ","completion":" Customer END"}
+{"prompt":"Can you help me choose a good external flash? ### ","completion":" Customer END"}
+{"prompt":"Do you sell camera straps? ### ","completion":" Customer END"}
+{"prompt":"What's the return policy? ### ","completion":" Customer END"}
+{"prompt":"How does the image stabilization work? ### ","completion":" Customer END"}
+{"prompt":"This camera is perfect for beginners; it has user-friendly controls and helpful tutorials ### ","completion":" Shopkeeper END"}
+{"prompt":"It takes about 2 hours to fully charge the battery ### ","completion":" Shopkeeper END"}
+{"prompt":"We have a sale on select camera accessories; let me show you ### ","completion":" Shopkeeper END"}
+{"prompt":"This external flash is popular among our customers and works well with your camera ### ","completion":" Shopkeeper END"}
+{"prompt":"We have a variety of camera straps available in different materials and designs ### ","completion":" Shopkeeper END"}
+{"prompt":"Our return policy is 30 days with the receipt and original packaging ### ","completion":" Shopkeeper END"}
+{"prompt":"Does it support RAW format? ### ","completion":" Customer END"}
+{"prompt":"Can I use external flash with this camera? ### ","completion":" Customer END"}
+{"prompt":"Are there any compatible lenses available for this camera? ### ","completion":" Customer END"}
+{"prompt":"Is this camera weather-sealed? ### ","completion":" Customer END"}
+{"prompt":"Does this camera have Wi-Fi connectivity? ### ","completion":" Customer END"}
+{"prompt":"Can I shoot 4K videos with this camera? ### ","completion":" Customer END"}
+{"prompt":"Do you have any camera bags available for this model? ### ","completion":" Customer END"}
+{"prompt":"What's the warranty coverage for this camera? ### ","completion":" Customer END"}
+{"prompt":"Can you suggest a camera for a beginner photographer? ### ","completion":" Customer END"}
+{"prompt":"How much does this camera weigh? ### ","completion":" Customer END"}
+{"prompt":"Are there any ongoing promotions or discounts on cameras? ### ","completion":" Customer END"}
+{"prompt":"This camera supports both RAW and JPEG formats ### ","completion":" Shopkeeper END"}
+{"prompt":"The battery life for this model is approximately 400 shots per charge ### ","completion":" Shopkeeper END"}
+{"prompt":"We have a wide range of compatible lenses for this camera ### ","completion":" Shopkeeper END"}
+{"prompt":"This camera is quite durable and built to last ### ","completion":" Shopkeeper END"}
+{"prompt":"This camera uses an SD memory card ### ","completion":" Shopkeeper END"}
+{"prompt":"This camera weighs approximately 1.5 pounds with the kit lens attached ### ","completion":" Shopkeeper END"}
+{"prompt":"We currently have a promotion for 10% off select cameras and accessories ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the battery life on this model let me find out for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to check the availability of that lens ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the compatibility with your current accessories let me ask ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to verify the details of our warranty policy ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure if we have that specific tripod in stock let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to inquire about the discount on this camera for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain if this camera is waterproof let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to check if this model has built-in Wi-Fi capabilities ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the maximum ISO on this camera let me ask ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to verify the dimensions of this camera bag for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure if this model is compatible with your flash unit let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to inquire about the availability of this specific filter ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain if this camera has a silent shutter mode let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to check if this lens is suitable for your needs ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the weight of this camera let me ask ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to verify the resolution of this model for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure about the image stabilization on this camera let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to inquire about the availability of this camera in other colors ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain if this model has a touchscreen let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to check the compatibility of this memory card with your camera ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the zoom capabilities on this lens let me ask ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to verify the processing speed of this camera for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure about the compatibility of this battery with your model let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to inquire about the stock of this specific camera strap ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the sensor size on this camera let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to check the minimum focusing distance of this lens for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the price of this camera bag let me ask ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to verify the availability of this cleaning kit for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure if we carry that brand of camera let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to inquire about the rebate offer on this camera ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain if this model has an articulating screen let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to check if this camera supports 4K video recording ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the battery compatibility of this charger let me ask ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to verify the shipping time for this item for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure about the compatibility of this remote shutter release let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to inquire about the stock of this specific UV filter ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain if this camera has built-in GPS let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to check the compatibility of this lens with your camera body ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the durability of this camera case let me ask ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the battery life let me look it up for you ### ","completion":" Shopkeeper END"}
+{"prompt":"Regarding the shutter speed I'll need to consult the manual ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure if this model has image stabilization let me verify ### ","completion":" Shopkeeper END"}
+{"prompt":"Let me check if we have that specific lens in stock ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll have to confirm the availability of that accessory with my supervisor ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not positive about the camera's waterproof rating I'll find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to ask my colleague about the compatibility of that flash ### ","completion":" Shopkeeper END"}
+{"prompt":"I can't remember the exact ISO range let me look that up ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure if this camera supports Wi-Fi let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"To see if that tripod works with this camera I'll have to consult the product guide ### ","completion":" Shopkeeper END"}
+{"prompt":"I can't recall the maximum video resolution I'll find out for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to verify the warranty information with my manager ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain if that camera bag fits this model let me double-check ### ","completion":" Shopkeeper END"}
+{"prompt":"I don't know if this camera has a built-in ND filter I'll look it up ### ","completion":" Shopkeeper END"}
+{"prompt":"Regarding the burst mode speed I'll need to consult the specs sheet ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure if this model has a touch screen let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the maximum ISO on this model let me check with my supervisor ###","completion":" Shopkeeper END"}
+{"prompt":"The battery life on this camera isn't clear to me I'll need to consult the manual ###","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the weather sealing on this model I'll have to look that up ###","completion":" Shopkeeper END"}
+{"prompt":"Let me confirm the availability of that accessory for you ###","completion":" Shopkeeper END"}
+{"prompt":"I can't recall the exact dimensions of this camera let me measure it for you ###","completion":" Shopkeeper END"}
+{"prompt":"The compatibility of this lens with your camera isn't clear to me I'll need to double-check ###","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure about the warranty period on this product let me consult the policy ###","completion":" Shopkeeper END"}
+{"prompt":"The video resolution of this camera escapes me at the moment let me verify that ###","completion":" Shopkeeper END"}
+{"prompt":"I don't recall if this model has in-body image stabilization let me confirm that for you ###","completion":" Shopkeeper END"}
+{"prompt":"The exact weight of this camera is something I'll have to look up for you ###","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the continuous shooting speed on this model let me research that ###","completion":" Shopkeeper END"}
+{"prompt":"The sensor size of this camera isn't clear to me let me check the specs ###","completion":" Shopkeeper END"}
+{"prompt":"I can't remember the maximum shutter speed on this model I'll need to verify that ###","completion":" Shopkeeper END"}
+{"prompt":"I'm uncertain about the number of autofocus points on this camera let me check the details ###","completion":" Shopkeeper END"}
+{"prompt":"The native ISO range on this model is something I'll have to look up for you ###","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about that feature let me look it up ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to verify that specification with my colleague ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure of that compatibility let me confirm it for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not positive about that aspect let me consult the manual ### ","completion":" Shopkeeper END"}
+{"prompt":"Allow me to double-check that information with our supplier ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to cross-check that detail with our inventory system ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm uncertain about that function let me ask my manager ### ","completion":" Shopkeeper END"}
+{"prompt":"I must clarify that point with our technical support ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to confirm that capability with the manufacturer ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not convinced about that quality let me investigate further ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to look into that setting for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not clear about that performance let me research it ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to verify the availability of that model ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the differences between these two models let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I must confirm if that camera has a specific feature ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll need to see if we have that accessory in stock ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about that camera's compatibility with certain lenses ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to verify the warranty details for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to check if we offer that camera in a different color ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure about the exact weight of this camera let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to confirm the dimensions of that camera for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not positive about that camera's weather resistance let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I must verify the battery life of this model ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to confirm the maximum ISO range of that camera ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm uncertain about that camera's video capabilities let me see ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to check on the built-in flash for that model ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not sure about the image stabilization system let me confirm ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to verify if that camera supports RAW files ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not convinced about the autofocus system let me research it ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to clarify the burst shooting speed for that camera ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to confirm if that camera has built-in Wi-Fi ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not clear about that camera's touchscreen capabilities let me see ### ","completion":" Shopkeeper END"}
+{"prompt":"I must check if we have additional lenses for that model ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to verify the availability of external flash units ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about that camera's memory card compatibility let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to check if we have compatible filters for that lens ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about that camera's low-light performance let me confirm ### ","completion":" Shopkeeper END"}
+{"prompt":"I have to confirm the maximum aperture of that lens ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not positive about that camera's durability let me investigate ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to verify the availability of camera bags for that model ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the autofocus speed let me verify that for you ### ","completion":" Shopkeeper END"}
+{"prompt":"The ISO range is unclear allow me to confirm it ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to check on the video resolution please wait a moment ### ","completion":" Shopkeeper END"}
+{"prompt":"The battery life is unclear I'll look it up for you ### ","completion":" Shopkeeper END"}
+{"prompt":"Regarding weather sealing let me double-check that information ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the frames per second let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to consult my supervisor on the camera's durability ### ","completion":" Shopkeeper END"}
+{"prompt":"Please hold while I confirm the sensor size for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain if this camera has image stabilization let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"Regarding connectivity options I'll need to verify that ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to confirm the camera's compatibility with certain lenses ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll check with my supervisor on the availability of this model ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the built-in flash allow me to verify that ### ","completion":" Shopkeeper END"}
+{"prompt":"I must consult my supervisor about the camera's warranty ### ","completion":" Shopkeeper END"}
+{"prompt":"Let me check on the camera's low-light performance ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to verify the maximum continuous shooting rate ### ","completion":" Shopkeeper END"}
+{"prompt":"Allow me to confirm the camera's weight for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to consult my supervisor about any current promotions ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the camera's dimensions let me find out ### ","completion":" Shopkeeper END"}
+{"prompt":"Regarding the camera's software features I'll need to verify that ### ","completion":" Shopkeeper END"}
+{"prompt":"I must check if this camera supports RAW file format ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the shutter speed range let me look it up ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll consult my supervisor about available financing options ### ","completion":" Shopkeeper END"}
+{"prompt":"Allow me to verify the camera's burst mode capabilities ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the touchscreen functionality let me confirm it ### ","completion":" Shopkeeper END"}
+{"prompt":"Regarding the camera's color options I'll need to check that ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to verify if this camera has built-in Wi-Fi ### ","completion":" Shopkeeper END"}
+{"prompt":"Let me consult my supervisor about possible discounts ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm not certain about the camera's viewfinder I'll check for you ### ","completion":" Shopkeeper END"}
+{"prompt":"I'll confirm the camera's compatibility with memory cards ### ","completion":" Shopkeeper END"}
+{"prompt":"Regarding the camera's custom settings let me verify that ### ","completion":" Shopkeeper END"}
+{"prompt":"I'm unsure about the external microphone support let me check ### ","completion":" Shopkeeper END"}
+{"prompt":"I need to consult my supervisor about the camera's trade-in value ### ","completion":" Shopkeeper END"}
+{"prompt":"Allow me to verify the camera's maximum video recording time ### ","completion":" Shopkeeper END"}

@@ -42,13 +42,15 @@ def callback(msg):
         extracted_info.append(str(len(detected_model_list)))
         extracted_info.append(str(len(topic)))
 
-        #Insert the second element of message data (shopkeeper utterance) at the beginning of the list
+        #Insert the first and second element of message data (customer and shopkeeper utterance) at the beginning of the list
         extracted_info.insert(0, msg.data[1])
+        extracted_info.insert(0, msg.data[0])
 
         # Publish the extracted information
         pub.publish(extracted_info)
     
     else: 
+        print("")
         print("ChatGPT1: Unrecognized model")  
 
 def models_of_interest(msg):

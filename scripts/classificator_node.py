@@ -57,9 +57,10 @@ def sentence_classification(new_utterance):
     # Request classification from fine-tuned GPT3 model
     classification_result = openai.Completion.create(
         #model="ada:ft-personal-2023-03-07-22-12-15", #Original model
-        model="ada:ft-personal-2023-03-28-13-40-40", #Improved model with syntetic data
+        #model="ada:ft-personal-2023-03-28-13-40-40", #Improved model with syntetic data
+        model="ada:ft-personal-2023-03-29-12-35-58", #Improved model with syntetic data
         prompt= new_utterance + " ### ", #Change if needed (depending on which stop message for the prompt did you use while training the fine-tuned model)
-        stop="end") #Change if needed (depending on which stop message did you use for the generated output while training the fine-tuned model)
+        stop="END") #Change if needed (depending on which stop message did you use for the generated output while training the fine-tuned model)
     
     return classification_result["choices"][0]["text"]
 

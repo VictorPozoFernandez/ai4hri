@@ -35,9 +35,11 @@ def main():
 def search_callback(msg):
 
     # Extract relevant data from the received message
-    shopkeeper_sentence = msg.data[0]
+    customer_sentence = msg.data[0]
+    shopkeeper_sentence = msg.data[1]
     num_models = int(msg.data[-2])/2
     num_topics = msg.data[-1]
+    msg.data.pop(0)
     msg.data.pop(0)
     msg.data.pop(-1)
     msg.data.pop(-1)
@@ -80,9 +82,9 @@ def search_callback(msg):
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-    # Generate message history with system instructions as first prompt. Append shopkeeper utterance. 
+    # Generate message history with system instructions as first prompt. Append customer and shopkeeper utterance. 
     messages_history = generating_system_instructions(models_interest,relevant_info)
-    messages_history.append({"role": "user", "content": "Shopkeeper utterance: " + str(shopkeeper_sentence)})
+    messages_history.append({"role": "user", "content": "Customer utterance: " + str(customer_sentence) + "Shopkeeper utterance: " + str(shopkeeper_sentence)})
 
     # Get the generated text from OpenAI's GPT-3.5-turbo model
     completion = openai.ChatCompletion.create(
@@ -131,8 +133,9 @@ def generating_system_instructions(models_interest,relevant_info):
 
     message1 = """Imagine you are helping me determine if a shopkeeper is right or mistaken when presenting the characteristics of a camera model. Your task is to analyze the shopkeeper's statements and output the relevant lists based on the characteristics mentioned by the shopkeeper:
 
-    1. If the shopkeeper is right about a characteristic, output: ['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>]
-    2. If the shopkeeper is mistaken about a characteristic, output: ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]
+    1. If the shopkeeper is right about a characteristic, output:  ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
+    2. If the shopkeeper is mistaken about a characteristic, output:  ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
+    3. If the shopkeeper is not sure about a characteristic, output:  ##['SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper doesnt know>']##
 
     Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
 
@@ -150,11 +153,12 @@ def generating_system_instructions(models_interest,relevant_info):
 
     Here's an example of how to format your answer:
 
-    Shopkeeper utterance: <Shopkeeper utterance>
+    Customer utterance: <Shopkeeper utterance> Shopkeeper utterance: <Shopkeeper utterance>
     ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
     ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
+    ##['SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper doesnt know>']##
 
-    Include the # characters. Keep your response concise.
+    Always include the ## characters at the beginning and the end of each list. Keep your response concise. 
     """
 
     # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
