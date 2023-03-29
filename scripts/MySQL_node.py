@@ -4,6 +4,7 @@ import os
 import sqlite3
 from keybert import KeyBERT
 import openai
+import re
 import ast
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
@@ -34,9 +35,11 @@ def main():
 def search_callback(msg):
 
     # Extract relevant data from the received message
-    shopkeeper_sentence = msg.data[0]
+    customer_sentence = msg.data[0]
+    shopkeeper_sentence = msg.data[1]
     num_models = int(msg.data[-2])/2
     num_topics = msg.data[-1]
+    msg.data.pop(0)
     msg.data.pop(0)
     msg.data.pop(-1)
     msg.data.pop(-1)
@@ -79,9 +82,9 @@ def search_callback(msg):
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-    # Generate message history with system instructions as first prompt. Append shopkeeper utterance. 
+    # Generate message history with system instructions as first prompt. Append customer and shopkeeper utterance. 
     messages_history = generating_system_instructions(models_interest,relevant_info)
-    messages_history.append({"role": "user", "content": "Shopkeeper utterance: " + str(shopkeeper_sentence)})
+    messages_history.append({"role": "user", "content": "Customer utterance: " + str(customer_sentence) + "Shopkeeper utterance: " + str(shopkeeper_sentence)})
 
     # Get the generated text from OpenAI's GPT-3.5-turbo model
     completion = openai.ChatCompletion.create(
@@ -94,30 +97,45 @@ def search_callback(msg):
     messages_history.pop(-1)
 
     # Process and print the identified knowledge
-    try:
-        result = ast.literal_eval(completion["choices"][0]["message"]["content"])
-
-        if isinstance((result), list):
-            for j in range(len(list(result))):
-                print("")
-                print(result[j][0])
-                print("Product: " + result[j][1])
-                print("Feature: " + result[j][2])
-                print("Reason: " + result[j][3])
     
-    # If the knowledge can't be idetified, print the comment that ChatGPT has generated
-    except:
+    substrings = extract_substrings(completion["choices"][0]["message"]["content"])
+
+    for substring in substrings:
+
+        substring = ast.literal_eval(substring)
+        feature = get_left_substring(substring[2])
+        if feature in topics_interest:
+            print("")
+            print(substring[0])
+            print("Product: " + substring[1])
+            print("Feature: " + substring[2])
+            print("Reason: " + substring[3])
+
+    if len(substrings) == 0:
         print("")
         print("ChatGPT2: " + str(completion["choices"][0]["message"]["content"]))
 
 
+def extract_substrings(text):
+    pattern = r'##\[(.*?)\]##'
+    substrings = re.findall(pattern, text)
+    return substrings
+
+
+def get_left_substring(text):
+    if ':' in text:
+        left_substring = text.split(':', 1)[0].strip()
+        return left_substring
+    else:
+        return text
 
 def generating_system_instructions(models_interest,relevant_info):
 
     message1 = """Imagine you are helping me determine if a shopkeeper is right or mistaken when presenting the characteristics of a camera model. Your task is to analyze the shopkeeper's statements and output the relevant lists based on the characteristics mentioned by the shopkeeper:
 
-    1. If the shopkeeper is right about a characteristic, output: ['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>]
-    2. If the shopkeeper is mistaken about a characteristic, output: ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]
+    1. If the shopkeeper is right about a characteristic, output:  ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
+    2. If the shopkeeper is mistaken about a characteristic, output:  ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
+    3. If the shopkeeper is not sure about a characteristic, output:  ##['SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper doesnt know>']##
 
     Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
 
@@ -133,12 +151,14 @@ def generating_system_instructions(models_interest,relevant_info):
 
     When the shopkeeper presents multiple characteristics, output a separate list for each characteristic. If the shopkeeper does not mention a specific characteristic, do not output a list about it.
 
-    Here's an example of how to format your answer (always in list format):
+    Here's an example of how to format your answer:
 
-    Shopkeeper utterance: <Shopkeeper utterance>
-    [['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>], ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]]
+    Customer utterance: <Shopkeeper utterance> Shopkeeper utterance: <Shopkeeper utterance>
+    ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
+    ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
+    ##['SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper doesnt know>']##
 
-    Keep your response concise.
+    Always include the ## characters at the beginning and the end of each list. Keep your response concise. 
     """
 
     # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
