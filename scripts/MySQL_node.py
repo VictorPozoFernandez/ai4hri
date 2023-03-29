@@ -101,11 +101,13 @@ def search_callback(msg):
     for substring in substrings:
 
         substring = ast.literal_eval(substring)
-        print("")
-        print(substring[0])
-        print("Product: " + substring[1])
-        print("Feature: " + substring[2])
-        print("Reason: " + substring[3])
+        feature = get_left_substring(substring[2])
+        if feature in topics_interest:
+            print("")
+            print(substring[0])
+            print("Product: " + substring[1])
+            print("Feature: " + substring[2])
+            print("Reason: " + substring[3])
 
     if len(substrings) == 0:
         print("")
@@ -117,6 +119,13 @@ def extract_substrings(text):
     substrings = re.findall(pattern, text)
     return substrings
 
+
+def get_left_substring(text):
+    if ':' in text:
+        left_substring = text.split(':', 1)[0].strip()
+        return left_substring
+    else:
+        return text
 
 def generating_system_instructions(models_interest,relevant_info):
 
@@ -142,8 +151,8 @@ def generating_system_instructions(models_interest,relevant_info):
     Here's an example of how to format your answer:
 
     Shopkeeper utterance: <Shopkeeper utterance>
-    ##['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>]##
-    ##['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]##
+    ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
+    ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
 
     Include the # characters. Keep your response concise.
     """
