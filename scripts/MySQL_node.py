@@ -4,6 +4,7 @@ import os
 import sqlite3
 from keybert import KeyBERT
 import openai
+import re
 import ast
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
@@ -94,22 +95,27 @@ def search_callback(msg):
     messages_history.pop(-1)
 
     # Process and print the identified knowledge
-    try:
-        result = ast.literal_eval(completion["choices"][0]["message"]["content"])
-
-        if isinstance((result), list):
-            for j in range(len(list(result))):
-                print("")
-                print(result[j][0])
-                print("Product: " + result[j][1])
-                print("Feature: " + result[j][2])
-                print("Reason: " + result[j][3])
     
-    # If the knowledge can't be idetified, print the comment that ChatGPT has generated
-    except:
+    substrings = extract_substrings(completion["choices"][0]["message"]["content"])
+
+    for substring in substrings:
+
+        substring = ast.literal_eval(substring)
+        print("")
+        print(substring[0])
+        print("Product: " + substring[1])
+        print("Feature: " + substring[2])
+        print("Reason: " + substring[3])
+
+    if len(substrings) == 0:
         print("")
         print("ChatGPT2: " + str(completion["choices"][0]["message"]["content"]))
 
+
+def extract_substrings(text):
+    pattern = r'##\[(.*?)\]##'
+    substrings = re.findall(pattern, text)
+    return substrings
 
 
 def generating_system_instructions(models_interest,relevant_info):
@@ -133,12 +139,13 @@ def generating_system_instructions(models_interest,relevant_info):
 
     When the shopkeeper presents multiple characteristics, output a separate list for each characteristic. If the shopkeeper does not mention a specific characteristic, do not output a list about it.
 
-    Here's an example of how to format your answer (always in list format):
+    Here's an example of how to format your answer:
 
     Shopkeeper utterance: <Shopkeeper utterance>
-    [['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>], ['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]]
+    ##['SHOPKEEPER IS RIGHT', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is right>]##
+    ##['SHOPKEEPER IS MISTAKEN', <presented camera model>, <presented characteristic>, <Reason of why the shopkeeper is mistaken>]##
 
-    Keep your response concise.
+    Include the # characters. Keep your response concise.
     """
 
     # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.

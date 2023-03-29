@@ -49,7 +49,7 @@ def callback(msg):
         pub.publish(extracted_info)
     
     else: 
-        print("Unrecognized model")  
+        print("ChatGPT1: Unrecognized model")  
 
 def models_of_interest(msg):
 
