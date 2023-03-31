@@ -96,8 +96,10 @@ def transcribe_audio(audio_queue, result_queue, rate):
 
         # Transcribe the temporary audio file
         with open(temp_file_name, "rb") as audio_file:
-            result = openai.Audio.transcribe("whisper-1", audio_file, language="es")
-        
+            result = openai.Audio.transcribe("whisper-1", audio_file, language="en") 
+            #Change language (english = "en", spanish = "es", french = "fr", german = "de", italian = "it", japanese = "ja")
+            
+
         # Remove the temporary file
         os.remove(temp_file_name)
 
