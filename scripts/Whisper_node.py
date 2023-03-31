@@ -19,8 +19,7 @@ def main():
     rospy.init_node("whisper", anonymous=True)
     pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1) 
 
-    # Load the whisper model with the desired configuration
-    model = "small.en"  # ["tiny.en","base.en", "small.en","medium.en","large"]   Use the "large" model for detecting different languages other than English. 
+    # Put the desired configuration 
     energy = 300
     pause = 0.5
 
@@ -28,7 +27,6 @@ def main():
     if DEBUG == True:
         for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
 
-    audio_model = whisper.load_model(model)
     audio_queue = queue.Queue()
     result_queue = queue.Queue()
     rate = rospy.Rate(1)
@@ -38,7 +36,7 @@ def main():
                     args=(audio_queue, energy, pause, rate)).start()
 
     threading.Thread(target=transcribe_audio,
-                    args=(audio_queue, result_queue, audio_model, rate)).start()
+                    args=(audio_queue, result_queue, rate)).start()
 
     # Main loop for the ROS node
     while not rospy.is_shutdown():
@@ -80,7 +78,7 @@ def record_audio(audio_queue, energy, pause, rate):
             rate.sleep()
 
 
-def transcribe_audio(audio_queue, result_queue, audio_model, rate):
+def transcribe_audio(audio_queue, result_queue, rate):
 
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
