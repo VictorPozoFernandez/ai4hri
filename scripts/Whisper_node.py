@@ -48,7 +48,7 @@ def main():
         utterance = result_queue.get() 
         
         # Publish the utterance if it's longer than 12 characters
-        if len(utterance) > 12:
+        if (len(utterance) > 12) and ("Amara.org" not in utterance):
             utterance = utterance.replace(",", "")
             utterance = utterance.replace("'", "")
             pub.publish(utterance)
@@ -98,7 +98,7 @@ def transcribe_audio(audio_queue, result_queue, audio_model, rate):
 
         # Transcribe the temporary audio file
         with open(temp_file_name, "rb") as audio_file:
-            result = openai.Audio.transcribe("whisper-1", audio_file, language="en")
+            result = openai.Audio.transcribe("whisper-1", audio_file, language="es")
         
         # Remove the temporary file
         os.remove(temp_file_name)
