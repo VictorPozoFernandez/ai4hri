@@ -4,8 +4,10 @@ import speech_recognition as sr
 import whisper
 import queue
 import threading
-import torch
-import numpy as np
+import openai
+import os
+import tempfile
+
 
 DEBUG = rospy.get_param('/whisper/DEBUG')
 SIMULATOR = rospy.get_param('/whisper/SIMULATOR')
@@ -74,19 +76,33 @@ def record_audio(audio_queue, energy, pause, rate):
         while not rospy.is_shutdown():
 
             audio = r.listen(source)
-            audio_data = torch.from_numpy(np.frombuffer(audio.get_raw_data(), np.int16).flatten().astype(np.float32) / 32768.0)
-            audio_queue.put_nowait(audio_data)
+            audio_queue.put_nowait(audio)
             rate.sleep()
 
 
 def transcribe_audio(audio_queue, result_queue, audio_model, rate):
+
+    openai.organization = os.environ.get("OPENAI_ORG_ID")
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
     
     # Transcribe the audio while the ROS node is running
     while not rospy.is_shutdown():
 
         # Get the audio data from the audio_queue and transcribe it using the whisper audio model
         audio_data = audio_queue.get()
-        result = audio_model.transcribe(audio_data,language='english')
+        
+        # Save the audio_data as a temporary file
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+            temp_file.write(audio_data.get_wav_data())
+            temp_file_name = temp_file.name
+
+        # Transcribe the temporary audio file
+        with open(temp_file_name, "rb") as audio_file:
+            result = openai.Audio.transcribe("whisper-1", audio_file, language="en")
+        
+        # Remove the temporary file
+        os.remove(temp_file_name)
+
         predicted_text = result["text"]
         
         # Add the predicted text to the result_queue
