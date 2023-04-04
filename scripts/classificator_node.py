@@ -5,6 +5,8 @@ import openai
 import os
 
 DEBUG = rospy.get_param('/classificator/DEBUG')
+global toggle
+toggle = False
 
 
 def main():
@@ -22,6 +24,7 @@ def callback(msg):
     # Initialize publisher for the utterance_and_position topic
     pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 1) 
     global new_utterance
+    global toggle
     utterance_and_position = String_list()
 
     # Store the previous utterance if available
@@ -36,7 +39,7 @@ def callback(msg):
     print("------------------------------------------")
     print(" - " + new_utterance + " (" + classification_result + ")")
 
-    if ("Shopkeeper" in classification_result) or ("shopkeeper" in classification_result):
+    if (("Shopkeeper" in classification_result) or ("shopkeeper" in classification_result)) and (toggle == False):
         # Get the position of the shopkeeper and the customer using a position tracker
         utterance_and_position = get_current_position(previous_utterance, new_utterance)
         
@@ -46,6 +49,23 @@ def callback(msg):
 
         # Publish the utterance and position
         pub.publish(utterance_and_position)
+        toggle = True
+    
+    elif (("Shopkeeper" in classification_result) or ("shopkeeper" in classification_result)) and (toggle == True):
+        # Get the position of the shopkeeper and the customer using a position tracker
+        previous_utterance = ""
+        utterance_and_position = get_current_position(previous_utterance, new_utterance)
+        
+        if DEBUG == True:
+            print("")
+            print("Publishing " + str(utterance_and_position))
+
+        # Publish the utterance and position
+        pub.publish(utterance_and_position)
+        toggle = True
+    
+    else:
+        toggle = False
 
 
 def sentence_classification(new_utterance):

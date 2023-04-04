@@ -153,12 +153,13 @@ def generating_system_instructions(models_interest,relevant_info):
 
     Here's an example of how to format your answer:
 
-    Customer utterance: <Shopkeeper utterance> Shopkeeper utterance: <Shopkeeper utterance>
+    Customer utterance: <Customer utterance> Shopkeeper utterance: <Shopkeeper utterance>
     ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
     ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
     ##['SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper doesnt know>']##
 
-    Always include the ## characters at the beginning and the end of each list. Keep your response concise. 
+    Always include the ## characters at the beginning and the end of each list. 
+    Keep your response concise. 
     """
 
     # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
