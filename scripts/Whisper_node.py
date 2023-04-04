@@ -4,8 +4,10 @@ import speech_recognition as sr
 import whisper
 import queue
 import threading
-import torch
-import numpy as np
+import openai
+import os
+import tempfile
+
 
 DEBUG = rospy.get_param('/whisper/DEBUG')
 SIMULATOR = rospy.get_param('/whisper/SIMULATOR')
@@ -17,8 +19,7 @@ def main():
     rospy.init_node("whisper", anonymous=True)
     pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1) 
 
-    # Load the whisper model with the desired configuration
-    model = "small.en"  # ["tiny.en","base.en", "small.en","medium.en","large"]   Use the "large" model for detecting different languages other than English. 
+    # Put the desired configuration 
     energy = 300
     pause = 0.5
 
@@ -26,7 +27,6 @@ def main():
     if DEBUG == True:
         for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
 
-    audio_model = whisper.load_model(model)
     audio_queue = queue.Queue()
     result_queue = queue.Queue()
     rate = rospy.Rate(1)
@@ -36,7 +36,7 @@ def main():
                     args=(audio_queue, energy, pause, rate)).start()
 
     threading.Thread(target=transcribe_audio,
-                    args=(audio_queue, result_queue, audio_model, rate)).start()
+                    args=(audio_queue, result_queue, rate)).start()
 
     # Main loop for the ROS node
     while not rospy.is_shutdown():
@@ -46,7 +46,7 @@ def main():
         utterance = result_queue.get() 
         
         # Publish the utterance if it's longer than 12 characters
-        if len(utterance) > 12:
+        if (len(utterance) > 12) and ("Amara.org" not in utterance):
             utterance = utterance.replace(",", "")
             utterance = utterance.replace("'", "")
             pub.publish(utterance)
@@ -74,19 +74,35 @@ def record_audio(audio_queue, energy, pause, rate):
         while not rospy.is_shutdown():
 
             audio = r.listen(source)
-            audio_data = torch.from_numpy(np.frombuffer(audio.get_raw_data(), np.int16).flatten().astype(np.float32) / 32768.0)
-            audio_queue.put_nowait(audio_data)
+            audio_queue.put_nowait(audio)
             rate.sleep()
 
 
-def transcribe_audio(audio_queue, result_queue, audio_model, rate):
+def transcribe_audio(audio_queue, result_queue, rate):
+
+    openai.organization = os.environ.get("OPENAI_ORG_ID")
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
     
     # Transcribe the audio while the ROS node is running
     while not rospy.is_shutdown():
 
         # Get the audio data from the audio_queue and transcribe it using the whisper audio model
         audio_data = audio_queue.get()
-        result = audio_model.transcribe(audio_data,language='english')
+        
+        # Save the audio_data as a temporary file
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+            temp_file.write(audio_data.get_wav_data())
+            temp_file_name = temp_file.name
+
+        # Transcribe the temporary audio file
+        with open(temp_file_name, "rb") as audio_file:
+            result = openai.Audio.transcribe("whisper-1", audio_file, language="en") 
+            #Change language (english = "en", spanish = "es", french = "fr", german = "de", italian = "it", japanese = "ja")
+            
+
+        # Remove the temporary file
+        os.remove(temp_file_name)
+
         predicted_text = result["text"]
         
         # Add the predicted text to the result_queue
