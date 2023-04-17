@@ -2,13 +2,11 @@ import rospy
 from ai4hri.msg import String_list
 import os
 import sqlite3
-from keybert import KeyBERT
 import openai
 import re
 import ast
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
-kw_model = KeyBERT(model='all-mpnet-base-v2')
 
 # Connect to the Camera_Store database. Initialize the cursor for querying the database.
 parent_dir = os.path.dirname(os.path.abspath(__file__))

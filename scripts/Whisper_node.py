@@ -1,7 +1,6 @@
 import rospy
 from std_msgs.msg import String
 import speech_recognition as sr
-import whisper
 import queue
 import threading
 import openai
