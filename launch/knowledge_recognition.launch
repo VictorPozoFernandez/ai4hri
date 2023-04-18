@@ -24,9 +24,9 @@
     <param name="DEBUG" value="$(arg DEBUG)" />
   </node>
 
-  <node name="simulator" pkg="ai4hri" type="simulator_node.py" output="screen">
+   <!--<node name="simulator" pkg="ai4hri" type="simulator_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
     <param name="SIMULATOR" value="$(arg SIMULATOR)" />
-  </node>
+  </node>-->
 
 </launch>
