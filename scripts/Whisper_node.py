@@ -66,7 +66,7 @@ def record_audio(audio_queue, energy, pause, rate):
     found_micro = False
     while (counter < 15) or (found_micro == False):
         try:      
-            with sr.Microphone(sample_rate=16000,  device_index=counter) as source:
+            with sr.Microphone(sample_rate=16000,  device_index=9) as source:
 
                 # Clear the console
                 for x in range(30):

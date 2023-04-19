@@ -18,4 +18,4 @@ RUN pip install -r requirements.txt
 
 CMD ["/bin/bash", "-c", "source /opt/ros/noetic/setup.bash && \
                          source /catkin_ws/devel/setup.bash && \
-                         roslaunch ai4hri knowledge_recognition.launch DEBUG:=True"]
+                         roslaunch ai4hri knowledge_recognition.launch"]
