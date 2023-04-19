@@ -62,21 +62,30 @@ def record_audio(audio_queue, energy, pause, rate):
     r.pause_threshold = pause
 
     # Open the microphone with the specified sample rate and device index
-    with sr.Microphone(sample_rate=16000,  device_index=12) as source:
+    counter = 0
+    found_micro = False
+    while (counter < 15) or (found_micro == False):
+        try:      
+            with sr.Microphone(sample_rate=16000,  device_index=counter) as source:
 
-        # Clear the console
-        for x in range(30):
-            print("")
+                # Clear the console
+                for x in range(30):
+                    print("")
 
-        rospy.loginfo("Node whisper initialized. Listening...")
+                rospy.loginfo("Node whisper initialized. Listening...")
 
-        # Record audio while the ROS node is running
-        while not rospy.is_shutdown():
+                # Record audio while the ROS node is running
+                while not rospy.is_shutdown():
 
-            audio = r.listen(source)
-            audio_queue.put_nowait(audio)
-            rate.sleep()
-
+                    audio = r.listen(source)
+                    audio_queue.put_nowait(audio)
+                    rate.sleep()
+                    found_micro = True
+        except:
+            counter += 1
+            if counter >= 15:
+                print("Microphone not found")
+                break
 
 def transcribe_audio(audio_queue, result_queue, rate):
 
