@@ -1,22 +1,21 @@
 FROM osrf/ros:noetic-desktop-full-focal
 
-RUN apt update
-RUN apt upgrade -y
-RUN apt install git -y
-RUN source /opt/ros/noetic/setup.bash
-RUN echo 'source /opt/ros/noetic/setup.bash' >> ~/.bashrc
-RUN mkdir catkin_ws
-RUN cd catkin_ws
-RUN mkdir src
-RUN cd src
-RUN git clone https://github.com/VictorPozoFernandez/ai4hri.git
-RUN cd ..
-RUN catkin make
-RUN source /catkin_ws/devel/setup.bash
-RUN echo 'source /catkin_ws/devel/setup.bash' >> ~/.bashrc
-RUN cd catkin_ws/src/ai4hri
-RUN apt install python3-pip -y
-RUN apt-get install portaudio19-dev python-all-dev -y
+RUN apt update && \
+    apt upgrade -y && \
+    apt install git -y && \
+    apt install python3-catkin-tools -y && \
+    apt install python3-pip -y && \
+    apt install portaudio19-dev python-all-dev alsa-base alsa-utils -y && \
+    mkdir -p /catkin_ws/src && \
+    git clone https://github.com/VictorPozoFernandez/ai4hri.git /catkin_ws/src/ai4hri && \
+    /bin/bash -c '. /opt/ros/noetic/setup.bash; cd /catkin_ws; catkin_make; . /catkin_ws/devel/setup.bash' && \
+    echo 'source /opt/ros/noetic/setup.bash' >> ~/.bashrc && \
+    echo 'source /catkin_ws/devel/setup.bash' >> ~/.bashrc
+
+WORKDIR /catkin_ws/src/ai4hri
+
 RUN pip install -r requirements.txt
 
-RUN roslaunch ai4hri knowledge_recognition.launch
+CMD ["/bin/bash", "-c", "source /opt/ros/noetic/setup.bash && \
+                         source /catkin_ws/devel/setup.bash && \
+                         roslaunch ai4hri knowledge_recognition.launch DEBUG:=True"]

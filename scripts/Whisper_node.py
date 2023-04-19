@@ -23,8 +23,9 @@ def main():
     pause = 0.5
 
     # Print microphone list if DEBUG is enabled
-    if DEBUG == True:
-        for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
+    #if DEBUG == True:
+    print("MICROPHONES LIST:")
+    for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
 
     audio_queue = queue.Queue()
     result_queue = queue.Queue()
