@@ -19,7 +19,7 @@ def main():
     pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1) 
 
     # Put the desired configuration 
-    energy = 300
+    energy = 500
     pause = 0.5
 
     # Print available microhpones PC
