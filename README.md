@@ -12,5 +12,5 @@ knowledge extraction, dividing this task into several tasks/sub- tasks/actions t
 
 1. Download the dockerfile of this repository
 2. Inside the terminal, go to the directory where the dockerfile is stored and execute "docker build --no-cache -t ai4hri:1.0 ."
-3. Inside the terminal, execute "docker run --privileged -it --rm --env OPENAI_ORG_ID=<insert your own OpenAI org ID> --env OPENAI_API_KEY=<insert your own OpenAI key> --env LANGUAGE_WHISPER='en' --device /dev/snd:/dev/snd ai4hri:1.0"
+3. Inside the terminal, execute "docker run --privileged -it --rm --env OPENAI_ORG_ID=&lt;insert your own OpenAI org ID&gt; --env OPENAI_API_KEY=&lt;insert your own OpenAI key&gt; --env LANGUAGE_WHISPER='en' --device /dev/snd:/dev/snd ai4hri:1.0"
 4. Wait for the message "Node whisper initialized. Listening..." and start talking to the microphone.
