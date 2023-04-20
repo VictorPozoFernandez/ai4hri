@@ -22,9 +22,7 @@ def main():
     energy = 300
     pause = 0.5
 
-    # Print microphone list if DEBUG is enabled
-    #if DEBUG == True:
-    print("MICROPHONES LIST:")
+    # Print available microhpones PC
     for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
 
     audio_queue = queue.Queue()
@@ -46,7 +44,7 @@ def main():
         utterance = result_queue.get() 
         
         # Publish the utterance if it's longer than 12 characters
-        if (len(utterance) > 12) and ("Amara.org" not in utterance):
+        if (len(utterance) > 12) and ("Amara.org" not in utterance) and ("for watching" not in utterance):
             utterance = utterance.replace(",", "")
             utterance = utterance.replace("'", "")
             pub.publish(utterance)
@@ -64,14 +62,13 @@ def record_audio(audio_queue, energy, pause, rate):
     # Open the microphone with the specified sample rate and device index
     counter = 0
     found_micro = False
-    while (counter < 15) or (found_micro == False):
+    while (counter < 15) and (found_micro == False):
         try:      
             with sr.Microphone(sample_rate=16000,  device_index=counter) as source:
 
                 # Clear the console
-                for x in range(30):
+                for x in range(5):
                     print("")
-
                 rospy.loginfo("Node whisper initialized. Listening...")
 
                 # Record audio while the ROS node is running
@@ -91,7 +88,7 @@ def transcribe_audio(audio_queue, result_queue, rate):
 
     openai.organization = os.environ.get("OPENAI_ORG_ID")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
-    
+ 
     # Transcribe the audio while the ROS node is running
     while not rospy.is_shutdown():
 
@@ -103,11 +100,13 @@ def transcribe_audio(audio_queue, result_queue, rate):
             temp_file.write(audio_data.get_wav_data())
             temp_file_name = temp_file.name
 
+        language = os.environ.get("LANGUAGE_WHISPER")
+        if language == None:
+            language = "en" #Change language (english = "en", spanish = "es", french = "fr", german = "de", italian = "it", japanese = "ja")  
+
         # Transcribe the temporary audio file
         with open(temp_file_name, "rb") as audio_file:
-            result = openai.Audio.transcribe("whisper-1", audio_file, language="en") 
-            #Change language (english = "en", spanish = "es", french = "fr", german = "de", italian = "it", japanese = "ja")
-            
+            result = openai.Audio.transcribe("whisper-1", audio_file, language=language)          
 
         # Remove the temporary file
         os.remove(temp_file_name)
