@@ -17,6 +17,8 @@ knowledge extraction, dividing this task into several tasks/sub- tasks/actions t
 
 Remember to execute in a new terminal "export ROS_MASTER_URI=http://&lt;insert IP address where roscore is running&gt;:11311" to listen to the ROS topics outside the docker container.
 
+## SQL Shop database inside the docker as an example
+
 ![Screenshot from 2023-04-25 10-03-04](https://user-images.githubusercontent.com/108496792/234213789-a803c5da-cbc5-4955-b64d-3d99d0aeda6b.png)
 
 ![Screenshot from 2023-04-25 10-03-42](https://user-images.githubusercontent.com/108496792/234213811-0a7832a6-d064-4d50-a489-ee805839f544.png)
