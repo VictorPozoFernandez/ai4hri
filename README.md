@@ -11,8 +11,8 @@ knowledge extraction, dividing this task into several tasks/sub- tasks/actions t
 ## Installation steps
 
 1. Download the dockerfile of this repository
-2. Inside the terminal, go to the directory where the dockerfile is stored and execute "docker build --no-cache -t ai4hri:1.0 ."
-3. Inside the terminal, execute "docker run --privileged -it --rm --env OPENAI_ORG_ID=&lt;insert your own OpenAI org ID&gt; --env OPENAI_API_KEY=&lt;insert your own OpenAI key&gt; --env LANGUAGE_WHISPER='en' --device /dev/snd:/dev/snd ai4hri:1.0"
+2. Inside the terminal, go to the directory where the dockerfile is stored and execute "sudo docker build --no-cache -t ai4hri:1.0 ."
+3. Inside the terminal, execute "sudo docker run --privileged -it --rm --env OPENAI_ORG_ID=&lt;insert your own OpenAI org ID&gt; --env OPENAI_API_KEY=&lt;insert your own OpenAI key&gt; --env LANGUAGE_WHISPER='en' --device /dev/snd:/dev/snd ai4hri:1.0"
 4. Wait for the message "Node whisper initialized. Listening..." and start talking to the microphone.
 
 Remember to execute in a new terminal "export ROS_MASTER_URI=http://&lt;insert IP address where roscore is running&gt;:11311" to listen to the ROS topics outside the docker container.
