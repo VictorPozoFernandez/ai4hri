@@ -76,7 +76,7 @@ def record_audio(audio_queue, energy, pause, rate):
 
                     audio = r.listen(source)
                     audio_queue.put_nowait(audio)
-                    rate.sleep()
+                    #rate.sleep()
                     found_micro = True
         except:
             counter += 1
