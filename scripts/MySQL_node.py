@@ -133,7 +133,6 @@ def generating_system_instructions(models_interest,relevant_info):
 
     1. If the shopkeeper is right about a characteristic, output:  ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
     2. If the shopkeeper is mistaken about a characteristic, output:  ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
-    3. If the shopkeeper is not sure about a characteristic, output:  ##['SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper doesnt know>']##
 
     Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
 
@@ -154,7 +153,6 @@ def generating_system_instructions(models_interest,relevant_info):
     Customer utterance: <Customer utterance> Shopkeeper utterance: <Shopkeeper utterance>
     ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
     ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
-    ##['SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper doesnt know>']##
 
     Always include the ## characters at the beginning and the end of each list. 
     Keep your response concise. 

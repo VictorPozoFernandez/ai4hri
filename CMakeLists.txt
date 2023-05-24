@@ -110,7 +110,7 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-catkin_install_python(PROGRAMS scripts/Whisper_node.py scripts/MySQL_node.py scripts/GPT_node.py scripts/classificator_node.py
+catkin_install_python(PROGRAMS scripts/Whisper_node.py scripts/MySQL_node.py scripts/GPT_node.py scripts/classificator_node.py scripts/record_node.py scripts/transcribe_node.py
 DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 

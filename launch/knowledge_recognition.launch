@@ -7,10 +7,15 @@
 
   <!-- Nodes -->
 
-   <!--<node name="whisper" pkg="ai4hri" type="Whisper_node.py" output="screen">
+  <node name="whisper" pkg="ai4hri" type="Whisper_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
     <param name="SIMULATOR" value="$(arg SIMULATOR)" />
-  </node>-->
+  </node>
+
+     <!--<node name="simulator" pkg="ai4hri" type="simulator_node.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+    <param name="SIMULATOR" value="$(arg SIMULATOR)" />
+  </node>
 
   <node name="record" pkg="ai4hri" type="record_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
@@ -18,7 +23,7 @@
 
   <node name="transcribe" pkg="ai4hri" type="transcribe_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
-  </node>
+  </node>-->
 
   <node name="classificator" pkg="ai4hri" type="classificator_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
@@ -32,9 +37,5 @@
     <param name="DEBUG" value="$(arg DEBUG)" />
   </node>
 
-   <!--<node name="simulator" pkg="ai4hri" type="simulator_node.py" output="screen">
-    <param name="DEBUG" value="$(arg DEBUG)" />
-    <param name="SIMULATOR" value="$(arg SIMULATOR)" />
-  </node>-->
 
 </launch>
