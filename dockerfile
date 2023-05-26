@@ -13,7 +13,7 @@ RUN apt update && \
     echo 'source /opt/ros/noetic/setup.bash' >> ~/.bashrc && \
     echo 'source /catkin_ws/devel/setup.bash' >> ~/.bashrc && \
     echo 'export ROS_MASTER_URI=http://192.168.203.36:11311/' && \
-    echo 'echo ROS_IP=172.17.0.1'
+    echo 'echo ROS_IP=172.17.0.2'
 
 WORKDIR /catkin_ws/src/ai4hri
 
