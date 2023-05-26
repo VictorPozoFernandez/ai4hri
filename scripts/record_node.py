@@ -37,10 +37,10 @@ def record_audio(pub, energy, pause):
 
                 # Record audio while the ROS node is running
                 while not rospy.is_shutdown():
-                    
+
                     audio = r.listen(source)
 
-                    if audio_control == "RESUME":                   
+                    if audio_control == "RESUME":
                         wav_data = audio.get_wav_data()
                         pub.publish(wav_data)
 
@@ -59,6 +59,10 @@ def main():
 
     energy = 1000
     pause = 0.5
+
+    # Print available microhpones PC
+    for index, name in enumerate(sr.Microphone.list_microphone_names()): print(f'{index}, {name}')
+
     record_audio(pub, energy, pause)
 
 if __name__ == '__main__':
