@@ -5,7 +5,7 @@ RUN apt update && \
     apt install git -y && \
     apt install python3-catkin-tools -y && \
     apt install python3-pip -y && \
-    apt install ros-noetic-audio-common \
+    apt install ros-noetic-audio-common -y && \
     apt install portaudio19-dev python-all-dev alsa-base alsa-utils -y && \
     mkdir -p /catkin_ws/src && \
     git clone https://github.com/VictorPozoFernandez/ai4hri.git /catkin_ws/src/ai4hri && \
