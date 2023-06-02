@@ -8,7 +8,7 @@ RUN apt update && \
     apt install ros-noetic-audio-common -y && \
     apt install portaudio19-dev python-all-dev alsa-base alsa-utils -y && \
     mkdir -p /catkin_ws/src && \
-    git clone https://github.com/VictorPozoFernandez/ai4hri.git /catkin_ws/src/ai4hri && \
+    git clone https://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@github.com/VictorPozoFernandez/ai4hri.git /catkin_ws/src/ai4hri && \
     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd /catkin_ws; catkin_make; . /catkin_ws/devel/setup.bash' && \
     echo 'source /opt/ros/noetic/setup.bash' >> ~/.bashrc && \
     echo 'source /catkin_ws/devel/setup.bash' >> ~/.bashrc 
