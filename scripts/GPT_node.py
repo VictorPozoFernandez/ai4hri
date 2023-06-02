@@ -4,6 +4,12 @@ import openai
 import os
 import sqlite3
 from sklearn.metrics.pairwise import cosine_similarity
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage, SystemMessage, AIMessage, Document
+from langchain.prompts import PromptTemplate
+import json
+import re
+import ast
 
 DEBUG = rospy.get_param('/GPT/DEBUG')
 
@@ -31,7 +37,11 @@ def callback(msg):
     detected_model_list = models_of_interest(msg)
 
     if "NULL" not in detected_model_list:
-        topic = topic_extraction(msg)
+        #topic = topic_extraction(msg)
+        topic = topic_extraction_2(msg)
+        print(topic)
+
+
 
         # Initialize the publisher for extracted_info ROS topic
         pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1, latch=True) 
@@ -151,6 +161,98 @@ def topic_extraction(msg):
         print("Topics: " + str(selected_columns))
 
     return selected_columns
+
+
+def topic_extraction_2(msg):
+
+    # Connect to the Camera_Store database. Initialize the cursor for querying the database.
+    parent_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(parent_dir, "Camera_Store.db")
+    db = sqlite3.connect(db_path)
+    
+    mycursor = db.cursor()
+
+    # Get all table names in the database
+    mycursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = mycursor.fetchall()
+
+    # Iterate through tables. Get all column names. Create a list with all the the found column names in the database that can be considered as topic
+    column_list = []
+    for table in tables:
+        table_name = table[0]
+        mycursor.execute(f"PRAGMA table_info({table_name});")
+        columns = mycursor.fetchall()
+        column_names = [column[1] for column in columns]
+
+        if 'Product_ID' in column_names:
+            column_list = column_list + column_names  
+        
+        column_list_no_duplicates = list(set(column_list))
+        column_list = [item for item in column_list_no_duplicates if item != 'Product_ID']
+        topics = topic_identification_gpt(msg, column_list)
+        topics_list = ast.literal_eval(topics["Detection"])
+
+
+    return topics_list
+
+
+def topic_identification_gpt(msg, column_list):
+
+    # Set OpenAI API credentials
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+
+    # Prepare prompt to send, using JSON format
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+
+
+    system_prompt = """
+    You are a helpful assistant. Write the element from the List that approximates the most with the topic of conversation given as Input.
+
+    Here there are some examples that illustrates how can you output your answer. The interactions appear in cronological order:
+
+    Input: What is the price of the Sony Camera? It has a price of 550 dollars
+    List: ['Type_of_camera', 'Model', 'Price', 'ISO', 'Camera_features', 'Color', 'Weight', 'Resolution']
+    You: {"Detection": "['Price']"}
+
+    Input: And what about this one? This model is available in color blue and has a resolution of 20 megapixels
+    List: ['Type_of_camera', 'Model', 'Price', 'ISO', 'Camera_features', 'Color', 'Weight', 'Resolution']
+    You: {"Detection": "['Color', 'Resolution']"}
+
+
+    Output the answer only in JSON format.
+    """
+
+    user_template = """
+    Input: {customer}. {shopkeeper}
+    List: {column_list}
+    """
+
+    user_prompt_template = PromptTemplate(input_variables=["customer", "shopkeeper", "column_list"], template=user_template)
+    user_prompt = user_prompt_template.format(customer = msg.data[0], shopkeeper = msg.data[1], column_list = column_list)
+
+    prompt_history = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(content=user_prompt)
+    ]
+
+    result = chat(prompt_history)
+    data = extract_json(result.content)
+
+    return data
+
+
+def extract_json(s):
+    json_match = re.search(r'\{.*\}', s, re.DOTALL)
+    if json_match:
+        try:
+            data = json.loads(json_match.group())
+            return data
+        except json.JSONDecodeError:
+            print("Invalid JSON")
+            return None
+    else:
+        print("No JSON found in the string")
+        return {"Detection": "null", "Model": "null", "Output" : "null",}
 
 
 def generating_system_instructions(products_of_interest):
