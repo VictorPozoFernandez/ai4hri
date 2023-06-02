@@ -31,17 +31,16 @@ def record_audio(pub, energy, pause):
             with sr.Microphone(sample_rate=16000,  device_index=counter) as source:
 
                 # Clear the console
-                for x in range(5):
+                for x in range(4):
                     print("")
                 rospy.loginfo("Node record_node initialized. Listening...")
 
                 # Record audio while the ROS node is running
                 while not rospy.is_shutdown():
-
                     audio = r.listen(source)
+                    wav_data = audio.get_wav_data()
 
-                    if audio_control == "RESUME":
-                        wav_data = audio.get_wav_data()
+                    if (audio_control == "RESUME"):
                         pub.publish(wav_data)
 
                     found_micro = True
@@ -57,7 +56,7 @@ def main():
     pub = rospy.Publisher('/ai4hri/audio_data', AudioData, queue_size= 1)
     rospy.Subscriber("/ai4hri/audio_control", String, callback)
 
-    energy = 1000
+    energy = 15000
     pause = 0.5
 
     # Print available microhpones PC
@@ -65,8 +64,11 @@ def main():
 
     record_audio(pub, energy, pause)
 
+
 if __name__ == '__main__':
     try:
         main()
     except rospy.ROSInterruptException:
+        print(rospy.ROSInterruptException)
         pass
+

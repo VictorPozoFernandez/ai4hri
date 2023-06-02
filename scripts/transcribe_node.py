@@ -16,6 +16,10 @@ def main():
     rospy.Subscriber("/ai4hri/audio_data", AudioData, callback)
     rospy.loginfo("Node audio_transcriber initialized. Listening...")
 
+    #The system never listens to the first utterance. This snippet code publishes a first utterance that will be ignored.
+    pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1)
+    pub.publish("------")
+
     rospy.sleep(1)
     rospy.spin()
 
@@ -39,7 +43,7 @@ def callback(msg):
     utterance = result["text"]
 
     # Publish the utterance if it's longer than 10 characters
-    if (len(utterance) > 12) and ("Amara.org" not in utterance) and ("for watching" not in utterance):
+    if (len(utterance) > 12) and ("Amara.org" not in utterance) and ("for watching" not in utterance) and ("Thank" not in utterance):
         utterance = utterance.replace(",", "")
         utterance = utterance.replace("'", "")
         pub = rospy.Publisher('/ai4hri/utterance', String, queue_size= 1)
