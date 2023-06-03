@@ -68,12 +68,12 @@ def search_callback(msg):
         substring = ast.literal_eval(substring)
         feature = get_left_substring(substring[2])
 
-        if feature in topics_interest:
-            print("")
-            print(substring[0])
-            print("Product: " + substring[1])
-            print("Feature: " + substring[2])
-            print("Reason: " + substring[3])
+        print("")
+        print(substring[0])
+        print("Product: " + substring[1])
+        print("Feature: " + substring[2])
+        print("Reason: " + substring[3])
+        print("")
 
     if len(substrings) == 0:
         print("")

@@ -45,11 +45,11 @@ def callback(msg):
     except:
         result = change_of_model_classification(msg)
     
-    if result["Detection"] == "['New model']":
+    if result["Detection"] == "['Different model']":
         previous_conversations = ""
 
     else:
-        print("Detected model: " + str(current_model))
+        print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
 
     previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
    
@@ -57,7 +57,7 @@ def callback(msg):
     topic = topic_extraction(msg)
     print("Detected topics: " + str(topic))
 
-    if result["Detection"] == "['New model']":
+    if result["Detection"] == "['Different model']":
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
         detected_model_list= model_identification_gpt(msg, characteristics_products)
         print("Detected model: " + str(detected_model_list))
@@ -252,7 +252,7 @@ def model_identification_gpt(msg, characteristics_products):
 
     Here there are some examples that illustrates how can you output your answer.
 
-    Customer: 'What is the price of this Sony Camera?' Shopkeeper: 'This is the Nikon Coolpix, and it costs 68 dollars';
+    Customer: 'What is the price of this Nikon Camera?' Shopkeeper: 'it costs 68 dollars only';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])], [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
     You: {"Detection": "['Nikon Coolpix S2800']"}
 
@@ -325,29 +325,28 @@ def change_of_model_classification(msg, previous_conversations = ""):
 
 
     system_prompt = """
-    You are a helpful assistant that identifies if the Customer or the Shopkeeper start talking about a different model than the one they where talking in the previous interaction.
+    You are a helpful assistant that identifies if the camera model that is being presented in the 'Current interaction' is different form the camera model that was presented in 'Previous interactions'.
 
-    Here there are some examples that illustrates how can you output your answer. The interactions appear in cronological order:
+    Here there are some examples that illustrates how can you output your answer.
 
     Previous interactions -> Customer: 'What is the price of this Sony Camera?' Shopkeeper: 'This is the Sony Alpha, and it costs 550 dollars';
     Current interaction -> Customer: 'I see, and how much does it weight?' Shopkeeper: 'only 120 grams';
-    You: {"Reasoning": "The Customer is asking about the weight of the camera that was presented in the previous interaction. They are keep talking about the same model as the Previous interaction", "Detection": "['Same model']"}
+    You: {"Reasoning": "The Customer is asking about the weight of the camera that was presented in the previous interaction. They are keep talking about the same model as Previous interactions", "Detection": "['Same model']"}
 
     Previous interactions -> Customer: 'I would like to buy a cheap camera' Shopkeeper: 'In this case I recommend you the Nikon Coolpix';
     Current interaction -> Customer: 'Do you have any other camera?' Shopkeeper: 'Yes, this is the Cannon EOS 5D, one of the best cameras of the market';
-    You: {"Reasoning": "The Customer is asking about other cameras and the Shopkeeper presents the Cannon EOS 5D model. They are keep talking about a different model than in the Previous interaction", "Detection": "['New model']"}
+    You: {"Reasoning": "The Customer is asking about other cameras and the Shopkeeper presents the Cannon EOS 5D model. They are keep talking about a different model than in Previous interactions", "Detection": "['Different model']"}
 
     Previous interactions -> Customer: 'How much does it cost?' Shopkeeper: '2000 dollars';
     Current interaction -> Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
-    You: {"Reasoning": "The Customer is asking about another camera that was presented previously bt the Shopkeeper. They are keep talking about a different model than in the Previous interaction", "Detection": "['New model']"}
+    You: {"Reasoning": "The Customer is asking about another camera that was presented previously by the Shopkeeper. They are talking about a different model than in Previous interactions", "Detection": "['Different model']"}
 
     Previous interactions -> ;
     Current interaction -> Customer: 'What's the price of this camera?' Shopkeeper: 'This is the Cannon EOS 5D, it costs 2000 dollars';
-    You: {"Reasoning": "This is the first interaction, so there is no previous model to compare with.", "Detection": "['New model']"}
+    You: {"Reasoning": "This is the first interaction, so there is no previous model to compare with.", "Detection": "['Different model']"}
 
 
-    Output only with the labels ['Same model'] or ['New model']
-    Output only ['New model'] when it's very clear that they are talking about a different camera. In case of doubt, output ['Same model']
+    Output only with the labels ['Same model'] or ['Different model']
     Output the answer only in JSON format.
     """
 
