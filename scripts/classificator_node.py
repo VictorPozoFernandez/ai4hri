@@ -38,6 +38,7 @@ def callback(msg):
     classification_result = sentence_classification(new_utterance)
     print("------------------------------------------")
     print(" - " + new_utterance + " (" + classification_result + ")")
+    print("")
 
     if (("Shopkeeper" in classification_result) or ("shopkeeper" in classification_result)) and (toggle == False):
         # Get the position of the shopkeeper and the customer using a position tracker

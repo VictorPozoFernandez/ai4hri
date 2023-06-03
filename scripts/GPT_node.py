@@ -41,22 +41,26 @@ def callback(msg):
 
     try:
         result = change_of_model_classification(msg, previous_conversations)
+        
     except:
         result = change_of_model_classification(msg)
     
     if result["Detection"] == "['New model']":
         previous_conversations = ""
 
-    previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
+    else:
+        print("Detected model: " + str(current_model))
 
-    
+    previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
+   
+
     topic = topic_extraction(msg)
-    print(topic)
+    print("Detected topics: " + str(topic))
 
     if result["Detection"] == "['New model']":
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
         detected_model_list= model_identification_gpt(msg, characteristics_products)
-        print(detected_model_list)
+        print("Detected model: " + str(detected_model_list))
         current_model = detected_model_list
     
     
@@ -343,6 +347,7 @@ def change_of_model_classification(msg, previous_conversations = ""):
 
 
     Output only with the labels ['Same model'] or ['New model']
+    Output only ['New model'] when it's very clear that they are talking about a different camera. In case of doubt, output ['Same model']
     Output the answer only in JSON format.
     """
 
@@ -361,8 +366,6 @@ def change_of_model_classification(msg, previous_conversations = ""):
 
     result = chat(prompt_history)
     data = extract_json(result.content)
-    print(data)
-
     return data
 
 

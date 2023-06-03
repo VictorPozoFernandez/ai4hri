@@ -5,6 +5,11 @@ import sqlite3
 import openai
 import re
 import ast
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage, SystemMessage, AIMessage, Document
+from langchain.prompts import PromptTemplate
+import json
+
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
 
@@ -45,17 +50,52 @@ def search_callback(msg):
     # Extract the camera models and topics of interest
     models_interest = []
     for _ in range(int(num_models)):
-
         models_interest.append((msg.data[0],msg.data[1]))
         msg.data.pop(0)
         msg.data.pop(0)
 
     topics_interest = []
     for _ in range(int(num_topics)):
-
         topics_interest.append(msg.data[0])
         msg.data.pop(0)
     
+    ground_truth = extract_ground_truth(models_interest, topics_interest)
+    result = judge_gpt(shopkeeper_sentence, ground_truth)
+    substrings = extract_substrings(result.content)
+
+    for substring in substrings:
+
+        substring = ast.literal_eval(substring)
+        feature = get_left_substring(substring[2])
+
+        if feature in topics_interest:
+            print("")
+            print(substring[0])
+            print("Product: " + substring[1])
+            print("Feature: " + substring[2])
+            print("Reason: " + substring[3])
+
+    if len(substrings) == 0:
+        print("")
+        print("ChatGPT2: " + str(result.content))
+
+
+def extract_substrings(text):
+    pattern = r'##\[(.*?)\]##'
+    substrings = re.findall(pattern, text)
+    return substrings
+
+
+def get_left_substring(text):
+    if ':' in text:
+        left_substring = text.split(':', 1)[0].strip()
+        return left_substring
+    else:
+        return text
+    
+
+def extract_ground_truth(models_interest, topics_interest):
+
     # Query the database for the characteristics of the detected topics for each of the presented cameras models.
     mycursor2.execute("SELECT name FROM sqlite_master WHERE type='table'")
 
@@ -76,93 +116,57 @@ def search_callback(msg):
 
                         relevant_info[i].append(str(column_info[1]) + ": " + str(finding[0]))
 
-    # Set OpenAI API credentials
-    openai.organization = os.environ.get("OPENAI_ORG_ID")
-    openai.api_key = os.environ.get("OPENAI_API_KEY")
-
-    # Generate message history with system instructions as first prompt. Append customer and shopkeeper utterance. 
-    messages_history = generating_system_instructions(models_interest,relevant_info)
-    messages_history.append({"role": "user", "content": "Customer utterance: " + str(customer_sentence) + "Shopkeeper utterance: " + str(shopkeeper_sentence)})
-
-    # Get the generated text from OpenAI's GPT-3.5-turbo model
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo", 
-        messages=messages_history,
-        temperature=0.0
-    )
-
-    #Remove the last message (shopkeeper message) from the message history
-    messages_history.pop(-1)
-
-    # Process and print the identified knowledge
-    
-    substrings = extract_substrings(completion["choices"][0]["message"]["content"])
-
-    for substring in substrings:
-
-        substring = ast.literal_eval(substring)
-        feature = get_left_substring(substring[2])
-        if feature in topics_interest:
-            print("")
-            print(substring[0])
-            print("Product: " + substring[1])
-            print("Feature: " + substring[2])
-            print("Reason: " + substring[3])
-
-    if len(substrings) == 0:
-        print("")
-        print("ChatGPT2: " + str(completion["choices"][0]["message"]["content"]))
-
-
-def extract_substrings(text):
-    pattern = r'##\[(.*?)\]##'
-    substrings = re.findall(pattern, text)
-    return substrings
-
-
-def get_left_substring(text):
-    if ':' in text:
-        left_substring = text.split(':', 1)[0].strip()
-        return left_substring
-    else:
-        return text
-
-def generating_system_instructions(models_interest,relevant_info):
-
-    message1 = """Imagine you are helping me determine if a shopkeeper is right or mistaken when presenting the characteristics of a camera model. Your task is to analyze the shopkeeper's statements and output the relevant lists based on the characteristics mentioned by the shopkeeper:
-
-    1. If the shopkeeper is right about a characteristic, output:  ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
-    2. If the shopkeeper is mistaken about a characteristic, output:  ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
-
-    Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
-
-    Model list:
-    """
-
     # Create a list to store characteristics of products
     characteristics_products=[]
     for i, model_reference in  enumerate(models_interest):
         characteristics_products.append(str(model_reference[1]) + ": " + str(relevant_info[i]))
+    return characteristics_products
 
-    message2 = """ 
+
+def judge_gpt(shopkeeper_sentence, ground_truth):
+
+    # Set OpenAI API credentials
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+
+    # Prepare prompt to send, using JSON format
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+
+
+    system_prompt = """
+    Imagine you are helping me determine if a shopkeeper is right or mistaken when presenting the characteristics of a camera model. Your task is to analyze the shopkeeper's statements and output the relevant lists based on the characteristics mentioned by the shopkeeper:
+
+    1. If the shopkeeper is right about a characteristic, output: ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
+    2. If the shopkeeper is mistaken about a characteristic, output: ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
 
     When the shopkeeper presents multiple characteristics, output a separate list for each characteristic. If the shopkeeper does not mention a specific characteristic, do not output a list about it.
 
-    Here's an example of how to format your answer:
+    Use the information given in Ground Truth to help you. Here's an example of how to format your answer:
 
-    Customer utterance: <Customer utterance> Shopkeeper utterance: <Shopkeeper utterance>
-    ##['SHOPKEEPER IS RIGHT', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
-    ##['SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
-
-    Always include the ## characters at the beginning and the end of each list. 
+    Shopkeeper utterance: <Shopkeeper utterance>
+    Ground Truth: <real characteristics of the camera model that the Shopkeeper is presenting>
+    ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
+    ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
+ 
     Keep your response concise. 
+    Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
+    Always include the ## characters at the beginning and the end of each list.
     """
 
-    # Put together previous string messages to obtain the final prompt that will be sent to ChatGPT.
-    system_message = message1 + str(characteristics_products) + message2
-    messages_history=[{"role": "system", "content": system_message}]
+    user_template = """
+    Shopkeeper: {shopkeeper_sentence}
+    Ground Truth: {ground_truth}
+    """
 
-    return messages_history
+    user_prompt_template = PromptTemplate(input_variables=["shopkeeper_sentence", "ground_truth"], template=user_template)
+    user_prompt = user_prompt_template.format(shopkeeper_sentence = shopkeeper_sentence, ground_truth = ground_truth)
+
+    prompt_history = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(content=user_prompt)
+    ]
+
+    result = chat(prompt_history)
+    return result
 
 
 if __name__ == '__main__':
