@@ -73,7 +73,7 @@ def search_callback(msg):
         feature = get_left_substring(substring[2])
         model = substring[1]
 
-        if (feature in topics_interest) and (model in models_interest[0][1]):
+        if (feature in topics_interest) and (model in models_interest[0][1]) and (substring[0] != 'NOT MENTIONED'):
             print("")
             print(substring[0])
             print("Product: " + substring[1])
@@ -143,18 +143,19 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
 
     1. If the shopkeeper is right about a characteristic, output: ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
     2. If the shopkeeper is mistaken about a characteristic, output: ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
+    3. If the shopkeeper does not mention a characteristic, output: ##['NOT MENTIONED', '<camera model's name>', '<presented characteristic>', '<Reason of why the characteristic is not mentioned>']##
 
-    When the shopkeeper presents multiple characteristics, output a separate list for each characteristic. If the shopkeeper does not mention a specific characteristic, do not output a list about it.
+    When the shopkeeper presents multiple characteristics, output a separate list for each characteristic.
 
     Use the information given in Ground Truth to help you. Here's an example of how to format your answer:
 
     Shopkeeper utterance: <Shopkeeper utterance>
     Ground Truth: <real characteristics of the camera model that the Shopkeeper is presenting>
-    ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic from Ground Truth>', '<Reason of why the shopkeeper is right>']##
-    ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic from Ground Truth>', '<Reason of why the shopkeeper is mistaken>']##
- 
+    ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic name from Ground Truth>', '<Reason of why the shopkeeper is right>']##
+    ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic name from Ground Truth>', '<Reason of why the shopkeeper is mistaken>']##
+    ##['NOT MENTIONED', '<camera model's name>', '<presented characteristic>', '<Reason of why the characteristic is not mentioned>']##
+    
     Keep your response concise. 
-    Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
     Always include the ## characters at the beginning and the end of each list.
     """
 
