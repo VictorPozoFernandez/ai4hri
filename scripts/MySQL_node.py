@@ -65,15 +65,21 @@ def search_callback(msg):
 
     for substring in substrings:
 
-        substring = ast.literal_eval(substring)
+        try:
+            substring = ast.literal_eval(substring)
+        except:
+            return
+        
         feature = get_left_substring(substring[2])
+        model = substring[1]
 
-        print("")
-        print(substring[0])
-        print("Product: " + substring[1])
-        print("Feature: " + substring[2])
-        print("Reason: " + substring[3])
-        print("")
+        if (feature in topics_interest) and (model in models_interest[0][1]):
+            print("")
+            print(substring[0])
+            print("Product: " + substring[1])
+            print("Feature: " + substring[2])
+            print("Reason: " + substring[3])
+            print("")
 
     if len(substrings) == 0:
         print("")
@@ -144,8 +150,8 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
 
     Shopkeeper utterance: <Shopkeeper utterance>
     Ground Truth: <real characteristics of the camera model that the Shopkeeper is presenting>
-    ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is right>']##
-    ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic>', '<Reason of why the shopkeeper is mistaken>']##
+    ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic from Ground Truth>', '<Reason of why the shopkeeper is right>']##
+    ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic from Ground Truth>', '<Reason of why the shopkeeper is mistaken>']##
  
     Keep your response concise. 
     Please only consider the camera models and their characteristics provided in the model list. Do not use any hypothetical camera models.
@@ -166,6 +172,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     ]
 
     result = chat(prompt_history)
+    print(result.content)
     return result
 
 
