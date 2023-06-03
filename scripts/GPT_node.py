@@ -16,7 +16,8 @@ DEBUG = rospy.get_param('/GPT/DEBUG')
 # Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives, etc. )
 # In this case the position tracker is not implemented yet, all cameras from Malcom's experiment are considered.
 products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
-
+#products_of_interest = [(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
+#products_of_interest = [(3,"Canon EOS 5D Mark III"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
 
 def main():
 
@@ -30,6 +31,7 @@ def main():
 def callback(msg):
 
     global previous_conversations
+    global current_model
         
     # Set OpenAI API credentials
     openai.organization = os.environ.get("OPENAI_ORG_ID")
@@ -37,36 +39,36 @@ def callback(msg):
 
     # Extract relevant modelS and topic from the message
 
-    topic = topic_extraction(msg)
-
-    characteristics_products = extraction_characteristics_products(products_of_interest, topic)
-    detected_model_list= model_identification_gpt(msg, characteristics_products)
-    print(detected_model_list)
-
     try:
-        result = change_of_model_classification(previous_conversations, msg)
-        
-        if result["Detection"] == "['Different model']":
-            previous_conversations = ""
-
-    except Exception as e:
-        print(e)
+        result = change_of_model_classification(msg, previous_conversations)
+    except:
+        result = change_of_model_classification(msg)
+    
+    if result["Detection"] == "['New model']":
         previous_conversations = ""
-        pass
 
     previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
 
-    if "NULL" not in detected_model_list:
-        #topic = topic_extraction(msg)
-        #extraction_list_products()
+    
+    topic = topic_extraction(msg)
+    print(topic)
+
+    if result["Detection"] == "['New model']":
+        characteristics_products = extraction_characteristics_products(products_of_interest, topic)
+        detected_model_list= model_identification_gpt(msg, characteristics_products)
+        print(detected_model_list)
+        current_model = detected_model_list
+    
+    
+    if (len(current_model) == 2) and ("NULL" not in topic):
 
         # Initialize the publisher for extracted_info ROS topic
         pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1, latch=True) 
 
         # Combine models and topic into a single list. Append number of detected models and topics
         extracted_info= String_list()
-        extracted_info = detected_model_list + topic  
-        extracted_info.append(str(len(detected_model_list)))
+        extracted_info = current_model + topic  
+        extracted_info.append(str(len(current_model)))
         extracted_info.append(str(len(topic)))
 
         #Insert the first and second element of message data (customer and shopkeeper utterance) at the beginning of the list
@@ -138,8 +140,12 @@ def topic_identification_gpt(msg, column_list):
     List: ['Type_of_camera', 'Model', 'Price', 'ISO', 'Camera_features', 'Color', 'Weight', 'Resolution']
     You: {"Detection": "['Color', 'Resolution']"}
 
+    Input: Good morning, how can I be of service?
+    List: ['Type_of_camera', 'Model', 'Price', 'ISO', 'Camera_features', 'Color', 'Weight', 'Resolution']
+    You: {"Detection": "['NULL']"}
 
-    Output the answer only in JSON format.
+
+    Output the answer only in JSON format.  If no topic is detected, output {"Detection": "['NULL']"}
     """
 
     user_template = """
@@ -262,17 +268,21 @@ def model_identification_gpt(msg, characteristics_products):
     List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])], [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
     You: {"Detection": "['NULL']"}
 
+    Customer: 'Im looking for a camera' Shopkeeper: 'This is the Sony Alpha';
+    List: [[('Model', ['Sony Alpha a6000']), ('Camera_features', ['13 artistic effect modes', '9 preset modes'])], [('Model', ['Sony Alpha a5000']), ('Camera_features', [])], [('Model', ['LEICA M11']), ('Camera_features', [])]]
+    You: {"Detection": "['Sony Alpha a6000', 'Sony Alpha a5000']"}
+
     Customer: 'What about its resolution?' Shopkeeper: 'It has more than 21 megapixels';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Resolution', ['20.1 megapixels'])], [('Model', ['Sony Alpha a6000']), ('Resolution', ['24.0 megapixels'])], [('Model', ['Canon EOS 5D Mark III']), ('Resolution', ['22.3 megapixels'])]]
     You: {"Detection": "['Sony Alpha a6000', 'Canon EOS 5D Mark III']"}
 
-    Use the data from the List to identify the camera model. If no camera is detected, output {"Detection": "['NULL']"} 
+    Use the data from the List to identify the camera model. If no camera is detected, output {"Detection": "['NULL']"}. If two or more models are identified, output all of them. 
     Output the answer only in JSON format.
     """
 
     user_template = """
-    Customer: {customer} Shopkeeper: {shopkeeper}
-    List: {characteristics_products}
+    Customer: {customer} Shopkeeper: {shopkeeper};
+    List: {characteristics_products};
     """
 
     user_prompt_template = PromptTemplate(input_variables=["customer", "shopkeeper", "characteristics_products"], template=user_template)
@@ -301,7 +311,7 @@ def model_identification_gpt(msg, characteristics_products):
     return detected_model_list
 
 
-def change_of_model_classification(previous_conversations, msg):
+def change_of_model_classification(msg, previous_conversations = ""):
 
     # Set OpenAI API credentials
     openai_api_key = os.environ.get("OPENAI_API_KEY")
@@ -321,24 +331,24 @@ def change_of_model_classification(previous_conversations, msg):
 
     Previous interactions -> Customer: 'I would like to buy a cheap camera' Shopkeeper: 'In this case I recommend you the Nikon Coolpix';
     Current interaction -> Customer: 'Do you have any other camera?' Shopkeeper: 'Yes, this is the Cannon EOS 5D, one of the best cameras of the market';
-    You: {"Reasoning": "The Customer is asking about other cameras and the Shopkeeper presents the Cannon EOS 5D model. They are keep talking about a different model than in the Previous interaction", "Detection": "['Different model']"}
+    You: {"Reasoning": "The Customer is asking about other cameras and the Shopkeeper presents the Cannon EOS 5D model. They are keep talking about a different model than in the Previous interaction", "Detection": "['New model']"}
 
     Previous interactions -> Customer: 'How much does it cost?' Shopkeeper: '2000 dollars';
     Current interaction -> Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
-    You: {"Reasoning": "The Customer is asking about another camera that was presented previously bt the Shopkeeper. They are keep talking about a different model than in the Previous interaction", "Detection": "['Different model']"}
+    You: {"Reasoning": "The Customer is asking about another camera that was presented previously bt the Shopkeeper. They are keep talking about a different model than in the Previous interaction", "Detection": "['New model']"}
 
-    Previous interactions -> Customer: '' Shopkeeper: 'Good morning';
+    Previous interactions -> ;
     Current interaction -> Customer: 'What's the price of this camera?' Shopkeeper: 'This is the Cannon EOS 5D, it costs 2000 dollars';
-    You: {"Reasoning": "This is the first interaction, so there is no previous model to compare with.", "Detection": "['First interaction']"}
+    You: {"Reasoning": "This is the first interaction, so there is no previous model to compare with.", "Detection": "['New model']"}
 
 
-    Output only with the labels ['Same model'], ['Different model'] or ['First interaction']
+    Output only with the labels ['Same model'] or ['New model']
     Output the answer only in JSON format.
     """
 
     user_template = """
-    Previous interactions -> {previous_conversations}
-    Current interaction -> Customer: {customer} Shopkeeper: {shopkeeper}
+    Previous interactions -> {previous_conversations};
+    Current interaction -> Customer: {customer} Shopkeeper: {shopkeeper};
     """
 
     user_prompt_template = PromptTemplate(input_variables=["previous_conversations", "customer", "shopkeeper"], template=user_template)
