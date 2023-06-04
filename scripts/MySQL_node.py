@@ -150,7 +150,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     Use the information given in Ground Truth to help you. Here's an example of how to format your answer:
 
     Shopkeeper utterance: <Shopkeeper utterance>
-    Ground Truth: ["Sony Alpha a6000: ['Model: Sony Alpha a6000', 'Price: 550', 'Type_of_camera: Mirrorless', 'Resolution: 24.0 megapixels']"]
+    Ground Truth: ["Sony Alpha a6000: ['Model: Sony Alpha a6000', 'Price: <>', 'Type_of_camera: <>', 'Resolution: <>']"]
     ##['SHOPKEEPER IS RIGHT', 'Sony Alpha a6000', 'Type_of_camera', '<Reason of why the shopkeeper is right>']##
     ##['SHOPKEEPER IS MISTAKEN', 'Sony Alpha a6000', 'Resolution', '<Reason of why the shopkeeper is mistaken>']##
     ##['NOT MENTIONED', '<Sony Alpha a6000', 'Price', '<Reason of why the characteristic is not mentioned>']##

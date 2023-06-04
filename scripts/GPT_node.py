@@ -89,16 +89,23 @@ def detect_change_of_camera(msg):
     global previous_conversations
     global current_model
 
+    if previous_conversations == "":
+        previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
+        return {"Detection": "['Different model']"}
+    
+    if str(msg.data[0]) != "":      
+        previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
+    elif str(msg.data[1]) != "": 
+        previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
+
     result = change_of_model_classification_fast(msg)
     
     if result["Detection"] == "['Same model']":
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
         
     elif result["Detection"] == "['Different model']":
-        previous_conversations = ""
+        previous_conversations = " Shopkeeper: " + str(msg.data[1])
     
-    previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
-
     return result
 
 
@@ -115,34 +122,24 @@ def change_of_model_classification_fast(msg):
 
 
     system_prompt = """
-    You are a helpful assistant that identifies if the camera model that is being presented in the 'Current interaction' is different form the camera model that was presented in 'Previous interactions'.
+    You are a helpful assistant that identifies if the Shopkeeper or the Customer bring a different camera to the conversation.
 
-    Here there are some examples that illustrates how can you output your answer.
+    Here is an example that illustrates how can you output your answer.
 
-    Previous interactions -> Customer: 'What is the price of this Sony Camera?' Shopkeeper: 'This is the Sony Alpha, and it costs 550 dollars';
-    Current interaction -> Customer: 'I see, and how much does it weight?' Shopkeeper: 'only 120 grams';
-    You: {"Detection": "['Same model']"}
-
-    Previous interactions -> Customer: 'I would like to buy a cheap camera' Shopkeeper: 'In this case I recommend you the Nikon Coolpix';
-    Current interaction -> Customer: 'Do you have any other camera?' Shopkeeper: 'Yes, this is the Cannon EOS 5D, one of the best cameras of the market';
-    You: {"Detection": "['Different model']"}
-
-    Previous interactions -> Customer: 'How much does it cost?' Shopkeeper: '2000 dollars';
-    Current interaction -> Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
+    Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
     You: {"Detection": "['Different model']"}
 
     Output only with the labels ['Same model'] or ['Different model']
-    If 'Previous interactions' is empty, output ['Different model']
+    If you detect expressions similar to "and what about this one?" or "do you have anything else", output ['Different model']
     Output the answer only in JSON format.
     """
 
     user_template = """
-    Previous interactions -> {previous_conversations};
-    Current interaction -> Customer: {customer} Shopkeeper: {shopkeeper};
+    {previous_conversations}
     """
 
-    user_prompt_template = PromptTemplate(input_variables=["previous_conversations", "customer", "shopkeeper"], template=user_template)
-    user_prompt = user_prompt_template.format(previous_conversations = previous_conversations, customer = msg.data[0], shopkeeper = msg.data[1])
+    user_prompt_template = PromptTemplate(input_variables=["previous_conversations"], template=user_template)
+    user_prompt = user_prompt_template.format(previous_conversations = previous_conversations)
 
     prompt_history = [
         SystemMessage(content=system_prompt),
