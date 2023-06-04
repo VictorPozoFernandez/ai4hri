@@ -10,12 +10,18 @@ from langchain.prompts import PromptTemplate
 import json
 import re
 import ast
+import concurrent.futures
+
+global previous_conversations
+global current_model
+previous_conversations = ""
+current_model = ""
 
 DEBUG = rospy.get_param('/GPT/DEBUG')
 
 # Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives, etc. )
 # In this case the position tracker is not implemented yet, all cameras from Malcom's experiment are considered.
-products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
+products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
 #products_of_interest = [(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
 #products_of_interest = [(3,"Canon EOS 5D Mark III"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
 
@@ -30,7 +36,6 @@ def main():
 
 def callback(msg):
 
-    global previous_conversations
     global current_model
         
     # Set OpenAI API credentials
@@ -39,30 +44,19 @@ def callback(msg):
 
     # Extract relevant modelS and topic from the message
 
-    try:
-        result = change_of_model_classification_fast(msg, previous_conversations)
-        
-    except:
-        result = change_of_model_classification_fast(msg)
-    
-    if result["Detection"] == "['Different model']":
-        previous_conversations = ""
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_1 = executor.submit(detect_change_of_camera, msg)
+        future_2 = executor.submit(topic_extraction, msg)
 
-    else:
-        print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
-
-    previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
-   
-
-    topic = topic_extraction(msg)
-    print("Detected topics: " + str(topic))
+        # Retrieve results from futures.
+        result = future_1.result()
+        topic = future_2.result()
 
     if result["Detection"] == "['Different model']":
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
         detected_model_list= model_identification_gpt(msg, characteristics_products)
         print("Detected model: " + str(detected_model_list))
         current_model = detected_model_list
-    
     
     if (len(current_model) == 2) and ("NULL" not in topic):
 
@@ -87,6 +81,77 @@ def callback(msg):
         if DEBUG == True: 
             print("")
             print("ChatGPT1: Unrecognized model")  
+
+
+
+def detect_change_of_camera(msg):
+    
+    global previous_conversations
+    global current_model
+
+    result = change_of_model_classification_fast(msg)
+    
+    if result["Detection"] == "['Same model']":
+        print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
+        
+    elif result["Detection"] == "['Different model']":
+        previous_conversations = ""
+    
+    previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
+
+    return result
+
+
+def change_of_model_classification_fast(msg):
+
+    global previous_conversations
+    global current_model
+
+    # Set OpenAI API credentials
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+
+    # Prepare prompt to send, using JSON format
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+
+
+    system_prompt = """
+    You are a helpful assistant that identifies if the camera model that is being presented in the 'Current interaction' is different form the camera model that was presented in 'Previous interactions'.
+
+    Here there are some examples that illustrates how can you output your answer.
+
+    Previous interactions -> Customer: 'What is the price of this Sony Camera?' Shopkeeper: 'This is the Sony Alpha, and it costs 550 dollars';
+    Current interaction -> Customer: 'I see, and how much does it weight?' Shopkeeper: 'only 120 grams';
+    You: {"Detection": "['Same model']"}
+
+    Previous interactions -> Customer: 'I would like to buy a cheap camera' Shopkeeper: 'In this case I recommend you the Nikon Coolpix';
+    Current interaction -> Customer: 'Do you have any other camera?' Shopkeeper: 'Yes, this is the Cannon EOS 5D, one of the best cameras of the market';
+    You: {"Detection": "['Different model']"}
+
+    Previous interactions -> Customer: 'How much does it cost?' Shopkeeper: '2000 dollars';
+    Current interaction -> Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
+    You: {"Detection": "['Different model']"}
+
+    Output only with the labels ['Same model'] or ['Different model']
+    If 'Previous interactions' is empty, output ['Different model']
+    Output the answer only in JSON format.
+    """
+
+    user_template = """
+    Previous interactions -> {previous_conversations};
+    Current interaction -> Customer: {customer} Shopkeeper: {shopkeeper};
+    """
+
+    user_prompt_template = PromptTemplate(input_variables=["previous_conversations", "customer", "shopkeeper"], template=user_template)
+    user_prompt = user_prompt_template.format(previous_conversations = previous_conversations, customer = msg.data[0], shopkeeper = msg.data[1])
+
+    prompt_history = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(content=user_prompt)
+    ]
+
+    result = chat(prompt_history)
+    data = extract_json(result.content)
+    return data
 
 
 def topic_extraction(msg):
@@ -118,6 +183,7 @@ def topic_extraction(msg):
         topics = topic_identification_gpt(msg, column_list)
         topics_list = ast.literal_eval(topics["Detection"])
 
+    #print("Detected topics: " + str(topics_list))
 
     return topics_list
 
@@ -314,107 +380,6 @@ def model_identification_gpt(msg, characteristics_products):
 
     return detected_model_list
 
-
-def change_of_model_classification(msg, previous_conversations = ""):
-
-    # Set OpenAI API credentials
-    openai_api_key = os.environ.get("OPENAI_API_KEY")
-
-    # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
-
-
-    system_prompt = """
-    You are a helpful assistant that identifies if the camera model that is being presented in the 'Current interaction' is different form the camera model that was presented in 'Previous interactions'.
-
-    Here there are some examples that illustrates how can you output your answer.
-
-    Previous interactions -> Customer: 'What is the price of this Sony Camera?' Shopkeeper: 'This is the Sony Alpha, and it costs 550 dollars';
-    Current interaction -> Customer: 'I see, and how much does it weight?' Shopkeeper: 'only 120 grams';
-    You: {"Reasoning": "The Customer is asking about the weight of the camera that was presented in the previous interaction. They are keep talking about the same model as Previous interactions", "Detection": "['Same model']"}
-
-    Previous interactions -> Customer: 'I would like to buy a cheap camera' Shopkeeper: 'In this case I recommend you the Nikon Coolpix';
-    Current interaction -> Customer: 'Do you have any other camera?' Shopkeeper: 'Yes, this is the Cannon EOS 5D, one of the best cameras of the market';
-    You: {"Reasoning": "The Customer is asking about other cameras and the Shopkeeper presents the Cannon EOS 5D model. They are keep talking about a different model than in Previous interactions", "Detection": "['Different model']"}
-
-    Previous interactions -> Customer: 'How much does it cost?' Shopkeeper: '2000 dollars';
-    Current interaction -> Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
-    You: {"Reasoning": "The Customer is asking about another camera that was presented previously by the Shopkeeper. They are talking about a different model than in Previous interactions", "Detection": "['Different model']"}
-
-    Previous interactions -> ;
-    Current interaction -> Customer: 'What's the price of this camera?' Shopkeeper: 'This is the Cannon EOS 5D, it costs 2000 dollars';
-    You: {"Reasoning": "This is the first interaction, so there is no previous model to compare with.", "Detection": "['Different model']"}
-
-
-    Output only with the labels ['Same model'] or ['Different model']
-    Output the answer only in JSON format.
-    """
-
-    user_template = """
-    Previous interactions -> {previous_conversations};
-    Current interaction -> Customer: {customer} Shopkeeper: {shopkeeper};
-    """
-
-    user_prompt_template = PromptTemplate(input_variables=["previous_conversations", "customer", "shopkeeper"], template=user_template)
-    user_prompt = user_prompt_template.format(previous_conversations = previous_conversations, customer = msg.data[0], shopkeeper = msg.data[1])
-
-    prompt_history = [
-        SystemMessage(content=system_prompt),
-        HumanMessage(content=user_prompt)
-    ]
-
-    result = chat(prompt_history)
-    data = extract_json(result.content)
-    return data
-
-
-def change_of_model_classification_fast(msg, previous_conversations = ""):
-
-    # Set OpenAI API credentials
-    openai_api_key = os.environ.get("OPENAI_API_KEY")
-
-    # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
-
-
-    system_prompt = """
-    You are a helpful assistant that identifies if the camera model that is being presented in the 'Current interaction' is different form the camera model that was presented in 'Previous interactions'.
-
-    Here there are some examples that illustrates how can you output your answer.
-
-    Previous interactions -> Customer: 'What is the price of this Sony Camera?' Shopkeeper: 'This is the Sony Alpha, and it costs 550 dollars';
-    Current interaction -> Customer: 'I see, and how much does it weight?' Shopkeeper: 'only 120 grams';
-    You: {"Detection": "['Same model']"}
-
-    Previous interactions -> Customer: 'I would like to buy a cheap camera' Shopkeeper: 'In this case I recommend you the Nikon Coolpix';
-    Current interaction -> Customer: 'Do you have any other camera?' Shopkeeper: 'Yes, this is the Cannon EOS 5D, one of the best cameras of the market';
-    You: {"Detection": "['Different model']"}
-
-    Previous interactions -> Customer: 'How much does it cost?' Shopkeeper: '2000 dollars';
-    Current interaction -> Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
-    You: {"Detection": "['Different model']"}
-
-    Output only with the labels ['Same model'] or ['Different model']
-    If 'Previous interactions' are empty, output ['Different model']
-    Output the answer only in JSON format.
-    """
-
-    user_template = """
-    Previous interactions -> {previous_conversations};
-    Current interaction -> Customer: {customer} Shopkeeper: {shopkeeper};
-    """
-
-    user_prompt_template = PromptTemplate(input_variables=["previous_conversations", "customer", "shopkeeper"], template=user_template)
-    user_prompt = user_prompt_template.format(previous_conversations = previous_conversations, customer = msg.data[0], shopkeeper = msg.data[1])
-
-    prompt_history = [
-        SystemMessage(content=system_prompt),
-        HumanMessage(content=user_prompt)
-    ]
-
-    result = chat(prompt_history)
-    data = extract_json(result.content)
-    return data
 
 
 if __name__ == '__main__':

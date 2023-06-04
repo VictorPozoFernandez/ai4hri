@@ -67,19 +67,20 @@ def search_callback(msg):
 
         try:
             substring = ast.literal_eval(substring)
+            
         except:
+            print("Couldnt ast")
             return
         
         feature = get_left_substring(substring[2])
         model = substring[1]
 
-        if (feature in topics_interest) and (model in models_interest[0][1]) and (substring[0] != 'NOT MENTIONED'):
+        if (substring[0] != 'NOT MENTIONED'):
             print("")
             print(substring[0])
             print("Product: " + substring[1])
             print("Feature: " + substring[2])
             print("Reason: " + substring[3])
-            print("")
 
     if len(substrings) == 0:
         print("")
@@ -137,7 +138,6 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     # Prepare prompt to send, using JSON format
     chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
 
-
     system_prompt = """
     Imagine you are helping me determine if a shopkeeper is right or mistaken when presenting the characteristics of a camera model. Your task is to analyze the shopkeeper's statements and output the relevant lists based on the characteristics mentioned by the shopkeeper:
 
@@ -150,10 +150,10 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     Use the information given in Ground Truth to help you. Here's an example of how to format your answer:
 
     Shopkeeper utterance: <Shopkeeper utterance>
-    Ground Truth: <real characteristics of the camera model that the Shopkeeper is presenting>
-    ##['SHOPKEEPER IS RIGHT', '<camera model's name>', '<presented characteristic name from Ground Truth>', '<Reason of why the shopkeeper is right>']##
-    ##['SHOPKEEPER IS MISTAKEN', '<camera model's name>', '<presented characteristic name from Ground Truth>', '<Reason of why the shopkeeper is mistaken>']##
-    ##['NOT MENTIONED', '<camera model's name>', '<presented characteristic>', '<Reason of why the characteristic is not mentioned>']##
+    Ground Truth: ["Sony Alpha a6000: ['Model: Sony Alpha a6000', 'Price: 550', 'Type_of_camera: Mirrorless', 'Resolution: 24.0 megapixels']"]
+    ##['SHOPKEEPER IS RIGHT', 'Sony Alpha a6000', 'Type_of_camera', '<Reason of why the shopkeeper is right>']##
+    ##['SHOPKEEPER IS MISTAKEN', 'Sony Alpha a6000', 'Resolution', '<Reason of why the shopkeeper is mistaken>']##
+    ##['NOT MENTIONED', '<Sony Alpha a6000', 'Price', '<Reason of why the characteristic is not mentioned>']##
     
     Keep your response concise. 
     Always include the ## characters at the beginning and the end of each list.
@@ -173,7 +173,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     ]
 
     result = chat(prompt_history)
-    print(result.content)
+    #print(result.content)
     return result
 
 
