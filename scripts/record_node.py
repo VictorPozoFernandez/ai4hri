@@ -56,7 +56,7 @@ def main():
     pub = rospy.Publisher('/ai4hri/audio_data', AudioData, queue_size= 1)
     rospy.Subscriber("/ai4hri/audio_control", String, callback)
 
-    energy = 20000
+    energy = 25000
     pause = 0.5
 
     # Print available microhpones PC

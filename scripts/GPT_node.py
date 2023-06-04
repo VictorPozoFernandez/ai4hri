@@ -21,9 +21,10 @@ DEBUG = rospy.get_param('/GPT/DEBUG')
 
 # Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives, etc. )
 # In this case the position tracker is not implemented yet, all cameras from Malcom's experiment are considered.
-products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
+products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
 #products_of_interest = [(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
 #products_of_interest = [(3,"Canon EOS 5D Mark III"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
+#products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
 
 def main():
 
@@ -52,7 +53,7 @@ def callback(msg):
         result = future_1.result()
         topic = future_2.result()
 
-    if result["Detection"] == "['Different model']":
+    if result["Detection"] == "['Different model']" or len(current_model) != 2:
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
         detected_model_list= model_identification_gpt(msg, characteristics_products)
         print("Detected model: " + str(detected_model_list))
@@ -100,7 +101,7 @@ def detect_change_of_camera(msg):
 
     result = change_of_model_classification_fast(msg)
     
-    if result["Detection"] == "['Same model']":
+    if result["Detection"] == "['Same model']" and (len(current_model) == 2):
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
         
     elif result["Detection"] == "['Different model']":
@@ -122,11 +123,11 @@ def change_of_model_classification_fast(msg):
 
 
     system_prompt = """
-    You are a helpful assistant that identifies if the Shopkeeper or the Customer bring a different camera to the conversation.
+    You are a helpful assistant that identifies if two cameras appear in the conversation.
 
     Here is an example that illustrates how can you output your answer.
 
-    Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
+    Shopkeeper: 'This camera costs 100 dollars' Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
     You: {"Detection": "['Different model']"}
 
     Output only with the labels ['Same model'] or ['Different model']
