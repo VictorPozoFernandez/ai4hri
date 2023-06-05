@@ -15,7 +15,8 @@ RUN apt update && \
 
 WORKDIR /catkin_ws/src/ai4hri
 
-RUN pip install -r requirements.txt
+RUN git checkout alternative && \
+    pip install -r requirements.txt
 
 CMD ["/bin/bash", "-c", "source /opt/ros/noetic/setup.bash && \
                          source /catkin_ws/devel/setup.bash && \
