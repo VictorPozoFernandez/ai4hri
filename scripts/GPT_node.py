@@ -181,7 +181,7 @@ def topic_extraction(msg):
         topics = topic_identification_gpt(msg, column_list)
         topics_list = ast.literal_eval(topics["Detection"])
 
-    #print("Detected topics: " + str(topics_list))
+    print("Detected topics: " + str(topics_list))
 
     return topics_list
 

@@ -76,7 +76,7 @@ def search_callback(msg):
         feature = get_left_substring(substring[3])
         model = substring[1]
 
-        if (substring[1] == 'SHOPKEEPER IS MISTAKEN'):
+        if (substring[1] != 'NOT MENTIONED'):
             print("")
             print(substring[1])
             print("Product: " + substring[2])
@@ -145,7 +145,8 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     1. If the shopkeeper is right about a characteristic, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS RIGHT', '<presented camera model>', '<feature from Ground Truth>']##
     2. If the shopkeeper is mistaken about a characteristic, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<feature from Ground Truth>']##
     3. If the shopkeeper does not mention a characteristic, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'NOT MENTIONED', '<presented camera model>', '<feature from Ground Truth>']##
-
+    4. If the shopkeeper is not able to answer, or asks for help, output: ##['<Reason of why the shopkeeper is not able to answer>', 'SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<feature from Ground Truth>']##
+    
     When the shopkeeper presents multiple characteristics, output a separate list for each characteristic mentioned by the shopkeeper. 
     Use the information given in Ground Truth to help you reason. Here's an example of how to format your answer:
 
@@ -153,7 +154,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     Ground Truth: ["Sony Alpha a6000: ['Model: Sony Alpha a6000', 'Price: <550>', 'Type_of_camera: <Mirrorless>', 'Resolution: <18.0 megapixels>']"]
     ##['The Sony Alpha a6000 is indeed a Mirrorless camera', 'SHOPKEEPER IS RIGHT', 'Sony Alpha a6000', 'Type_of_camera']##
     ##['The Sony Alpha a6000 has a resolution of 18 megapixels, not 20', 'SHOPKEEPER IS MISTAKEN', 'Sony Alpha a6000', 'Resolution']##
-    ##['The Shopkeeper doesn't mention any price ', 'NOT MENTIONED', 'Sony Alpha a6000', 'Price']##
+    ##['The Shopkeeper doesnt mention any price ', 'NOT MENTIONED', 'Sony Alpha a6000', 'Price']##
     
     Keep your response concise. 
     Always include the ## characters at the beginning and the end of each list.
