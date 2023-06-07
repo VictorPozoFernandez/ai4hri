@@ -22,9 +22,7 @@ DEBUG = rospy.get_param('/GPT/DEBUG')
 # Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives, etc. )
 # In this case the position tracker is not implemented yet, all cameras from Malcom's experiment are considered.
 #products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
-#products_of_interest = [(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
-#products_of_interest = [(3,"Canon EOS 5D Mark III"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
-products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D"),(6,"LEICA M11")] 
+products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D")] 
 
 def main():
 
@@ -38,6 +36,7 @@ def main():
 def callback(msg):
 
     global current_model
+    global current_topic
         
     # Set OpenAI API credentials
     openai.organization = os.environ.get("OPENAI_ORG_ID")
@@ -52,6 +51,8 @@ def callback(msg):
         # Retrieve results from futures.
         result = future_1.result()
         topic = future_2.result()
+
+    current_topic = topic
 
     if result["Detection"] == "['Different model']":
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
@@ -89,8 +90,13 @@ def detect_change_of_camera(msg):
     
     global previous_conversations
     global current_model
+    global current_topic
 
     if previous_conversations == "":
+        previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
+        return {"Detection": "['Different model']"}
+    
+    if ("NULL" in current_topic) and (len(current_model) != 2):
         previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
         return {"Detection": "['Different model']"}
     
@@ -100,6 +106,7 @@ def detect_change_of_camera(msg):
         previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
 
     result = change_of_model_classification_fast(msg)
+    print(result)
     
     if result["Detection"] == "['Same model']" and (len(current_model) == 2):
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
@@ -316,40 +323,36 @@ def model_identification_gpt(msg, characteristics_products):
 
     Here there are some examples that illustrates how can you output your answer.
 
-    Customer: 'What is the price of this Nikon Camera?' Shopkeeper: 'it costs 68 dollars only';
+    'What is the price of this Nikon Camera? it costs 68 dollars only';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])], [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
     You: {"Detection": "['Nikon Coolpix S2800']"}
 
-    Customer: 'And what about this camera?' Shopkeeper: 'this model is only available in color black';
+    'And what about this camera?'this model is only available in color black';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Color', ['black', 'pink', 'purple', 'red', 'silver'])], [('Model', ['Sony Alpha a6000']), ('Color', ['black', 'silver', 'white'])], [('Model', ['Canon EOS 5D Mark III']), ('Color', ['black'])]]
     You: {"Detection": "['Canon EOS 5D Mark III']"}
 
-    Customer: 'Has this camera 18 preset modes?' Shopkeeper: 'No, it only has 9 preset modes';
+    'Has this camera 18 preset modes? No, it only has 9 preset modes';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Camera_features', ['12 Glamour retouch effects', '18 preset modes', 'Optical Zoom 5x'])], [('Model', ['Sony Alpha a6000']), ('Camera_features', ['13 artistic effect modes', '9 preset modes'])], [('Model', ['Canon EOS 5D Mark III']), ('Camera_features', ['Silent Shooting'])]]
     You: {"Detection": "['Sony Alpha a6000']"}
 
-    Customer: 'And the weight of this one?' Shopkeeper: 'This camera weights 95 grams';
+    'And the weight of this one? This camera weights 95 grams';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Weight', ['120 grams'])], [('Model', ['Sony Alpha a6000']), ('Weight', ['470 grams'])], [('Model', ['Canon EOS 5D Mark III']), ('Weight', ['950 grams'])]]
     You: {"Detection": "['NULL']"}
 
-    Customer: 'How much does it cost this camera?' Shopkeeper: 'This one costs 200 dollars';
+    'How much does it cost this camera? This one costs 200 dollars';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])], [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
     You: {"Detection": "['NULL']"}
 
-    Customer: 'Im looking for a camera' Shopkeeper: 'This is the Sony Alpha';
-    List: [[('Model', ['Sony Alpha a6000']), ('Camera_features', ['13 artistic effect modes', '9 preset modes'])], [('Model', ['Sony Alpha a5000']), ('Camera_features', [])], [('Model', ['LEICA M11']), ('Camera_features', [])]]
-    You: {"Detection": "['Sony Alpha a6000', 'Sony Alpha a5000']"}
-
-    Customer: 'What about its resolution?' Shopkeeper: 'It has more than 21 megapixels';
+    'What about its resolution? It has more than 21 megapixels';
     List: [[('Model', ['Nikon Coolpix S2800']), ('Resolution', ['20.1 megapixels'])], [('Model', ['Sony Alpha a6000']), ('Resolution', ['24.0 megapixels'])], [('Model', ['Canon EOS 5D Mark III']), ('Resolution', ['22.3 megapixels'])]]
     You: {"Detection": "['Sony Alpha a6000', 'Canon EOS 5D Mark III']"}
 
-    Use the data from the List to identify the camera model. If no camera is detected, output {"Detection": "['NULL']"}. If two or more models are identified, output all of them. 
+    Use the data from the List to identify the camera model. If no camera is detected, output {"Detection": "['NULL']"}. If two or more models are detected, output all the detected models . 
     Output the answer only in JSON format.
     """
 
     user_template = """
-    Customer: {customer} Shopkeeper: {shopkeeper};
+    {customer}. {shopkeeper};
     List: {characteristics_products};
     """
 
