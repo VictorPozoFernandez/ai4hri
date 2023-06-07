@@ -65,6 +65,8 @@ def search_callback(msg):
     substrings = extract_substrings(result.content)
 
     for substring in substrings:
+        #print("")
+        #print(substring)
 
         try:
             substring = ast.literal_eval(substring)
@@ -76,9 +78,16 @@ def search_callback(msg):
         feature = get_left_substring(substring[3])
         model = substring[1]
 
-        if (substring[1] != 'NOT MENTIONED'):
+        if (substring[1] != 'NOT MENTIONED') and (feature in topics_interest):
+            
             print("")
-            print(substring[1])
+            if substring[1] == "SHOPKEEPER IS RIGHT":
+                print("\033[92m" + substring[1] + "\033[0m")
+            elif substring[1] == "SHOPKEEPER IS MISTAKEN":
+                print("\033[91m" + substring[1] + "\033[0m")
+            else:
+                print("\033[93m" + substring[1] + "\033[0m")
+
             print("Product: " + substring[2])
             print("Feature: " + substring[3])
             print("Reason: " + substring[0])

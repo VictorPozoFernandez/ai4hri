@@ -42,8 +42,7 @@ def main():
             print("------------------------------------------")
             print(interaction_no_trial.iloc[row])
             
-            for _ in range(10):
-                rate.sleep()
+            input()
 
 
 if __name__ == '__main__':
