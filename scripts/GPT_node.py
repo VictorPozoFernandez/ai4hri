@@ -302,6 +302,7 @@ def extraction_characteristics_products(products_of_interest, topics):
                         characterstics_model.append((column_name, column))
 
         # Append the characteristics for the current product to the main list
+        characterstics_model.sort(key=lambda x: x[0] != 'Model')
         characteristics_product_IDs.append(characterstics_model)
 
     # Return the list containing extracted characteristics for each product
@@ -366,6 +367,7 @@ def model_identification_gpt(msg, characteristics_products):
 
     result = chat(prompt_history)
     data = extract_json(result.content)
+    print(user_prompt)
 
     detected_model_list = []
     # Iterate through products_of_interest and check if they are mentioned in the generated text from ChatGPT
