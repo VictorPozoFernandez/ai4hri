@@ -62,7 +62,7 @@ def search_callback(msg):
     ground_truth = extract_ground_truth(models_interest, topics_interest)
     result = judge_gpt(shopkeeper_sentence, ground_truth)
     
-    substrings = extract_substrings(result.content)
+    substrings = extract_substrings(result)
 
     for substring in substrings:
         #print("")
@@ -93,7 +93,7 @@ def search_callback(msg):
     
     if len(substrings) == 0:
         print("")
-        print("ChatGPT2: " + str(result.content))
+        print("ChatGPT2: " + str(result))
 
 
 def extract_substrings(text):
@@ -181,8 +181,16 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
         HumanMessage(content=user_prompt)
     ]
 
-    result = chat(prompt_history)
-    #print(result.content)
+    if DEBUG == True:
+        print("")
+        print(user_prompt)
+        result=input("judge_gpt:")
+
+    else:
+        result = chat(prompt_history)
+        #print(result.content)
+        result=result.content
+
     return result
 
 

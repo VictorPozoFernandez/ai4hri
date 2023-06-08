@@ -77,13 +77,6 @@ def callback(msg):
 
         # Publish the extracted information
         pub.publish(extracted_info)
-    
-    else:
-
-        if DEBUG == True: 
-            print("")
-            print("ChatGPT1: Unrecognized model")  
-
 
 
 def detect_change_of_camera(msg):
@@ -106,7 +99,6 @@ def detect_change_of_camera(msg):
         previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
 
     result = change_of_model_classification_fast(msg)
-    print(result)
     
     if result["Detection"] == "['Same model']" and (len(current_model) == 2):
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
@@ -154,8 +146,16 @@ def change_of_model_classification_fast(msg):
         HumanMessage(content=user_prompt)
     ]
 
-    result = chat(prompt_history)
-    data = extract_json(result.content)
+    if DEBUG == True:
+        print("")
+        print(user_prompt)
+        result=input("change_model_gpt:")
+        data = extract_json(result)
+
+    else:
+        result = chat(prompt_history)
+        data = extract_json(result.content)
+    
     return data
 
 
@@ -185,7 +185,7 @@ def topic_extraction(msg):
         
         column_list_no_duplicates = list(set(column_list))
         column_list = [item for item in column_list_no_duplicates if item != 'Product_ID']
-        
+
     topics = topic_identification_gpt(msg, column_list)
     topics_list = ast.literal_eval(topics["Detection"])
 
@@ -237,7 +237,13 @@ def topic_identification_gpt(msg, column_list):
         HumanMessage(content=user_prompt)
     ]
 
-    print(user_prompt)
+
+    if DEBUG == True:
+        print("")
+        print(user_prompt)
+        result=input("topic_identification_gpt:")
+        data = extract_json(result)
+        
     result = chat(prompt_history)
     data = extract_json(result.content)
 
@@ -367,8 +373,15 @@ def model_identification_gpt(msg, characteristics_products):
         HumanMessage(content=user_prompt)
     ]
 
-    result = chat(prompt_history)
-    data = extract_json(result.content)
+    if DEBUG == True:
+        print("")
+        print(user_prompt)
+        result=input("model_identification_gpt:")
+        data = extract_json(result)
+
+    else:
+        result = chat(prompt_history)
+        data = extract_json(result.content)
 
     detected_model_list = []
     # Iterate through products_of_interest and check if they are mentioned in the generated text from ChatGPT
