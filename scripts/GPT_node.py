@@ -185,8 +185,9 @@ def topic_extraction(msg):
         
         column_list_no_duplicates = list(set(column_list))
         column_list = [item for item in column_list_no_duplicates if item != 'Product_ID']
-        topics = topic_identification_gpt(msg, column_list)
-        topics_list = ast.literal_eval(topics["Detection"])
+        
+    topics = topic_identification_gpt(msg, column_list)
+    topics_list = ast.literal_eval(topics["Detection"])
 
     print("Detected topics: " + str(topics_list))
 
@@ -236,6 +237,7 @@ def topic_identification_gpt(msg, column_list):
         HumanMessage(content=user_prompt)
     ]
 
+    print(user_prompt)
     result = chat(prompt_history)
     data = extract_json(result.content)
 
@@ -367,7 +369,6 @@ def model_identification_gpt(msg, characteristics_products):
 
     result = chat(prompt_history)
     data = extract_json(result.content)
-    print(user_prompt)
 
     detected_model_list = []
     # Iterate through products_of_interest and check if they are mentioned in the generated text from ChatGPT
