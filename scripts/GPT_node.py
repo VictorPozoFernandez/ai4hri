@@ -54,13 +54,13 @@ def callback(msg):
 
     current_topic = topic
 
-    if result["Detection"] == "Two cameras":
+    if (result["Detection"] == "1 camera" and (len(current_model) != 2)) or (result["Detection"] == "2 cameras"):
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
         detected_model_list= model_identification_gpt(msg, characteristics_products)
         print("Detected model: " + str(detected_model_list))
         current_model = detected_model_list
     
-    if (len(current_model) == 2) and ("NULL" not in topic):
+    if ("NULL" not in topic):
 
         # Initialize the publisher for extracted_info ROS topic
         pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1, latch=True) 
@@ -85,14 +85,6 @@ def detect_change_of_camera(msg):
     global current_model
     global current_topic
 
-    if previous_conversations == "":
-        previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
-        return {"Detection": "Two cameras"}
-    
-    if ("NULL" in current_topic) and (len(current_model) != 2):
-        previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
-        return {"Detection": "Two cameras"}
-    
     if str(msg.data[0]) != "":      
         previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
     elif str(msg.data[1]) != "": 
@@ -100,10 +92,10 @@ def detect_change_of_camera(msg):
 
     result = change_of_model_classification_fast(msg)
     
-    if result["Detection"] == "One camera":
+    if result["Detection"] == "1 camera" and current_model != "":
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
         
-    elif result["Detection"] == "Two cameras":
+    elif result["Detection"] == "2 cameras":
         previous_conversations = " Shopkeeper: " + str(msg.data[1])
 
     
@@ -127,16 +119,20 @@ def change_of_model_classification_fast(msg):
 
     Here is an example that illustrates how can you output your answer.
 
-    Customer: 'How is the price of this camera?' Customer: 'It has a price of 68 dollars';
-    You: {"Detection": "One camera"}
+    Customer: 'Good morning' Shopkeeper: 'How can I help you?';
+    You: {"Detection": "0 cameras"}
+
+    Customer: 'How is the price of this camera?' Shopkeeper: 'It has a price of 68 dollars';
+    You: {"Detection": "1 camera"}
 
     Shopkeeper: 'This camera costs 100 dollars' Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
-    You: {"Detection": "Two cameras"}
+    You: {"Detection": "2 cameras"}
 
     Shopkeeper: 'This one is very good' Customer: 'Do you have anything else?' Shopkeeper: 'Yes, this camera over here is available in color red';
-    You: {"Detection": "Two cameras"}
+    You: {"Detection": "2 cameras"}
 
-    If you detect expressions similar to "and what about this one?" or "do you have anything else", output {"Detection": "Two cameras"}
+    If you detect expressions similar to "and what about this one?" or "do you have anything else", output {"Detection": "2 cameras"}
+    Don't output the name of the models. 
     Output the answer only in JSON format.
     """
 
@@ -151,8 +147,6 @@ def change_of_model_classification_fast(msg):
         SystemMessage(content=system_prompt),
         HumanMessage(content=user_prompt)
     ]
-
-    print(user_prompt)
 
     if DEBUG == True:
         print("")

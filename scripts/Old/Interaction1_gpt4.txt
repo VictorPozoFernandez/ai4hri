@@ -1,0 +1,273 @@
+roslaunch ai4hri knowledge_recognition.launch DEBUG:=True
+... logging to /home/victor/.ros/log/f06e10d0-06ec-11ee-bb33-0d1f40f11ad9/roslaunch-victor-OMEN-by-HP-Laptop-16-b1xxx-2340916.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+
+started roslaunch server http://victor-OMEN-by-HP-Laptop-16-b1xxx:41903/
+
+SUMMARY
+========
+
+PARAMETERS
+ * /GPT/DEBUG: True
+ * /MySQL/DEBUG: True
+ * /classificator/DEBUG: True
+ * /rosdistro: noetic
+ * /rosversion: 1.16.0
+ * /transcribe/DEBUG: True
+
+NODES
+  /
+    GPT (ai4hri/GPT_node.py)
+    MySQL (ai4hri/MySQL_node.py)
+    classificator (ai4hri/classificator_node.py)
+    transcribe (ai4hri/transcribe_node.py)
+
+auto-starting new master
+process[master]: started with pid [2340924]
+ROS_MASTER_URI=http://localhost:11311
+
+setting /run_id to f06e10d0-06ec-11ee-bb33-0d1f40f11ad9
+process[rosout-1]: started with pid [2340934]
+started core service [/rosout]
+process[transcribe-2]: started with pid [2340941]
+process[classificator-3]: started with pid [2340961]
+process[GPT-4]: started with pid [2340982]
+process[MySQL-5]: started with pid [2341012]
+[INFO] [1686332522.002518]: Node audio_transcriber initialized. Listening...
+[INFO] [1686332522.564204]: Node classificator initialized. Listening...
+[INFO] [1686332522.757530]: Node MySQL initialized. Listening...
+[INFO] [1686332522.793461]: Node GPT initialized. Listening...
+
+
+     ## New Interaction: hi, in which colors is available the canon model?
+    
+role_identification_gpt:{"Detection": "Customer"}
+------------------------------------------
+ - hi, in which colors is available the canon model? (Customer) 
+
+
+
+     ## Customer: hi, in which colors is available the canon model? ## New Interaction: this only comes in black. which type of camera are you looking for?
+    
+role_identification_gpt:{"Detection": "Shopkeeper"}
+------------------------------------------
+ - this only comes in black. which type of camera are you looking for? (Shopkeeper) 
+
+
+    Customer: hi, in which colors is available the canon model? Shopkeeper: this only comes in black. which type of camera are you looking for?
+    
+
+
+    Customer: hi, in which colors is available the canon model? Shopkeeper: this only comes in black. which type of camera are you looking for?
+    
+change_model_gpt:
+
+    Input: hi, in which colors is available the canon model?. this only comes in black. which type of camera are you looking for?
+    List: ['FPS', 'Silent_Shooting', 'Optical_Zoom', 'Preset_modes', 'Shutter_Speed', 'Weight', 'Resolution', 'Type_of_camera', 'ISO', 'Autofocus', 'Color', 'Model', 'Price', 'Effects']
+    
+{"Detection": "1 camera"}
+topic_identification_gpt:{'Detection': '1 camera'}
+{"Detection": "['Color', 'Model', 'Type_of_camera']"}
+Detected topics: ['Color']
+
+
+    hi, in which colors is available the canon model?. this only comes in black. which type of camera are you looking for?;
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Color', ['black', 'pink', 'purple', 'red', 'silver'])], [('Model', ['Sony Alpha a6000']), ('Color', ['black', 'silver', 'white'])], [('Model', ['Canon EOS 5D Mark III']), ('Color', ['black'])], [('Model', ['Sony Alpha a5000']), ('Color', [])], [('Model', ['Canon EOS 1000D']), ('Color', [])]];
+    
+model_identification_gpt:{"Detection": "['Canon EOS 5D Mark III']"}
+Detected model: ['3', 'Canon EOS 5D Mark III']
+
+
+    Shopkeeper: this only comes in black. which type of camera are you looking for?
+    Ground Truth: ["Canon EOS 5D Mark III: ['Color: black']"]
+    
+judge_gpt:##['The Canon EOS 5D Mark III is indeed available in black', 'SHOPKEEPER IS RIGHT', 'Canon EOS 5D Mark III', 'Color']##
+SHOPKEEPER IS RIGHT
+Product: Canon EOS 5D Mark III
+Feature: Color
+Reason: The Canon EOS 5D Mark III is indeed available in black
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## New Interaction: something that's light and attractive. 
+    
+role_identification_gpt:{"Detection": "Customer"}
+------------------------------------------
+ - something that's light and attractive.  (Customer) 
+
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## Customer: something that's light and attractive.  ## New Interaction: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here
+    
+role_identification_gpt:{"Detection": "Shopkeeper"}
+------------------------------------------
+ - we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here (Shopkeeper) 
+
+
+    Customer: hi, in which colors is available the canon model? Shopkeeper: this only comes in black. which type of camera are you looking for?Customer: something that's light and attractive.  Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here
+    
+
+
+    Customer: hi, in which colors is available the canon model? Shopkeeper: this only comes in black. which type of camera are you looking for?Customer: something that's light and attractive.  Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here
+    
+change_model_gpt:
+
+    Input: something that's light and attractive. . we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here
+    List: ['FPS', 'Silent_Shooting', 'Optical_Zoom', 'Preset_modes', 'Shutter_Speed', 'Weight', 'Resolution', 'Type_of_camera', 'ISO', 'Autofocus', 'Color', 'Model', 'Price', 'Effects']
+    
+{"Detection": "2 cameras"}
+topic_identification_gpt:{'Detection': '2 cameras'}
+{"Detection": "['Weight', 'Preset_modes', 'Model']"}
+Detected topics: ['Weight', 'Preset_modes', 'Type_of_camera', 'Model']
+
+
+    something that's light and attractive. . we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here;
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Weight', ['120 grams']), ('Type_of_camera', ['Point and Shoot']), ('Preset_modes', ['18'])], [('Model', ['Sony Alpha a6000']), ('Weight', ['470 grams']), ('Type_of_camera', ['Mirrorless']), ('Preset_modes', ['9'])], [('Model', ['Canon EOS 5D Mark III']), ('Weight', ['950 grams']), ('Type_of_camera', ['DSLR']), ('Preset_modes', ['5'])], [('Model', ['Sony Alpha a5000']), ('Weight', ['269 grams']), ('Type_of_camera', ['Mirrorless']), ('Preset_modes', ['9'])], [('Model', ['Canon EOS 1000D']), ('Weight', ['502 grams']), ('Type_of_camera', ['Compact SLR']), ('Preset_modes', [''])]];
+    
+model_identification_gpt:{"Detection": "['Nikon Coolpix S2800']"}
+Detected model: ['1', 'Nikon Coolpix S2800']
+
+
+    Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here
+    Ground Truth: ["Nikon Coolpix S2800: ['Model: Nikon Coolpix S2800', 'Weight: 120 grams', 'Type_of_camera: Point and Shoot', 'Preset_modes: 18']"]
+    
+judge_gpt:##['The Nikon Coolpix S2800 is indeed lightweight, weighing 120 grams', 'SHOPKEEPER IS RIGHT', 'Nikon Coolpix S2800', 'Weight']##
+##['The Nikon Coolpix S2800 has 18 preset modes', 'SHOPKEEPER IS RIGHT', 'Nikon Coolpix S2800', 'Preset_modes']##
+##['The Shopkeeper doesn't mention the type of camera', 'NOT MENTIONED', 'Nikon Coolpix S2800', 'Type_of_camera']##
+SHOPKEEPER IS RIGHT
+Product: Nikon Coolpix S2800
+Feature: Weight
+Reason: The Nikon Coolpix S2800 is indeed lightweight, weighing 120 grams
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## Customer: something that's light and attractive.  ## Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here ## New Interaction: I want good lighting and loss of motion I guess
+    
+role_identification_gpt:No JSON found in the string
+------------------------------------------
+ - I want good lighting and loss of motion I guess (null) 
+
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## Customer: something that's light and attractive.  ## Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here ## null: I want good lighting and loss of motion I guess ## New Interaction: It is very lightweight, 120 grams, and it has 18 preset modes
+    
+role_identification_gpt:{"Detection": "Shopkeeper"}
+------------------------------------------
+ - It is very lightweight, 120 grams, and it has 18 preset modes (Shopkeeper) 
+
+
+     Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon hereCustomer: I want good lighting and loss of motion I guess Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modes
+    
+
+
+     Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon hereCustomer: I want good lighting and loss of motion I guess Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modes
+    
+change_model_gpt:
+
+    Input: I want good lighting and loss of motion I guess. It is very lightweight, 120 grams, and it has 18 preset modes
+    List: ['FPS', 'Silent_Shooting', 'Optical_Zoom', 'Preset_modes', 'Shutter_Speed', 'Weight', 'Resolution', 'Type_of_camera', 'ISO', 'Autofocus', 'Color', 'Model', 'Price', 'Effects']
+    
+{"Detection": "1 camera"}
+topic_identification_gpt:Detected model: ['1', 'Nikon Coolpix S2800'] (They keep talking about the same camera)
+{'Detection': '1 camera'}
+{"Detection": "['Weight', 'Preset_modes']"}
+Detected topics: ['Weight', 'Preset_modes']
+
+
+    Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modes
+    Ground Truth: ["Nikon Coolpix S2800: ['Weight: 120 grams', 'Preset_modes: 18']"]
+    
+judge_gpt:##['The Nikon Coolpix S2800 does weigh 120 grams', 'SHOPKEEPER IS RIGHT', 'Nikon Coolpix S2800', 'Weight']##
+##['The Nikon Coolpix S2800 does have 18 preset modes', 'SHOPKEEPER IS RIGHT', 'Nikon Coolpix S2800', 'Preset_modes']##
+SHOPKEEPER IS RIGHT
+Product: Nikon Coolpix S2800
+Feature: Weight
+Reason: The Nikon Coolpix S2800 does weigh 120 grams
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## Customer: something that's light and attractive.  ## Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here ## null: I want good lighting and loss of motion I guess ## Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modes ## New Interaction: that sounds great how much does this cost?
+    
+role_identification_gpt:{"Detection": "Customer"}
+------------------------------------------
+ - that sounds great how much does this cost? (Customer) 
+
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## Customer: something that's light and attractive.  ## Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here ## null: I want good lighting and loss of motion I guess ## Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modes ## Customer: that sounds great how much does this cost? ## New Interaction: $68 and it gets very high-resolution photographs too, it's right value for the price
+    
+role_identification_gpt:{"Detection": "Shopkeeper"}
+------------------------------------------
+ - $68 and it gets very high-resolution photographs too, it's right value for the price (Shopkeeper) 
+
+
+     Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon hereCustomer: I want good lighting and loss of motion I guess Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modesCustomer: that sounds great how much does this cost? Shopkeeper: $68 and it gets very high-resolution photographs too, it's right value for the price
+    
+
+
+     Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon hereCustomer: I want good lighting and loss of motion I guess Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modesCustomer: that sounds great how much does this cost? Shopkeeper: $68 and it gets very high-resolution photographs too, it's right value for the price
+    
+change_model_gpt:
+
+    Input: that sounds great how much does this cost?. $68 and it gets very high-resolution photographs too, it's right value for the price
+    List: ['FPS', 'Silent_Shooting', 'Optical_Zoom', 'Preset_modes', 'Shutter_Speed', 'Weight', 'Resolution', 'Type_of_camera', 'ISO', 'Autofocus', 'Color', 'Model', 'Price', 'Effects']
+    
+{"Detection": "1 camera"}
+topic_identification_gpt:Detected model: ['1', 'Nikon Coolpix S2800'] (They keep talking about the same camera)
+{'Detection': '1 camera'}
+{"Detection": "['Price', 'Resolution']"}
+Detected topics: ['Price', 'Resolution']
+
+
+    Shopkeeper: $68 and it gets very high-resolution photographs too, it's right value for the price
+    Ground Truth: ["Nikon Coolpix S2800: ['Price: 68', 'Resolution: 20.1 megapixels']"]
+    
+judge_gpt:##['The Nikon Coolpix S2800 is indeed priced at $68', 'SHOPKEEPER IS RIGHT', 'Nikon Coolpix S2800', 'Price']##
+##['The Shopkeeper does not specify the resolution of the Nikon Coolpix S2800', 'NOT MENTIONED', 'Nikon Coolpix S2800', 'Resolution']##
+SHOPKEEPER IS RIGHT
+Product: Nikon Coolpix S2800
+Feature: Price
+Reason: The Nikon Coolpix S2800 is indeed priced at $68
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## Customer: something that's light and attractive.  ## Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here ## null: I want good lighting and loss of motion I guess ## Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modes ## Customer: that sounds great how much does this cost? ## Shopkeeper: $68 and it gets very high-resolution photographs too, it's right value for the price ## New Interaction: how many megapixels
+    
+role_identification_gpt:{"Detection": "Customer"}
+------------------------------------------
+ - how many megapixels (Customer) 
+
+
+
+     ## Customer: hi, in which colors is available the canon model? ## Shopkeeper: this only comes in black. which type of camera are you looking for? ## Customer: something that's light and attractive.  ## Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here ## null: I want good lighting and loss of motion I guess ## Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modes ## Customer: that sounds great how much does this cost? ## Shopkeeper: $68 and it gets very high-resolution photographs too, it's right value for the price ## Customer: how many megapixels ## New Interaction: 20.1 megapixels
+    
+role_identification_gpt:{"Detection": "Shopkeeper"}
+------------------------------------------
+ - 20.1 megapixels (Shopkeeper) 
+
+
+     Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon hereCustomer: I want good lighting and loss of motion I guess Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modesCustomer: that sounds great how much does this cost? Shopkeeper: $68 and it gets very high-resolution photographs too, it's right value for the priceCustomer: how many megapixels Shopkeeper: 20.1 megapixels
+    
+
+
+     Shopkeeper: we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon hereCustomer: I want good lighting and loss of motion I guess Shopkeeper: It is very lightweight, 120 grams, and it has 18 preset modesCustomer: that sounds great how much does this cost? Shopkeeper: $68 and it gets very high-resolution photographs too, it's right value for the priceCustomer: how many megapixels Shopkeeper: 20.1 megapixels
+    
+change_model_gpt:
+
+    Input: how many megapixels. 20.1 megapixels
+    List: ['FPS', 'Silent_Shooting', 'Optical_Zoom', 'Preset_modes', 'Shutter_Speed', 'Weight', 'Resolution', 'Type_of_camera', 'ISO', 'Autofocus', 'Color', 'Model', 'Price', 'Effects']
+    
+{"Detection": "1 camera"}
+topic_identification_gpt:Detected model: ['1', 'Nikon Coolpix S2800'] (They keep talking about the same camera)
+{'Detection': '1 camera'}
+{"Detection": "['Resolution']"}
+Detected topics: ['Resolution']
+
+
+    Shopkeeper: 20.1 megapixels
+    Ground Truth: ["Nikon Coolpix S2800: ['Resolution: 20.1 megapixels']"]
+    
+judge_gpt:##['The Nikon Coolpix S2800 indeed has a resolution of 20.1 megapixels', 'SHOPKEEPER IS RIGHT', 'Nikon Coolpix S2800', 'Resolution']##
+
+SHOPKEEPER IS RIGHT
+Product: Nikon Coolpix S2800
+Feature: Resolution
+Reason: The Nikon Coolpix S2800 indeed has a resolution of 20.1 megapixels
