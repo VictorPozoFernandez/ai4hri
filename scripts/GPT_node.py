@@ -54,7 +54,7 @@ def callback(msg):
 
     current_topic = topic
 
-    if result["Detection"] == "['Different model']":
+    if result["Detection"] == "Two cameras":
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
         detected_model_list= model_identification_gpt(msg, characteristics_products)
         print("Detected model: " + str(detected_model_list))
@@ -87,11 +87,11 @@ def detect_change_of_camera(msg):
 
     if previous_conversations == "":
         previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
-        return {"Detection": "['Different model']"}
+        return {"Detection": "Two cameras"}
     
     if ("NULL" in current_topic) and (len(current_model) != 2):
         previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
-        return {"Detection": "['Different model']"}
+        return {"Detection": "Two cameras"}
     
     if str(msg.data[0]) != "":      
         previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
@@ -100,10 +100,10 @@ def detect_change_of_camera(msg):
 
     result = change_of_model_classification_fast(msg)
     
-    if result["Detection"] == "['Same model']":
+    if result["Detection"] == "One camera":
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
         
-    elif result["Detection"] == "['Different model']":
+    elif result["Detection"] == "Two cameras":
         previous_conversations = " Shopkeeper: " + str(msg.data[1])
 
     
@@ -123,15 +123,20 @@ def change_of_model_classification_fast(msg):
 
 
     system_prompt = """
-    You are a helpful assistant that identifies if two cameras appear in the conversation.
+    You are a helpful assistant that listens a conversation between a Customer and a Shopkeeper inside a camera shop and identifies if different cameras are hinted during the conversation.
 
     Here is an example that illustrates how can you output your answer.
 
-    Shopkeeper: 'This camera costs 100 dollars' Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
-    You: {"Detection": "['Different model']"}
+    Customer: 'How is the price of this camera?' Customer: 'It has a price of 68 dollars';
+    You: {"Detection": "One camera"}
 
-    Output only {"Detection": "['Different model']"} or {"Detection": "['Same model']"}. Don't output anything else.
-    If you detect expressions similar to "and what about this one?" or "do you have anything else", output {"Detection": "['Different model']"}
+    Shopkeeper: 'This camera costs 100 dollars' Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
+    You: {"Detection": "Two cameras"}
+
+    Shopkeeper: 'This one is very good' Customer: 'Do you have anything else?' Shopkeeper: 'Yes, this camera over here is available in color red';
+    You: {"Detection": "Two cameras"}
+
+    If you detect expressions similar to "and what about this one?" or "do you have anything else", output {"Detection": "Two cameras"}
     Output the answer only in JSON format.
     """
 
@@ -146,6 +151,8 @@ def change_of_model_classification_fast(msg):
         SystemMessage(content=system_prompt),
         HumanMessage(content=user_prompt)
     ]
+
+    print(user_prompt)
 
     if DEBUG == True:
         print("")
