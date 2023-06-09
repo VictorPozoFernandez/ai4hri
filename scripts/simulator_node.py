@@ -29,10 +29,9 @@ def main():
         df = pd.read_csv("/home/victor/catkin_ws/src/ai4hri/scripts/simplified_database.csv")
 
         # Filter the extracted columns by the selected interaction number.
-        try:
-            interaction = df[df['TRIAL'] == int(num_interaction)]
-        except:
-            interaction = df[df['TRIAL'] == str(num_interaction)]
+        
+        interaction = df[df['TRIAL'] == str(num_interaction)]
+
 
         interaction_no_trial = interaction.iloc[:,1]
         

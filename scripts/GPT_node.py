@@ -100,11 +100,12 @@ def detect_change_of_camera(msg):
 
     result = change_of_model_classification_fast(msg)
     
-    if result["Detection"] == "['Same model']" and (len(current_model) == 2):
+    if result["Detection"] == "['Same model']":
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
         
     elif result["Detection"] == "['Different model']":
         previous_conversations = " Shopkeeper: " + str(msg.data[1])
+
     
     return result
 
@@ -129,7 +130,7 @@ def change_of_model_classification_fast(msg):
     Shopkeeper: 'This camera costs 100 dollars' Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
     You: {"Detection": "['Different model']"}
 
-    Output only with the labels ['Same model'] or ['Different model']
+    Output only ['Same model'] or ['Different model']
     If you detect expressions similar to "and what about this one?" or "do you have anything else", output ['Different model']
     Output the answer only in JSON format.
     """
