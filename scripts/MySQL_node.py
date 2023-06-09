@@ -89,11 +89,6 @@ def search_callback(msg):
             
         except:
             print("Couldnt ast")
-        
-    
-    if len(substrings) == 0:
-        print("")
-        print("ChatGPT2: " + str(result))
 
 
 def extract_substrings(text):

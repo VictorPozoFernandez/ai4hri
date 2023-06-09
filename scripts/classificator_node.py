@@ -42,7 +42,13 @@ def callback(msg):
     
     # Get new utterance from message and classify it
     new_utterance = msg.data
-    classification_result = sentence_classification(new_utterance)
+
+    if DEBUG == True:
+        classification_result = sentence_classification_chatgpt(new_utterance)
+        
+    else:
+        #classification_result = sentence_classification(new_utterance)
+        classification_result = sentence_classification_chatgpt(new_utterance)
 
     print("------------------------------------------")
     print("\033[94m - " + new_utterance + " (" + classification_result + ") \033[0m")
@@ -160,13 +166,21 @@ def sentence_classification_chatgpt(new_utterance):
         HumanMessage(content=user_prompt)
     ]
 
-    result = chat(prompt_history)
-    data = extract_json(result.content)
+    
+    if DEBUG == True:
+        print("")
+        print(user_prompt)
+        result=input("role_identification_gpt:")
+        data = extract_json(result)
+
+    else:
+        result = chat(prompt_history)
+        data = extract_json(result.content)
 
     previous_utterances = previous_utterances + " ## " + data["Detection"] + ": " + new_utterance
  
 
-    return data
+    return data["Detection"]
 
 def extract_json(s):
     json_match = re.search(r'\{.*\}', s, re.DOTALL)
