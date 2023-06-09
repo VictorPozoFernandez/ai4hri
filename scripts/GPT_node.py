@@ -130,8 +130,8 @@ def change_of_model_classification_fast(msg):
     Shopkeeper: 'This camera costs 100 dollars' Customer: 'And the price of the first camera that you showed me?' Shopkeeper: '68 dollars';
     You: {"Detection": "['Different model']"}
 
-    Output only ['Same model'] or ['Different model']
-    If you detect expressions similar to "and what about this one?" or "do you have anything else", output ['Different model']
+    Output only {"Detection": "['Different model']"} or {"Detection": "['Same model']"}. Don't output anything else.
+    If you detect expressions similar to "and what about this one?" or "do you have anything else", output {"Detection": "['Different model']"}
     Output the answer only in JSON format.
     """
 

@@ -1,39 +1,48 @@
 TRIAL,CONVERSATION
 1,good afternoon how can I help today
-1,"hi, how many colors do you have for canon model"
-1,this only comes in black. what were you looking for in a camera
+1,"hi, in which colors is available the canon model?"
+1,this only comes in black. which type of camera are you looking for?
 1,something that's light and attractive. 
 1,"we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here"
-1,I want a good lighting and loss of motion I guess
-1,"It is very lightweight, 120 grams, and it has 18 preset mode"
-1,that sounds great how much does this cost
-1,$68 and it gets very high-resolution photographs to it's right value for the price
+1,I want good lighting and loss of motion I guess
+1,"It is very lightweight, 120 grams, and it has 18 preset modes"
+1,that sounds great how much does this cost?
+1,"$68 and it gets very high-resolution photographs too, it's right value for the price"
 1,how many megapixels
 1,20.1 megapixels
 1,that's great thank you for your help
-1s,"good afternoon, how can I help today?"
-1s,"hi, how many colors do you have for this Cannon model?"
-1s,this one only comes in black. 
-1s, What are you looking for a camera?
+1s,good afternoon how can I help today
+1s,"hi, in which colors is available the canon model?"
+1s,this only comes in black. what were you looking for in a camera
 1s,something that's light and attractive. 
-1s,"we have this Nikon, its a very lightweight camera that has a lot of presets"
+1s,"please come and have a look at this nikon here"
 1s,I want a good lighting and loss of motion I guess
-1s,"It is very lightweight, 120 grams, and it has 18 preset mode"
+1s,"It is very lightweight, 120 grams, and it has 18 preset modes"
 1s,that sounds great how much does this cost
 1s,$68 and it gets very high-resolution photographs to it's right value for the price
-1s,how many megapixels
-1s,20.1 megapixels
+1s,how many megapixels?
+1s,this model has 20.1 megapixels
 1s,that's great thank you for your help
 2,excuse me
 2,good afternoon how can I help
-2,how does canon camera perform on low lighting
-2,"this is one is the best camera for low light. It has 6400 ISO, and it has silent shooting. It has little noise."
-2,that sounds great what about the price
-2,it is a high end professional camera separately the body itself is $2000
-2,I see do you have anything in this type that's a little more reasonably priced
-2,yes of course I want to come and have a look at the Sony it cost  $550
+2,how does this canon camera perform on low lighting?
+2,"this one is the best camera for low light. It has 6400 ISO, and it has silent shooting. It has little noise."
+2,that sounds great what about the price?
+2,"it is a high end professional camera, the body itself is $2000"
+2,"I see, do you have anything in this type that's more reasonably priced?"
+2,"yes of course, come and have a look at the Sony it cost $550"
 2,thank you for your help
 2,thank you have a good afternoon
+2,excuse me
+2s,good afternoon how can I help
+2s,how does this canon camera perform on low lighting?
+2s,"this one is the best camera for low light. It has 6400 ISO, and it has silent shooting. It has little noise."
+2s,that sounds great what about the price?
+2s,"the body itself is $2000"
+2s,"I see, do you have anything in this type that's more reasonably priced?"
+2s,"yes of course, we have the Sony it cost $550"
+2s,thank you for your help
+2s,thank you have a good afternoon
 3,good afternoon can you tell me more about canon model
 3,this is a high-end professional model you can see with selling a body only it cost 2000. It is the only one with silent mode.
 3,how much does it weight
@@ -181,3 +190,4 @@ TRIAL,CONVERSATION
 11,the ISO setting is only half of the other camera 3200
 11,I see well thank you for your time
 11,thank you have a good afternoon
+
