@@ -48,7 +48,7 @@ def callback(msg):
         
     else:
         #classification_result = sentence_classification(new_utterance)
-        classification_result = sentence_classification_chatgpt(new_utterance)
+        classification_result = sentence_classification(new_utterance)
 
     print("------------------------------------------")
     print("\033[94m - " + new_utterance + " (" + classification_result + ") \033[0m")
@@ -166,7 +166,6 @@ def sentence_classification_chatgpt(new_utterance):
         HumanMessage(content=user_prompt)
     ]
 
-    
     if DEBUG == True:
         print("")
         print(user_prompt)

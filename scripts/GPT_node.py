@@ -92,7 +92,7 @@ def detect_change_of_camera(msg):
 
     result = change_of_model_classification_fast(msg)
     
-    if result["Detection"] == "1 camera" and current_model != "":
+    if result["Detection"] == "1 camera" and current_model != "" and(len(current_model) == 2):
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
         
     elif result["Detection"] == "2 cameras":
@@ -222,8 +222,8 @@ def topic_identification_gpt(msg, column_list):
     List: ['Type_of_camera', 'Model', 'Price', 'ISO', 'Camera_features', 'Color', 'Weight', 'Resolution']
     You: {"Detection": "['NULL']"}
 
-
     Output the answer only in JSON format.  If no topic is detected, output {"Detection": "['NULL']"}
+    Output only topics that appear in the List.
     """
 
     user_template = """

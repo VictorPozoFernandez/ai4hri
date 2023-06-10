@@ -30,9 +30,7 @@ def main():
 
         # Filter the extracted columns by the selected interaction number.
         
-        interaction = df[df['TRIAL'] == str(num_interaction)]
-
-
+        interaction = df[df['TRIAL'] == int(num_interaction)]
         interaction_no_trial = interaction.iloc[:,1]
         
         # Iterate through the rows of the selected interaction. Publish the message to the "/ai4hri/utterance" topic.
@@ -45,7 +43,9 @@ def main():
             print("------------------------------------------")
             print(interaction_no_trial.iloc[row])
             
-            input()
+            x = input()
+            if x == "q":
+                break
 
 
 if __name__ == '__main__':
