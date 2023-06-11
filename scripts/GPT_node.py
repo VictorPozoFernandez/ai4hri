@@ -191,6 +191,9 @@ def topic_extraction(msg):
     topics = topic_identification_gpt(msg, column_list)
     topics_list = ast.literal_eval(topics["Detection"])
 
+    if len(topics_list) > 4:
+        topics_list = [['NULL']]
+
     print("Detected topics: " + str(topics_list))
 
     return topics_list
