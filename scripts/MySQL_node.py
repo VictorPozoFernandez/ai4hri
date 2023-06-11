@@ -10,7 +10,8 @@ from langchain.schema import HumanMessage, SystemMessage, AIMessage, Document
 from langchain.prompts import PromptTemplate
 import json
 
-
+global last_insert_rowid
+last_insert_rowid = ""
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
 
@@ -27,6 +28,7 @@ mycursor4 = db2.cursor()
 mycursor5 = db2.cursor()
 mycursor6 = db2.cursor()
 mycursor7 = db2.cursor()
+mycursor8 = db2.cursor()
 
 
 def main():
@@ -40,6 +42,8 @@ def main():
 
 
 def search_callback(msg):
+
+    global last_insert_rowid
 
     # Extract relevant data from the received message
     customer_sentence = msg.data[0]
@@ -67,36 +71,49 @@ def search_callback(msg):
     result = judge_gpt(shopkeeper_sentence, ground_truth)
     
     substrings = extract_substrings(result)
-
-    mycursor5.execute("INSERT INTO Interactions DEFAULT VALUES;")
-    mycursor6.execute("SELECT last_insert_rowid();")
     
-    for last_insert_rowid in mycursor6:
-        last_insert_rowid = last_insert_rowid[0]
+    if last_insert_rowid == "":
+
+        mycursor5.execute("INSERT INTO Interactions DEFAULT VALUES;")
+        mycursor6.execute("SELECT last_insert_rowid();")
+
+        for last_insert_rowid in mycursor6:
+            last_insert_rowid = last_insert_rowid[0]
    
+    query = "INSERT INTO Utterances (Content, Interaction_ID) VALUES (?, ?);"
+    params = (customer_sentence + " // " + shopkeeper_sentence, last_insert_rowid)
+    mycursor8.execute(query, params)
+    
     for substring in substrings:
         #print("")
         #print(substring)
 
-        substring = ast.literal_eval(substring)
-        feature = get_left_substring(substring[3])
+        try:
+            substring = ast.literal_eval(substring)
+            feature = get_left_substring(substring[3])
 
-        if (substring[1] != 'NOT MENTIONED') and (feature in topics_interest):
-            
-            print("")
-            if substring[1] == "SHOPKEEPER IS RIGHT":
-                print("\033[92m" + substring[1] + "\033[0m")
-            elif substring[1] == "SHOPKEEPER IS MISTAKEN":
-                print("\033[91m" + substring[1] + "\033[0m")
-            else:
-                print("\033[93m" + substring[1] + "\033[0m")
+            if (substring[1] != 'NOT MENTIONED') and (feature in topics_interest):
+                
+                print("")
+                if substring[1] == "SHOPKEEPER IS RIGHT":
+                    print("\033[92m" + substring[1] + "\033[0m")
+                elif substring[1] == "SHOPKEEPER IS MISTAKEN":
+                    print("\033[91m" + substring[1] + "\033[0m")
+                else:
+                    print("\033[93m" + substring[1] + "\033[0m")
 
-            print("Product: " + substring[2])
-            print("Feature: " + feature)
-            print("Reason: " + substring[0])
+                print("Product: " + substring[2])
+                print("Feature: " + feature)
+                print("Reason: " + substring[0])
 
-            mycursor7.execute("INSERT INTO Detections (Class, Feature, Reason, Interaction_ID) VALUES ('{}', '{}', '{}', '{}');".format(substring[1], feature, substring[0], last_insert_rowid))
-            db2.commit()
+                query = "INSERT INTO Detections (Class, Feature, Reason, Interaction_ID) VALUES (?, ?, ?, ?);"
+                params = (substring[1], feature, substring[0], last_insert_rowid)
+                mycursor7.execute(query, params)
+
+                db2.commit()
+        
+        except Exception as e:
+            print(e)
             
 
 
