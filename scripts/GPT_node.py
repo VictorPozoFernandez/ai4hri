@@ -182,7 +182,7 @@ def topic_extraction(msg):
         columns = mycursor.fetchall()
         column_names = [column[1] for column in columns]
 
-        if 'Product_ID' in column_names:
+        if 'Product_ID' in column_names: 
             column_list = column_list + column_names  
         
         column_list_no_duplicates = list(set(column_list))

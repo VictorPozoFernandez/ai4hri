@@ -11,6 +11,7 @@ from langchain.prompts import PromptTemplate
 import json
 
 
+
 DEBUG = rospy.get_param('/MySQL/DEBUG')
 
 # Connect to the Camera_Store database. Initialize the cursor for querying the database.
@@ -23,6 +24,9 @@ mycursor = db2.cursor()
 mycursor2 = db2.cursor()
 mycursor3 = db2.cursor()
 mycursor4 = db2.cursor()
+mycursor5 = db2.cursor()
+mycursor6 = db2.cursor()
+mycursor7 = db2.cursor()
 
 
 def main():
@@ -64,31 +68,36 @@ def search_callback(msg):
     
     substrings = extract_substrings(result)
 
+    mycursor5.execute("INSERT INTO Interactions DEFAULT VALUES;")
+    mycursor6.execute("SELECT last_insert_rowid();")
+    
+    for last_insert_rowid in mycursor6:
+        last_insert_rowid = last_insert_rowid[0]
+   
     for substring in substrings:
         #print("")
         #print(substring)
 
-        try:
-            substring = ast.literal_eval(substring)
-            feature = get_left_substring(substring[3])
+        substring = ast.literal_eval(substring)
+        feature = get_left_substring(substring[3])
 
-            if (substring[1] != 'NOT MENTIONED') and (feature in topics_interest):
-                
-                print("")
-                if substring[1] == "SHOPKEEPER IS RIGHT":
-                    print("\033[92m" + substring[1] + "\033[0m")
-                elif substring[1] == "SHOPKEEPER IS MISTAKEN":
-                    print("\033[91m" + substring[1] + "\033[0m")
-                else:
-                    print("\033[93m" + substring[1] + "\033[0m")
-
-                print("Product: " + substring[2])
-                print("Feature: " + substring[3])
-                print("Reason: " + substring[0])
-
+        if (substring[1] != 'NOT MENTIONED') and (feature in topics_interest):
             
-        except:
-            print("Couldnt ast")
+            print("")
+            if substring[1] == "SHOPKEEPER IS RIGHT":
+                print("\033[92m" + substring[1] + "\033[0m")
+            elif substring[1] == "SHOPKEEPER IS MISTAKEN":
+                print("\033[91m" + substring[1] + "\033[0m")
+            else:
+                print("\033[93m" + substring[1] + "\033[0m")
+
+            print("Product: " + substring[2])
+            print("Feature: " + feature)
+            print("Reason: " + substring[0])
+
+            mycursor7.execute("INSERT INTO Detections (Class, Feature, Reason, Interaction_ID) VALUES ('{}', '{}', '{}', '{}');".format(substring[1], feature, substring[0], last_insert_rowid))
+            db2.commit()
+            
 
 
 def extract_substrings(text):

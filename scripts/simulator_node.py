@@ -2,8 +2,6 @@ import rospy
 from std_msgs.msg import String
 import pandas as pd
 
-
-
 def main():
 
     # Initialize the simulator ROS node and a publisher for the AI4HRI utterance_and_position topic
@@ -35,6 +33,7 @@ def main():
         
         # Iterate through the rows of the selected interaction. Publish the message to the "/ai4hri/utterance" topic.
         num_rows = len(interaction_no_trial)
+                         
         for row in range(num_rows):
 
             utterance = String()
