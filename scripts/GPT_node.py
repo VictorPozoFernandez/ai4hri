@@ -206,7 +206,7 @@ def topic_identification_gpt(msg, column_list):
 
 
     system_prompt = """
-    You are a helpful assistant. Write the element from the List that approximates the most with the topic of conversation given as Input.
+    You are a helpful assistant. Write the element from the List that you detect as the topic of the conversation given as Input.
 
     Here there are some examples that illustrates how can you output your answer. The interactions appear in cronological order:
 
@@ -222,7 +222,8 @@ def topic_identification_gpt(msg, column_list):
     List: ['Type_of_camera', 'Model', 'Price', 'ISO', 'Camera_features', 'Color', 'Weight', 'Resolution']
     You: {"Detection": "['NULL']"}
 
-    Output the answer only in JSON format.  If no topic is detected, output {"Detection": "['NULL']"}
+    Output the answer only in JSON format.  
+    If no topic is detected, output {"Detection": "['NULL']"}
     Output only topics that appear in the List.
     """
 
