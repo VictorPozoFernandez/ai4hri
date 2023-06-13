@@ -60,7 +60,7 @@ def callback(msg):
         print("Detected model: " + str(detected_model_list))
         current_model = detected_model_list
     
-    if ("NULL" not in topic):
+    if ("NULL" not in topic) and (len(topic) <= 5) and (current_model != ""):
 
         # Initialize the publisher for extracted_info ROS topic
         pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1, latch=True) 
@@ -190,9 +190,6 @@ def topic_extraction(msg):
 
     topics = topic_identification_gpt(msg, column_list)
     topics_list = ast.literal_eval(topics["Detection"])
-
-    if len(topics_list) > 4:
-        topics_list = [['NULL']]
 
     print("Detected topics: " + str(topics_list))
 

@@ -33,7 +33,7 @@ TRIAL,CONVERSATION
 5,I see how much does it cost?
 5,it's only $68
 5,is it powerful? how many megapixels can it shoot?
-5,20 megapixels so if you want to make big pictures you'll get a nice shot
+5,20 megapixels so if you want to make big pictures you'll get a nice shoot
 5,does it have any preset mode ready to use?
 5,this camera is built around preset modes it has a 18 options. you can say what type of location you're in and it will give you the best result for that location 
 5,is it hard to operate?
@@ -78,236 +78,185 @@ TRIAL,CONVERSATION
 7,"this camera is great, it has a shutter speed of 1/7000 seconds"
 7,sounds good thank you for your information
 7,thank you for your time please come again
-8,good afternoon how can I help you
-8,afternoon I'm interested with canon camera can you tell me more about it
-8,it's a full manual control camera it gives you total control over the creative process
-8,sounds good what about the manual settings
-8,"every manual setting you want is in this camera this is designed to be the complete camera. it's the number one. Also, there are some other similar cameras out there that have similar price and features"
-8,how high can I set the ISO
+8,good afternoon how can I help you?
+8,good afternoon I'm interested in the canon camera. can you tell me more about it?
+8,it's a DSLR full manual control camera it gives you total control over the creative process
+8,sounds good what about the manual settings?
+8,"every manual setting you want is in this camera this is designed to be a complete camera. it's the number one"
+8,how high can I set up the ISO?
 8,the ISO goes up to 6400 its excellent for shooting in low light
-8,what about the exposure how long can I set it to
-8,as long as you like it has a bulb setting so if you want to shoot at a low ISO for an explosure of 2 hours. this camera can do that
-8,how many autofocus points does it have
+8,how many autofocus points does it have?
 8,it has 61 auto focus points that can be combined in a variety of autofocus modes
-8,how many colors does it come in
-8,black. black  only
-8,well black is a good color and how much does it cost
-8,the body is $2000 the lenses extra
-8,do you have something that's more affordable but in this range of model
-8,we have a sony camera that takes excellent pictures and equal to this camera much cheaper there are some compromises. 
-8,and for this model how many auto focus points does it have
-8,it actually has 179 autofocus points to get a very fine texture in whatever order Focus emoji goose
-8,that's cool and what about the iso setting
-8,the ISO setting is only half of the other camera 3200
+8,how many colors does it come in?
+8,black. black only
+8,well black is a good color. how much does it cost?
+8,the body is $2000. the lenses cost an extra.
+8,do you have something that's more affordable in this range?
+8,we have the sony a6000 camera that takes excellent pictures and is similar to this camera. It's much cheaper but there are some compromises. 
+8,and for this model how many autofocus points does it have?
+8,it has 179 autofocus points
+8,that's cool and what about the iso setting?
+8,the ISO setting is only up to 3200. Is half than the Canon that I showed you.
 8,I see well thank you for your time
 8,thank you have a good afternoon
-9,good afternoon how can I help you today
-9,am I'm not really good at taking photos or anything I just need something that's easy to use
-9,nikon Coolpix s2800 camera right here is perfect it takes beautiful pictures that can be launched up to a very big size
-9,other colors
-9,it's right now in stock we have purple pink black silver and red
-9,what about the megapixel how many how good can it shoot
+9,good afternoon how can I help you today?
+9,I'm not really good at taking photos or anything I just need something that's easy to use
+9,The nikon Coolpix s2800 camera right here is perfect for you. its a Mirrorless camera that can help you in any situation
+9,Is it available in other colors?
+9,right now in stock we have purple pink black silver and red
+9,what about the megapixels. how many can it shoot?
 9,its has 20 megapixels so you can make quite a large poster and it will still look very clear
-9,can you take good pictures cuz I'm not so good at taking it I'm worried about the quality of the result
-9,it takes great pictures everything is fully automatic if you want to you can trust somebody that will help the color or help in different situations
-9,it sounds great how much does it cost
+9,can you take good pictures? because I'm not very good at taking them I'm worried about the quality of the result
+9,it takes great pictures everything is fully automatic if you want to.
+9,it sounds great how much does it cost?
 9,it's only $68
-9,is there anything else I should know about this model
-9,it has a zoom lens as well so if you want that little bit of extra help to make the frame idea if you do that
+9,is there anything else I should know about this model?
+9,it has zoom lens as well so if you want a little bit of extra help to take the photo this model can serve you well.
 9,that sounds good
-9,"it is over here, it is very nice shape"
+9,"it is over here, it has a very nice shape"
 9,thanks for your time
 9,thank you look forward to seeing you again
-10,good afternoon how can I help
-10,hi sony camera looks good
-10,"it's an excellent camera that gives you a lot of the features the professional cameras have at a much lower price, for example, it's a mirrorless camera. It means that in late night you won't get that vibration "
-10,really can you tell me more
-10,"there are so many things that it becomes very profesional. for me one of the exciting things is it's a mirrorless camera. that means if you want to take a shot late at night, you won't get that vibration that can happen when a mirror moves inside the camera"
-10,so you mean it takes good picture at night
-10,"yes, it can take good pictures into the late evening at night. there are cameras to take better pictures but they are much more expensive"
-10,so how high does the iso go
-10,on this camera 3200
-10,what about the exposure
+10,good afternoon how can I help?
+10,I was looking at this sony camera. It looks good
+10,"it's an excellent camera that gives you a lot of the features of a professional cameras at a much lower price, and it costs 550 dollars only"
+10,really? can you tell me more?
+10,"for me one of the most exciting things is that is a mirrorless camera. if you want to take a shoot late at night you won't get that vibration that can happen when a mirror moves inside the camera"
+10,so do you mean it takes good picture at night?
+10,"yes, it can take good pictures at any hour. there are cameras that take better pictures but they are much more expensive"
+10,so how high does the iso go?
+10,on this camera up to 3200 with little noise
+10,what about the exposure?
 10,that can go up to 30 seconds
-10,there are a camera with longer explosure?
-10,"would you like a longer exposure camera, please over here we have the Canon 5d Mark 3"
-10,what about this one with the ISO
-10,the eye so here is 6400 X 1 shots in the evening but then you have full creative control with manual shutter settings
-10,oh that sounds good how long does the exposure go
-10,here the explosure is arroung 40 seconds.
-10,it looks heavy though how much does it weight
-10,yes it is heavy it weighs one kilogram without a lens
-10,how much does it cost
-10,for the body only $2000
+10, Is there are a camera with longer exposure?
+10,"Yes of course. please come over let me show you the Canon 5d Mark 3"
+10,what ISO does it have?
+10,Up to 6400 in the evening. you have full creative control with manual shutter settings
+10,oh that sounds good how long does the exposure go?
+10,here the explosure is around 40 seconds.
+10,it looks heavy though how much does it weight?
+10,yes it is heavy it weighs one kilogram without lens
+10,how much does it cost?
+10,$2000 lens not included.
 10,thank you for your time
 10,thank you have a good afternoon
-11,good afternoon how can I help today
-11,hey I'm looking for camera that's easy to use
-11,we have two great cameras and I both easy to use this one is $68 that bond is $550
-11,who can you tell me more about nikon coolpix 
-11,"nikon is perhaps a simplest camera for people who want to diferent photos, who want to take family photos and some travel shots like landscapes when they're out on sofa. it has 18 preset modes. "
-11,what about the resolution?
-11,it has 20.1 megapixels so you can make quite large posters promoting they look fantastic
-11,is it equipped with any preset modes
-11,it has a set of presets it has 14. sometimes I may seem a little tricky to use but once you choose your 2 or 3 favorites it's very simple.
-11,does it come in any other colors
+11,good afternoon how can I help?
+11,hey I'm looking for a camera that's easy to use
+11,we have two easy to use cameras. this one is 68 dollars and that one is 550 dollars
+11,can you tell me more about nikon coolpix?
+11,"nikon is perhaps the simplest camera for people who want diferent photos, like family photos and landscapes. it is a point and shoot camera "
+11,what about its resolution?
+11,it has 20.1 megapixels so you can make quite large posters. they look fantastic
+11,is it equipped with any preset modes?
+11,it has a set of 14 presets. sometimes it may seem a little tricky to use but once you get familiar with its functionalities it's very simple.
+11,does it come in any other colors?
 11,purple pink black silver and red
-11,and is it heavy
-11,this camera is very light 120 grams for instance the other more expensive camera of a day is 470 grams
+11,and is it heavy?
+11,this camera is very light 120 grams. for instance the other camera weights 470 grams
 11,sounds like a pretty good option
-11,how to like to speak with outside stuff over here and they be able to step you through all the different colors What's in stock right now and show you some of the features in practice
-11,thank you
 11,thank you for your time
-12,good afternoon how can I help you
-12,afternoon I'm interested with canon camera can you tell me more about it
-12,it's a full manual control camera it gives you total control over the creative process
-12,how high can I set the ISO
-12,the ISO goes up to 7400 its excellent for shooting in low light
-12,what about the exposure how long can I set it to
-12,explosure is about 50 seconds
-12,how many autofocus points does it have
-12,it has 61 auto focus points that can be combined in a variety of autofocus modes
-12,how many colors does it come in
-12,black black only
-12,well black is a good color and how much does it cost
-12,the body is $2000 the lenses extra
-12,do you have something that's more affordable but in this range of model
-12,we have a sony camera that takes excellent pictures and equal to this camera much cheaper there are some compromises
-12,and for this model how many auto focus points does it have
-12,it actually has 179 autofocus points to get a very fine texture in whatever order Focus emoji goose
-12,that's cool and what about the iso setting
-12,the ISO setting is only half of the other camera 3200
-12,I see well thank you for your time
-12,thank you have a good afternoon
-13,good afternoon how can I help today
+13,good afternoon how can I help today?
 13,I'm looking for a camera
-13,"for example, this canon is a top camera. it is around one kilogram. it has full creative control many different manual settings in fact every manual setting that can be on a camera is on this camera. It cost 1500 dollars."
-13,"do you have something that's more affordable but in this range of model. Also, I'm not so good with manual settings in cameras maybe can you tell me other models that's more easy to use"
-13,yes of course we have a perfect model. This sony.
-13,really tell me more
-13,it actually has 179 autofocus points to get a very fine texture in whatever picture
-13,and does it take good pictures in dark environment
-13,there are some limits in dark environments simple work very well up to the late evening because it has ISO 3200
-13,the sensor size
-13,this is a cropped digital sensor so it's quite large for digital camera but to keep the price down it's not too big. Its size is 23 mm x 32 mm.
-13,I see so I can take good picture with these even though I don't have very extensive knowledge about photography
-13,the picture quality from this camera is excellent option for most photos it is as good as the top-end camera
-13,have that in other colors
+13,"this canon is a top DSLR camera. it only weights 950 grams and it has multiple manual settings. in fact every manual setting that you can think of is available on this camera."
+13,"do you have something similar but a bit more affordable and easy to use?. I'm not very good with manual cameras."
+13,yes of course this Sony alpha a6000 is perfect for you.
+13,really? tell me more
+13,it has 179 autofocus points to get a very fine texture in any picture
+13,does it take good pictures in a dark environment?
+13,it works very well until late evening because it has an ISO 3200
+13,what about its sensor size?
+13,it has a cropped digital sensor with a size of 23 mm x 32 mm. it's quite large for a digital camera.
+13,I see so can I take good pictures with these even though I don't have a profound knowledge about photography?
+13,the picture quality of this camera is excellent an option for most situations. it is as good as the top-end camera
+13,Do you have it in other colors?
 13,it's available in white silver and black
 13,that's great
 13,thank you please come this way
-14,good afternoon how can I help you today
+14,good afternoon how can I help you today?
 14,I'm looking for a camera
 14,there are many cameras. What type of pictures do you take?
-14,I'm not really into photography I just needed for a family vacation that's coming up
-14,"for example, this nikon  comes in a range of colors, black, red, purple. it takes fantastic pictures it's really easy to use because it is authomatic so you can focus on the photograph instead of all the ways that the camera can be set"
-14,how powerful is it
-14,"it takes pictures of the 20 megapixels pic then, you can get will  a large poster on your wall and the picture will be really clean"
-14,oh yeah that sounds good doesn't have any preset modes
-14,it's got 18 preset modes you will probably find the 2 or 3 that work best for you and then you can relax with those and nothing too much about the others.  it also allows  12 glamour retouching effects so if something goes a little bit wrong like the background is too bright you can fix that in the camera.
-14,that sounds good is it light go cuz I don't want to be carrying around heavy stuff all through the vacation
-14,"I am not sure. I should ask. Aslo, please feel free to take it an feel how heavy it is"
+14,I'm not really into photography I just need it for a family vacation that's coming up
+14,"this nikon comes in colors black, red and purple only. it's really easy to use because it is automatic so you can focus on the experience instead on how to properly set up the camera"
+14,how powerful is it?
+14,"it takes pictures at 20 megapixels, you can get a large poster and the picture will be really clean"
+14,oh yeah that sounds good does it have any preset modes?
+14,it has 18 preset modes. you will probably find a few that work best for you and don't bother too much about the others.  
+14,it also allows for 12 glamour retouching effects so if something goes wrong like a background too bright you can fix it with this camera.
+14,is it light? because I don't want to be carrying around heavy stuff
+14,"I am not sure. I should ask. please feel free to take it an feel how heavy it is"
 14,it's pretty light
-14,would you like to take some pictures with it now
+14,would you like to take some pictures with it now?
 14,it's pretty easy
-14,and the pictures look great
-14,true thank you very much for your help
+14,and the pictures look great as you can see.
+14,true. thank you very much for your help
 14,thank you for your time have a good afternoon
-15,good afternoon how can I help
-15,this sony camera looks good can you tell me more about it
-15,it's an excellent camera yes it's designed to take the kind of pictures that a top end camera can take with a few compromises to bring it down to an affordable price of 68 dollars.
-15,how good is the quality when I take pictures at night for example
-15,this is an excellent camera in the evening time he can go up to 3200 ISO and have a 30 second shutter speed
-15,can you do long exposure shoot
-15,it is only 30 seconds. I'm sorry for that you would have to go through the top-end camera with different settings.
-15,"then, show me that canon. How much  the explosure is"
-15,only limited by your imagination
-15,is it has a bulb setting so that if you want to take a 2 hour or 20 hour exposure even that is possible
-15,I see what else can it do
-15,everything if you want to do something with a camera this camera can do it
-15,how much does it cost
-15,you can see we only have two body on display the body only is $2000
-15,that's quite expensive
-15,yes and then the lenses can cause just as much or even more
+15,good afternoon how can I help?
+15,this sony a6000 camera looks good can you tell me more about it?
+15,it's an excellent Mirrorless camera  it's designed to take professional pictures at an affordable price of 68 dollars.
+15,how good is the quality when I take pictures at night for example?
+15,in the evening it can go up to 3200 ISO
+15,can you take long exposure shoots?
+15,only for 30 seconds and it has a 1/4000 second shutter speed. 
+15,"For longer exposure shoots you would have to look for our top-end Point-and-shoot camera, the Cannon EOS Mark III"
+15,"show me that canon then. How much the explosure is"
+15,is it has a bulb setting so if you want to take exposure shoots as long as you want really.
+15,I see what else can it do?
+15,pretty much everything. if you want to do something with a camera this one can do it
+15,how much does it cost?
+15,you can see it here the body only is $2000
 15,I guess it's a pretty good camera then
-15,choice of most professional
+15,is the choice of most professionals
 15,thank you for your time
-15,thank you have a good afternoon
 16,I'm looking for a point and shoot camera
-16,this sony it is different. It takes fantastic photos but there's a lot of complexities in how its use. Please come and have a look at this nikon camera. this is an excellent quality point and shoot camera 20 megapixel pictures so you can get  big posters on your wall and they still look great
-16,any preset modes
-16,it has 20 preset modes but we find with most users do they choose to a three setting
-16,do any retouch modes with the camera
-16,there a few retouching modes to clean up some skin colors especially if they look a little bit washed out in sunlight or under fluorescent lights there are 12 of these modes
-16,optical zoom
-16,is has a basic 5 x optical zoom so if you want to set up your family photo you can adjust the frame very easily
-16,perhaps you'd like to take couple pictures with an
-16,that looks good
+16,Please come and have a look at this nikon camera. this is an excellent quality point and shoot camera with 20 megapixels.
+16,any preset modes?
+16,it has 20 preset modes. but we find that most users only choose the two or three settings they like the most and forget about the rest.
+16,does it come with any retouch modes?
+16,there are up to 12 retouching effect modes to clean up some skin colors. especially if they look a little bit washed out in sunlight or under fluorescent lights
+16, what about optical zoom?
+16,is has a basic 5x optical zoom so if you want to set up your family photo you can adjust the frame very easily
 16,it comes in a number of colors to we have purple pink black silver and red
-16,and is it heavy
-16,"please pick it up and try, it is about  128  grams"
+16,and is it heavy?
+16,"please pick it up and try, it is about 128 grams"
 16,it seems like a pretty good camera
-16,yes we had great feedback about would you like to talk to one of our other stuff and have a look at what's in stock right now
+16,yes we had great feedback.  would you like to talk to one of our other staff and have a look at what's in stock right now?
 16,that would be good thank you very much
 16,thank you for your time
-17,I'm looking for a camera
-17,we have a lot of different cameras for every need can I ask what type pictures you take
-17,I like taking pictures at night I like shooting lights
-17,very creative you need full manual control I guess
-17,yeah I think I would like that
-17,we do have a camera that's designed for the creative professional please come and have a look at this canon model
-17,that looks good can you tell me more about it
-17,this is the Canon 5d Mark 3 and it's the first choice of most health professionals it has full manual control and a huge range of lenses
-17,how good is the quality of dark environment photographs
-17,excellent it has a bulb mode so if you want to take astrophotography that is very easy with this camera
-17,that's good how long can I set the exposure to
-17,"the standard shutter exposure settings go up to 30 seconds but then it has a bulb mode so you can stay open for as long as you want, like 2h."
-17,perfect how much does it cost
-17,this camera body is $2000
-17,and does it only come in Black
-17,"yes, it is only black"
-17,I see thanks so much for your help
-17,thank you for your time have a good afternoon
 18,good afternoon how can I help today
 18,hi I'm looking for a practical camera
 18,can I ask what sort of pictures you take
-18,Oh My take pictures most likely on family vacations
-18,when you travel with your family do you go to big landscapes exciting cities to take pictures of the places to
+18,Oh I take pictures most on family vacations
+18,when you travel with your family do you go to big landscapes?
 18,yeah
-18,you might be interested in this camera over here. The sony.
-18,does it have autofocus
-18,it has very final tour focused there 179 different points that are picked up on the sensor to drive through order focus
-18,cool any preset modes
-18,it has 9 preset modes maybe you would normally choose 10 through favorites and style nose but you can change this one
+18,you might be interested in this camera over here. The sony a6000.
+18,does it have autofocus?
+18,it has 179 different points that are picked up on the sensor.
 18,does it come in any other colors
-18,the color choice he is white silver and black
-18,does this one cost
-18,this is 550 dollars
-18,it is expensive.
-18,"we also have this camera over here, the nikon, of 68 dollars"
+18,you can choose between white silver and black
+18,and how much does it cost?
+18,550 dollars
+18,is quite expensive.
+18,"we also have this camera over here, the nikon, for 68 dollars"
 18,this seems like a more reasonable choice
-18,this is excellent for family photos and for some of the travel photos that you will take
+18,this is excellent for family and traveling photos.
 18,thank you very much for your help
 18,thank you for your time have a good afternoon
-19,good afternoon how can I help
+19,good afternoon how can I help?
 19,this camera looks good how high does the iso go
 19,the iso on this camera goes up to 6400
-19,and what about the exposure
-19,"understanding shutter speeds isi 30 seconds, but you can also change the bulb mode. then you can keep the shutter open forever, like 2h"
-19,had the sensor size
-19,full frame the same size as a piece of 35mm x 25mm that's the standard for a top end camera
-19,what about the auto focus points
-19,it has 61 autofocus points and a number of modes that use those to create very fast response
-19,what about the weight
-19,some people think it's a bit heavy it weighs one kilogram but that is what you get when you buy a top end camera
-19,how much does this cost
-19,the body is $2000 the lenses cost extra
-19,how much Freedom do I get when using this camera
+19,and what is the size of its sensor?
+19, 35mm x 25mm that's the standard for a top end camera
+19,what about the auto focus points?
+19,it has 61 autofocus points and a number of modes that use those to create a very fast response
+19,what about the weight?
+19,some people think it's a bit heavy it weighs o950 grams but that is what you get when you buy a top end camera
+19,how much does it cost?
+19,the body is $2000. lenses not included
+19,how much freedom do I get when using this camera?
 19,you have full creative control it has every possible manual setting
-19,this camera sounds pretty good
-19,we have one set up over here with a small zoom lens if you would like to try using it
-19,I call you  back in later to check thank you very much
-19,no worries thank you for your time I look forward to seeing you again
+19,it sounds pretty good
+19,we have one over here if you want to try it.
+19,I will call you back later thank you very much
+19,no worries thank you for your time I look forward to seeing from again
 20,good afternoon how can I help today
 20,this sony camera looks good
 20,it's an excellent camera that takes the same quality pictures as a top-end camera without the top and price cheaper
