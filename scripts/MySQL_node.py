@@ -171,9 +171,9 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     system_prompt = """
     You are a helpful assistant that identifies if a shopkeeper is mistaken when presenting the characteristics of a camera model. Your task is to analyze the information given in Ground Truth and output the relevant lists based on the characteristics mentioned by the shopkeeper:
 
-    1. If the shopkeeper is right about a characteristic, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS RIGHT', '<presented camera model>', '<feature from Ground Truth>']##
-    2. If the shopkeeper is mistaken about a characteristic, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<feature from Ground Truth>']##
-    3. If the shopkeeper does not mention a characteristic, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'NOT MENTIONED', '<presented camera model>', '<feature from Ground Truth>']##
+    1. If the shopkeeper is right about a characteristic from Ground Truth, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS RIGHT', '<presented camera model>', '<feature from Ground Truth>']##
+    2. If the shopkeeper is mistaken about a characteristic from Ground Truth, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<feature from Ground Truth>']##
+    3. If the shopkeeper does not mention a characteristic from Ground Truth, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'NOT MENTIONED', '<presented camera model>', '<feature from Ground Truth>']##
     4. If the shopkeeper is not able to answer, or asks for help, output: ##['<Reason of why the shopkeeper is not able to answer>', 'SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<feature from Ground Truth>']##
     
     When the shopkeeper presents multiple characteristics, output a separate list for each characteristic mentioned by the shopkeeper. 

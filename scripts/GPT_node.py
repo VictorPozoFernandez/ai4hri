@@ -60,7 +60,7 @@ def callback(msg):
         print("Detected model: " + str(detected_model_list))
         current_model = detected_model_list
     
-    if ("NULL" not in topic) and (len(topic) <= 5) and (current_model != ""):
+    if ("NULL" not in topic) and (len(topic) <= 5) and (current_model != "") and (len(current_model) <= 2) :
 
         # Initialize the publisher for extracted_info ROS topic
         pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1, latch=True) 
