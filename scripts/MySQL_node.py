@@ -74,15 +74,19 @@ def search_callback(msg):
     
     if last_insert_rowid == "":
 
-        mycursor5.execute("INSERT INTO Interactions DEFAULT VALUES;")
-        mycursor6.execute("SELECT last_insert_rowid();")
+        print("")
+        result = input("Write the interaction number you want to update. If you just want to add a new utterance, press ENTER:")
 
-        for last_insert_rowid in mycursor6:
-            last_insert_rowid = last_insert_rowid[0]
-   
-    query = "INSERT INTO Utterances (Content, Interaction_ID) VALUES (?, ?);"
-    params = (customer_sentence + " // " + shopkeeper_sentence, last_insert_rowid)
-    mycursor8.execute(query, params)
+        if result != "":
+            last_insert_rowid = result
+            mycursor5.execute("DELETE FROM Detections WHERE Interaction_ID=?", (int(last_insert_rowid),))
+        
+        else:
+            mycursor5.execute("INSERT INTO Interactions DEFAULT VALUES;")
+            mycursor6.execute("SELECT last_insert_rowid();")
+
+            for last_insert_rowid in mycursor6:
+                last_insert_rowid = last_insert_rowid[0]
     
     for substring in substrings:
         #print("")
@@ -106,8 +110,8 @@ def search_callback(msg):
                 print("Feature: " + feature)
                 print("Reason: " + substring[0])
 
-                query = "INSERT INTO Detections (Class, Feature, Reason, Interaction_ID) VALUES (?, ?, ?, ?);"
-                params = (substring[1], feature, substring[0], last_insert_rowid)
+                query = "INSERT INTO Detections (Interaction_ID, Utterance, Class, Feature, Reason) VALUES (?, ?, ?, ?, ?);"
+                params = (last_insert_rowid ,customer_sentence + " // " + shopkeeper_sentence, substring[1], feature, substring[0])
                 mycursor7.execute(query, params)
 
                 db2.commit()
