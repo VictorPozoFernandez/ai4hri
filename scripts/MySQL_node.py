@@ -159,7 +159,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     1. If the shopkeeper is right about a characteristic from Ground Truth, output:
     [
         {
-            "Explanation": "<Explain why the Shopkeeper shopkeeper is right>",
+            "Explanation": "<Explain why the Shopkeeper is right>",
             "Detection": "SHOPKEEPER IS RIGHT",
             "Model": "<presented camera model>",
             "Feature": "<feature from Ground Truth>"
@@ -169,7 +169,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     2. If the shopkeeper is mistaken about a characteristic from Ground Truth, output: ##['<Explain why the Shopkeeper is mistaken>', 'SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<feature from Ground Truth>']##
     [
         {
-            "Explanation": "<Explain why the Shopkeeper shopkeeper is mistaken>",
+            "Explanation": "<Explain why the Shopkeeper is mistaken>",
             "Detection": "SHOPKEEPER IS MISTAKEN",
             "Model": "<presented camera model>",
             "Feature": "<feature from Ground Truth>"
@@ -189,7 +189,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     4. If the shopkeeper is not able to answer, or asks for help, output: ##['<Explain why the shopkeeper is not able to answer>', 'SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<feature from Ground Truth>']##
     [
         {
-            "Explanation": "<Explain why the Shopkeeper shopkeeper is not able to answer",
+            "Explanation": "<Explain why the Shopkeeper is not able to answer",
             "Detection": "SHOPKEEPER DOESNT KNOW",
             "Model": "<presented camera model>",
             "Feature": "<feature from Ground Truth>"
@@ -199,7 +199,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     When the shopkeeper presents multiple characteristics, output an JSON object for each characteristic mentioned by the shopkeeper. 
     Use the information given in Ground Truth to help you reason. Here's an example of how to format your answer:
 
-    Shopkeeper utterance: <The Sony camera is a Mirrorless camera that has a resolution of 20 megapixels>
+    Shopkeeper utterance: The Sony camera is a Mirrorless camera that has a resolution of 20 megapixels
     Ground Truth: ["Sony Alpha a6000: ['Model: Sony Alpha a6000', 'Price: <550>', 'Type_of_camera: <Mirrorless>', 'Resolution: <18.0 megapixels>']"]
     You:[
             {
