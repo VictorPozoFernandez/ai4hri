@@ -82,11 +82,16 @@ def search_callback(msg):
             mycursor5.execute("DELETE FROM Detections WHERE Interaction_ID=?", (int(last_insert_rowid),))
         
         else:
-            mycursor5.execute("INSERT INTO Interactions DEFAULT VALUES;")
-            mycursor6.execute("SELECT last_insert_rowid();")
+            mycursor5.execute("SELECT MAX(Interaction_ID) FROM Detections;")
 
-            for last_insert_rowid in mycursor6:
-                last_insert_rowid = last_insert_rowid[0]
+            for result in mycursor5:
+                print(result)
+
+                if result[0] != None:
+                    last_insert_rowid = result[0] + 1
+                else:
+                    last_insert_rowid = 1
+                    
     
     for substring in substrings:
         #print("")

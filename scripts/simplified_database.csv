@@ -1,6 +1,10 @@
 TRIAL,CONVERSATION
+
+INTERACTION 1,--------------------------------------------------------------------------------------------------------------------------------
+
 1,"hi, in which colors is available the canon model?"
-1,this only comes in black. which type of camera are you looking for?
+1,"this DSLR camera only comes in black."
+1,"which type of camera are you looking for?"
 1,something that's light and attractive. 
 1,"we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here"
 1,I want good lighting and loss of motion I guess
@@ -9,6 +13,18 @@ TRIAL,CONVERSATION
 1,"$68 and it gets very high-resolution photographs too, it's right value for the price"
 1,how many megapixels
 1,20.1 megapixels
+
+Ground Truth Detections,
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III is only available in color black     (nº 1)
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has a weight of 120 grams              (nº 2)
+SHOPKEEPER IS MISTAKEN, The Nikon Coolpix S2800 has 18 preset modes                 (nº 3)
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 costs 68 dollars                       (nº 4)
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has a resolution of 20.1 megapixels    (nº 5)
+
+Evaluation,    5 Correct Detections (nº 1,2,3,4,5)   1 Incorrect Detections     0 Missed Detections
+
+INTERACTION 2,-------------------------------------------------------------------------------------------------------------------------------- 
+
 2,good afternoon how can I help
 2,how does this canon camera perform on low lighting?
 2,"this one is the best camera for low light. It has 6400 ISO, and it has silent shooting. It has little noise."
@@ -16,8 +32,19 @@ TRIAL,CONVERSATION
 2,"it is a high end professional camera, the body itself is $68"
 2,"I see, do you have anything in this type that's more reasonably priced?"
 2,"yes of course, come and have a look at the Sony it cost $550"
-3,good afternoon can you tell me more about this canon model?
-3,"this is a high-end professional model you see, the body alone costs 2000. It is the only one with silent mode."
+
+Ground Truth Detections,
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has an ISO of 6400                   (nº 1)
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has silent shooting                  (nº 2)
+SHOPKEEPER IS MISTAKEN, The Canon EOS 5D Mark III costs 2000                        (nº 3)
+SHOPKEEPER IS RIGHT, The Sony Alpha a6000 costs 550                                 (nº 4)
+
+Evaluation,    3 Correct Detections(nº 1,2,3)   0 Incorrect Detections    1 Missed Detections(nº 4)
+
+INTERACTION 3,--------------------------------------------------------------------------------------------------------------------------------
+
+3,good afternoon can you tell me more about this canon camera?
+3,"this is a high-end professional model you see, the body alone costs 2000. It is the only one with silent shooting mode."
 3,how much does it weight?
 3,around 950 grams 
 3,I see does it perform well with a lot of motion?
@@ -26,24 +53,54 @@ TRIAL,CONVERSATION
 3,it has 20 megapixels. What type of pictures do you like?
 3,I like taking pictures of different stuff so it sounds like a well-rounded camera that might suit my needs
 3,"We have other cameras at much lower price. The canon 1000D, for example, is very good as well and it only costs 400 dollars "
+
+Ground Truth Detections,
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III costs 2000                               (nº 1)
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has silent shooting                      (nº 2)
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III weighs 950 grams                         (nº 3)
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has 3.9 fps                              (nº 4)
+SHOPKEEPER IS MISTAKEN, The Canon EOS 5D Mark III has a resolution of 22.3 megapixels   (nº 5)
+SHOPKEEPER IS MISTAKEN, The Canon EOS 1000D costs 1099                                  (nº 6)
+
+Evaluation,    3 Correct Detections(nº 1,2,3)   1 Incorrect/Missed Detections(nº 4) 
+
+INTERACTION 4,--------------------------------------------------------------------------------------------------------------------------------
+
 4,"good day, can you assist me with the Sony Alpha a5000 model?"
-4,"Of course, I'd be happy to help. The Sony Alpha a5000 is a lightweight mirrorless camera weighing just 269 grams. It's available in three colors: black, white, and silver."
+4,"Of course, I'd be happy to help. The Sony Alpha a5000 is a lightweight mirrorless camera weighing just 300 grams. It's available in three colors: black, white, and silver."
 4,"I'm interested in the image quality and resolution. Can you give me some information about it?"
 4,"Certainly. This model boasts a resolution of 20.0 megapixels, ensuring sharp and detailed images. It also has an ISO range up to 3200, which makes it perform decently in low-light conditions."
-4,"That sounds impressive. What about its shooting modes and effects?"
-4,"It comes with 9 preset modes and 13 artistic effect modes. These modes can help you capture your desired image without needing to adjust settings manually."
+4,"That sounds impressive. What about its shooting modes? Is it easy to use?"
+4,"It comes with 9 preset modes by default. These modes can help you capture your desired image without needing to adjust settings manually."
 4,"I often shoot in environments with fast-moving subjects. How fast is the shutter speed and frames per second on this one?"
-4,"It has a shutter speed of 1/4000 seconds and can capture at a rate of 3.5 frames per second. So it's pretty decent at capturing fast-moving subjects."
+4,"It has a shutter speed of 1/4000 seconds and can capture at a rate of 5 frames per second. So it's pretty decent at capturing fast-moving subjects."
 4,"What's its price? I'm sure its quite expensive"
 4,"The Sony Alpha a5000 is priced at $329, which is quite affordable given its features and performance."
 4,"Sounds like a good deal. Thank you for your help!"
 4,"You're welcome! If you have any other questions, feel free to ask."
+
+Ground Truth Detections,
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 is a Mirrorless camera
+SHOPKEEPER IS MISTAKEN, The Sony Alpha a5000 weighs 269 grams
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 is available in colors black white and silver
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has a resolution of 20.0 megapixels
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has an ISO up to 3200
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has 9 preset modes
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has a shutter speed of 1/4000
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 is a Mirrorless camera
+SHOPKEEPER IS MISTAKEN, The Sony Alpha a5000 has 3.5 fps
+SHOPKEEPER IS RIGHT, The Sony Alpha a5000 costs 329
+
+Evaluation,    3 Correct Detections(nº 1,2,3)   1 Incorrect/Missed Detections(nº 4) 
+
+INTERACTION 5,--------------------------------------------------------------------------------------------------------------------------------
+
 5,excuse me
 5,good afternoon how can I help
 5,In how many colors does this nikon model come in?
 5,this comes in 5 colors we have purple pink black silver and red color in stock now
 5,I see how much does it cost?
-5,it's only $68
+5,it's only $50
 5,is it powerful? how many frames per second does it have?
 5,"it captures up to 1,1 frames per second, not bad for a camera of this range."
 5,does it have any preset mode ready to use?
@@ -52,6 +109,16 @@ TRIAL,CONVERSATION
 5,it's a point-and-shoot camera so you have a small zoom control about 5x but otherwise it's very simple. It also has autofocus
 5,thank you for your information
 5,thank you for your time have a good afternoon
+
+Ground Truth Detections,
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 comes in colors black pink purple red and silver
+SHOPKEEPER IS MISTAKEN, The Nikon Coolpix S2800 costs 68 dollars
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has 1.1 fps
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has 18 preset modes
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 is a Point-and-shoot camera
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has an 5x optical zoom
+SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
+
 6,good afternoon how can I help?
 6,can you tell me more about the sony Alpha a6000 camera?
 6,"yes it does so many things, it does a fantastic job in low-light, it does a great job with movement."
