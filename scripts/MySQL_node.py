@@ -14,6 +14,7 @@ global last_insert_rowid
 last_insert_rowid = ""
 
 DEBUG = rospy.get_param('/MySQL/DEBUG')
+UPDATE = rospy.get_param('/MySQL/UPDATE')
 
 # Connect to the Camera_Store database. Initialize the cursor for querying the database.
 parent_dir = os.path.dirname(os.path.abspath(__file__))
@@ -74,11 +75,8 @@ def search_callback(msg):
     
     if last_insert_rowid == "":
 
-        print("")
-        result = input("Write the interaction number you want to update. If you just want to add a new utterance, press ENTER:")
-
-        if result != "":
-            last_insert_rowid = result
+        if UPDATE != "":
+            last_insert_rowid = UPDATE
             mycursor5.execute("DELETE FROM Detections WHERE Interaction_ID=?", (int(last_insert_rowid),))
         
         else:
@@ -111,8 +109,8 @@ def search_callback(msg):
                 else:
                     print("\033[93m" + substring[1] + "\033[0m")
 
-                print("Product: " + substring[2])
-                print("Feature: " + feature)
+                #print("Product: " + substring[2])
+                #print("Feature: " + feature)
                 print("Reason: " + substring[0])
 
                 query = "INSERT INTO Detections (Interaction_ID, Utterance, Class, Feature, Reason) VALUES (?, ?, ?, ?, ?);"
@@ -175,15 +173,15 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
 
     system_prompt = """
     You are a helpful assistant that identifies if a shopkeeper is mistaken when presenting the characteristics of a camera model. Your task is to analyze the information given in Ground Truth and output the relevant lists based on the characteristics mentioned by the shopkeeper:
 
-    1. If the shopkeeper is right about a characteristic from Ground Truth, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS RIGHT', '<presented camera model>', '<feature from Ground Truth>']##
-    2. If the shopkeeper is mistaken about a characteristic from Ground Truth, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<feature from Ground Truth>']##
-    3. If the shopkeeper does not mention a characteristic from Ground Truth, output: ##['<Difference between the Shopkeeper and the Ground Truth>', 'NOT MENTIONED', '<presented camera model>', '<feature from Ground Truth>']##
-    4. If the shopkeeper is not able to answer, or asks for help, output: ##['<Reason of why the shopkeeper is not able to answer>', 'SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<feature from Ground Truth>']##
+    1. If the shopkeeper is right about a characteristic from Ground Truth, output: ##['<Explain why the Shopkeeper shopkeeper is right>', 'SHOPKEEPER IS RIGHT', '<presented camera model>', '<feature from Ground Truth>']##
+    2. If the shopkeeper is mistaken about a characteristic from Ground Truth, output: ##['<Explain why the Shopkeeper is mistaken>', 'SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<feature from Ground Truth>']##
+    3. If the shopkeeper does not mention a characteristic from Ground Truth, output: ##['null', 'NOT MENTIONED', '<presented camera model>', '<feature from Ground Truth>']##
+    4. If the shopkeeper is not able to answer, or asks for help, output: ##['<Explain why the shopkeeper is not able to answer>', 'SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<feature from Ground Truth>']##
     
     When the shopkeeper presents multiple characteristics, output a separate list for each characteristic mentioned by the shopkeeper. 
     Use the information given in Ground Truth to help you reason. Here's an example of how to format your answer:

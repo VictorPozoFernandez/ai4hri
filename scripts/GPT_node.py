@@ -111,7 +111,7 @@ def change_of_model_classification_fast(msg):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
 
 
     system_prompt = """
@@ -202,7 +202,7 @@ def topic_identification_gpt(msg, column_list):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
 
 
     system_prompt = """
@@ -327,7 +327,7 @@ def model_identification_gpt(msg, characteristics_products):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
 
 
     system_prompt = """

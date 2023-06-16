@@ -6,22 +6,13 @@ INTERACTION 1,------------------------------------------------------------------
 1,"this DSLR camera only comes in black."
 1,"which type of camera are you looking for?"
 1,something that's light and attractive. 
-1,"we have a very lightweight camera that has a lot of presets, please come and have a look at this nikon here"
+1,"we have a very lightweight camera that is very popular nowadays, please come and have a look at this nikon coolpix here"
 1,I want good lighting and loss of motion I guess
 1,"It is very lightweight, 120 grams, and it has 16 preset modes"
 1,that sounds great how much does this cost?
 1,"$68 and it gets very high-resolution photographs too, it's right value for the price"
 1,how many megapixels
 1,20.1 megapixels
-
-Ground Truth Detections,
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III is only available in color black     (nº 1)
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has a weight of 120 grams              (nº 2)
-SHOPKEEPER IS MISTAKEN, The Nikon Coolpix S2800 has 18 preset modes                 (nº 3)
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 costs 68 dollars                       (nº 4)
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has a resolution of 20.1 megapixels    (nº 5)
-
-Evaluation,    5 Correct Detections (nº 1,2,3,4,5)   1 Incorrect Detections     0 Missed Detections
 
 INTERACTION 2,-------------------------------------------------------------------------------------------------------------------------------- 
 
@@ -34,12 +25,10 @@ INTERACTION 2,------------------------------------------------------------------
 2,"yes of course, come and have a look at the Sony it cost $550"
 
 Ground Truth Detections,
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has an ISO of 6400                   (nº 1)
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has silent shooting                  (nº 2)
-SHOPKEEPER IS MISTAKEN, The Canon EOS 5D Mark III costs 2000                        (nº 3)
-SHOPKEEPER IS RIGHT, The Sony Alpha a6000 costs 550                                 (nº 4)
-
-Evaluation,    3 Correct Detections(nº 1,2,3)   0 Incorrect Detections    1 Missed Detections(nº 4)
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has an ISO of 6400       (nº 1)
+SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has silent shooting      (nº 2)
+SHOPKEEPER IS MISTAKEN, The Canon EOS 5D Mark III costs 2000            (nº 3)
+SHOPKEEPER IS RIGHT, The Sony Alpha a6000 costs 550                     (nº 4)
 
 INTERACTION 3,--------------------------------------------------------------------------------------------------------------------------------
 
@@ -61,8 +50,6 @@ SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III weighs 950 grams                 
 SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has 3.9 fps                              (nº 4)
 SHOPKEEPER IS MISTAKEN, The Canon EOS 5D Mark III has a resolution of 22.3 megapixels   (nº 5)
 SHOPKEEPER IS MISTAKEN, The Canon EOS 1000D costs 1099                                  (nº 6)
-
-Evaluation,    3 Correct Detections(nº 1,2,3)   1 Incorrect/Missed Detections(nº 4) 
 
 INTERACTION 4,--------------------------------------------------------------------------------------------------------------------------------
 
@@ -91,7 +78,6 @@ SHOPKEEPER IS RIGHT, The Sony Alpha a5000 is a Mirrorless camera
 SHOPKEEPER IS MISTAKEN, The Sony Alpha a5000 has 3.5 fps
 SHOPKEEPER IS RIGHT, The Sony Alpha a5000 costs 329
 
-Evaluation,    3 Correct Detections(nº 1,2,3)   1 Incorrect/Missed Detections(nº 4) 
 
 INTERACTION 5,--------------------------------------------------------------------------------------------------------------------------------
 
