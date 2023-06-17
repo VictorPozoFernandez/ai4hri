@@ -24,12 +24,6 @@ INTERACTION 2,------------------------------------------------------------------
 2,"I see, do you have anything in this type that's more reasonably priced?"
 2,"yes of course, come and have a look at the Sony it cost $550"
 
-Ground Truth Detections,
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has an ISO of 6400       (nº 1)
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has silent shooting      (nº 2)
-SHOPKEEPER IS MISTAKEN, The Canon EOS 5D Mark III costs 2000            (nº 3)
-SHOPKEEPER IS RIGHT, The Sony Alpha a6000 costs 550                     (nº 4)
-
 INTERACTION 3,--------------------------------------------------------------------------------------------------------------------------------
 
 3,good afternoon can you tell me more about this canon camera?
@@ -43,18 +37,10 @@ INTERACTION 3,------------------------------------------------------------------
 3,I like taking pictures of different stuff so it sounds like a well-rounded camera that might suit my needs
 3,"We have other cameras at much lower price. The canon 1000D, for example, is very good as well and it only costs 400 dollars "
 
-Ground Truth Detections,
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III costs 2000                               (nº 1)
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has silent shooting                      (nº 2)
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III weighs 950 grams                         (nº 3)
-SHOPKEEPER IS RIGHT, The Canon EOS 5D Mark III has 3.9 fps                              (nº 4)
-SHOPKEEPER IS MISTAKEN, The Canon EOS 5D Mark III has a resolution of 22.3 megapixels   (nº 5)
-SHOPKEEPER IS MISTAKEN, The Canon EOS 1000D costs 1099                                  (nº 6)
-
 INTERACTION 4,--------------------------------------------------------------------------------------------------------------------------------
 
 4,"good day, can you assist me with the Sony Alpha a5000 model?"
-4,"Of course, I'd be happy to help. The Sony Alpha a5000 is a lightweight mirrorless camera weighing just 300 grams. It's available in three colors: black, white, and silver."
+4,"Of course, I'd be happy to help. It is a mirrorless camera weighing just 300 grams. It's available in three colors: black, white, and silver."
 4,"I'm interested in the image quality and resolution. Can you give me some information about it?"
 4,"Certainly. This model boasts a resolution of 20.0 megapixels, ensuring sharp and detailed images. It also has an ISO range up to 3200, which makes it perform decently in low-light conditions."
 4,"That sounds impressive. What about its shooting modes? Is it easy to use?"
@@ -65,19 +51,6 @@ INTERACTION 4,------------------------------------------------------------------
 4,"The Sony Alpha a5000 is priced at $329, which is quite affordable given its features and performance."
 4,"Sounds like a good deal. Thank you for your help!"
 4,"You're welcome! If you have any other questions, feel free to ask."
-
-Ground Truth Detections,
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 is a Mirrorless camera
-SHOPKEEPER IS MISTAKEN, The Sony Alpha a5000 weighs 269 grams
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 is available in colors black white and silver
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has a resolution of 20.0 megapixels
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has an ISO up to 3200
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has 9 preset modes
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 has a shutter speed of 1/4000
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 is a Mirrorless camera
-SHOPKEEPER IS MISTAKEN, The Sony Alpha a5000 has 3.5 fps
-SHOPKEEPER IS RIGHT, The Sony Alpha a5000 costs 329
-
 
 INTERACTION 5,--------------------------------------------------------------------------------------------------------------------------------
 
@@ -96,14 +69,7 @@ INTERACTION 5,------------------------------------------------------------------
 5,thank you for your information
 5,thank you for your time have a good afternoon
 
-Ground Truth Detections,
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 comes in colors black pink purple red and silver
-SHOPKEEPER IS MISTAKEN, The Nikon Coolpix S2800 costs 68 dollars
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has 1.1 fps
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has 18 preset modes
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 is a Point-and-shoot camera
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has an 5x optical zoom
-SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
+INTERACTION 6,--------------------------------------------------------------------------------------------------------------------------------
 
 6,good afternoon how can I help?
 6,can you tell me more about the sony Alpha a6000 camera?
@@ -126,6 +92,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 6,"pick it up and see how it feels. it so light, only 269 grams,  it has plastic lens so it's designed to be much lighter "
 6,what about its preset modes?
 6,"I do not know, let me check."
+
+INTERACTION 7,--------------------------------------------------------------------------------------------------------------------------------
+
 7,good afternoon how can I help you today?
 7,hi is this sony a5000 good for low light pictures?
 7,this is a fantastic camera for low light pictures. it has an ISO that goes up to 3200 and its mirrorless 
@@ -143,6 +112,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 7,"this camera is great, it has a shutter speed of 1/7000 seconds"
 7,sounds good thank you for your information
 7,thank you for your time please come again
+
+INTERACTION 8,--------------------------------------------------------------------------------------------------------------------------------
+
 8,good afternoon how can I help you?
 8,good afternoon I'm interested in the canon camera. can you tell me more about it?
 8,it's a DSLR full manual control camera it gives you total control over the creative process
@@ -164,6 +136,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 8,the ISO setting is only up to 3200. Is half than the Canon that I showed you.
 8,I see well thank you for your time
 8,thank you have a good afternoon
+
+INTERACTION 9,--------------------------------------------------------------------------------------------------------------------------------
+
 9,good afternoon how can I help you today?
 9,I'm not really good at taking photos or anything I just need something that's easy to use
 9,The nikon Coolpix s2800 camera right here is perfect for you. its a Mirrorless camera that can help you in any situation
@@ -181,6 +156,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 9,"it is over here, it has a very nice shape"
 9,thanks for your time
 9,thank you look forward to seeing you again
+
+INTERACTION 10,--------------------------------------------------------------------------------------------------------------------------------
+
 10,good afternoon how can I help?
 10,I was looking at this sony camera. It looks good
 10,"it's an excellent camera that gives you a lot of the features of a professional cameras at a much lower price, and it costs 550 dollars only"
@@ -204,6 +182,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 10,$2000 lens not included.
 10,thank you for your time
 10,thank you have a good afternoon
+
+INTERACTION 11,--------------------------------------------------------------------------------------------------------------------------------
+
 11,good afternoon how can I help?
 11,hey I'm looking for a camera that's easy to use
 11,we have two easy to use cameras. this one is 68 dollars and that one is 550 dollars
@@ -221,6 +202,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 11,this camera is very light 120 grams. for instance the other camera weights 470 grams
 11,sounds like a pretty good option
 11,thank you for your time
+
+INTERACTION 12,--------------------------------------------------------------------------------------------------------------------------------
+
 12,"hello, I'm interested in this Canon EOS 1000D model. Can you tell me more about its features?"
 12,"Sure, I'd be glad to. The Canon EOS 1000D is a Compact SLR type camera. It has a resolution of 10 megapixels and offers an ISO up to 1600."
 12,"What about the weight? I usually travel a lot and prefer something light."
@@ -235,6 +219,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 12,"The Canon EOS 1000D is priced at $1099. It's a fantastic camera for its price range."
 12,"Thank you for the detailed information. I'll think about it."
 12,"You're welcome. Take your time and if you have any other questions, feel free to ask."
+
+INTERACTION 13,--------------------------------------------------------------------------------------------------------------------------------
+
 13,good afternoon how can I help today?
 13,I'm looking for a camera
 13,"this canon is a top DSLR camera. it only weights 950 grams and it has multiple manual settings. in fact every manual setting that you can think of is available on this camera."
@@ -252,6 +239,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 13,it's available in white silver and black
 13,that's great
 13,thank you please come this way
+
+INTERACTION 14,--------------------------------------------------------------------------------------------------------------------------------
+
 14,good afternoon how can I help you today?
 14,I'm looking for a camera
 14,there are many cameras. What type of pictures do you take?
@@ -270,6 +260,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 14,and the pictures look great as you can see.
 14,true. thank you very much for your help
 14,thank you for your time have a good afternoon
+
+INTERACTION 15,--------------------------------------------------------------------------------------------------------------------------------
+
 15,good afternoon how can I help?
 15,this sony a6000 camera looks good can you tell me more about it?
 15,it's an excellent Mirrorless camera  it's designed to take professional pictures at an affordable price of 68 dollars.
@@ -287,6 +280,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 15,I guess it's a pretty good camera then
 15,is the choice of most professionals
 15,thank you for your time
+
+INTERACTION 16,--------------------------------------------------------------------------------------------------------------------------------
+
 16,I'm looking for a point and shoot camera
 16,Please come and have a look at this nikon camera. this is an excellent quality point and shoot camera with a CCD sensor.
 16,any preset modes?
@@ -302,6 +298,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 16,yes we had great feedback.  would you like to talk to one of our other staff and have a look at what's in stock right now?
 16,that would be good thank you very much
 16,thank you for your time
+
+INTERACTION 17,--------------------------------------------------------------------------------------------------------------------------------
+
 17,"Hi, could you help me with something?"
 17,"Of course, how can I assist you today?"
 17,"I am considering this Sony Alpha a5000. Can you tell me about its weight and available colors?"
@@ -314,6 +313,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 17,"Absolutely! It has a semi-automatic mode that can be very helpful for beginners. You can also switch to manual as you gain more experience."
 17,"That seems like a fit for me. What's the price?"
 17,"The Sony Alpha a5000 is available for $329. It's a solid camera for the price given its features."
+
+INTERACTION 18,--------------------------------------------------------------------------------------------------------------------------------
+
 18,good afternoon how can I help today
 18,hi I'm looking for a practical camera
 18,can I ask what sort of pictures you take
@@ -333,6 +335,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 18,this is excellent for family and traveling photos.
 18,thank you very much for your help
 18,thank you for your time have a good afternoon
+
+INTERACTION 19,--------------------------------------------------------------------------------------------------------------------------------
+
 19,good afternoon how can I help?
 19,this camera looks good how high does the iso go
 19,the iso on this camera goes up to 6400
@@ -350,6 +355,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 19,we have one over here if you want to try it.
 19,I will call you back later thank you very much
 19,no worries thank you for your time I look forward to seeing from again
+
+INTERACTION 20,--------------------------------------------------------------------------------------------------------------------------------
+
 20,good afternoon how can I help you?
 20,this sony alpha a6000 camera looks good
 20,it's an excellent camera. it takes the same quality pictures as a top-end camera for a lower price.
@@ -372,6 +380,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 20,only $68 it's the best camera in its price range
 20,thank you for your help
 20,thank you for your time have a good afternoon
+
+INTERACTION 21,--------------------------------------------------------------------------------------------------------------------------------
+
 21,excuse me. I am looking for camera
 21,can I ask what kind of pictures do you take?
 21,show me a camera that's practical but also with manual configuration.
@@ -389,6 +400,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 21,it is a little bit heavier than the nikon Coolpix but is a better camera overall.
 21,I see thanks for your help
 21,thank you for your time have a good afternoon
+
+INTERACTION 22,--------------------------------------------------------------------------------------------------------------------------------
+
 22,good afternoon how can I help
 22,hi I'm interested in this canon camera
 22,this is an excellent DSLR camera is the choice for professionals
@@ -400,6 +414,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 22,almost 2 kilogram not counting the lens. It is the main problem of this camera.
 22,I see thanks for your help
 22,thank you for your time have a good afternoon
+
+INTERACTION 23,--------------------------------------------------------------------------------------------------------------------------------
+
 23,good afternoon are you looking for a camera?
 23,yes. could you help me with that? 
 23,can I ask what sort of pictures you take?
@@ -417,6 +434,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 23,yes it does
 23,that's perfect thank you for your help
 23,thank you for your time have a good afternoon
+
+INTERACTION 24,--------------------------------------------------------------------------------------------------------------------------------
+
 24,hey I'm looking for a camera
 24,we have compact cameras or cameras with full manual control
 24,which one would you recommend?
@@ -439,6 +459,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 24,we have them in stock right now. look around to see the rest of the cameras and tell me if you need anything.
 24,okay thanks
 24,thank you for your time have a good afternoon
+
+INTERACTION 25,--------------------------------------------------------------------------------------------------------------------------------
+
 25,good afternoon how can I help you?
 25,I'm looking for a camera that I can use in concerts
 25,that's a bit tricky. will you be using flash?
@@ -450,6 +473,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 25,how about the autofocus?
 25,you have 61 autofocus points some cameras have more but this one behaves very well even in motion. It also has 5 preset modes
 25,thank you for your help
+
+INTERACTION 26,--------------------------------------------------------------------------------------------------------------------------------
+
 26,"Good afternoon, I'm interested in the Canon EOS 1000D."
 26,"Hello! That's an excellent choice. What do you want to know?"
 26,"Can you tell me more about its type and weight?"
@@ -466,6 +492,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 26,"The Canon EOS 1000D is priced at $1099. It's a higher-end model, but its performance and features justify the price."
 26,"In which colors it its available?"
 26,"In color black only. These types of cameras are usually available only in black"
+
+INTERACTION 27,--------------------------------------------------------------------------------------------------------------------------------
+
 27,good afternoon. can I assist you with anything?
 27,"yes, I'm interested in the Sony Alpha a5000 model. How's the exposure?"
 27,"it has an excellent exposure time of up to 30 seconds, which allows it to handle a variety of lighting situations."
@@ -479,6 +508,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 27,unfortunately the Sony Alpha a5000 doesn't come with a silent shooting mode. But its shutter sound is relatively quiet and should not be a distraction.
 27,thank you for the information. I'll think about it.
 27,of course take your time. If you have any other questions feel free to ask.
+
+INTERACTION 28,--------------------------------------------------------------------------------------------------------------------------------
+
 28,yes how can I help you?
 28,what is the sensor size of this camera canon?
 28,it has a full frame sensor with size 35mm x 25mm
@@ -490,6 +522,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 28,it has an CMOS sensor of size 23 times 32 mm
 28,what about its exposure?
 28,it lasts about 30 seconds
+
+INTERACTION 29,--------------------------------------------------------------------------------------------------------------------------------
+
 29,excuse me
 29,yes ma'am how can I help you
 29,do you have this nikon in color black?
@@ -512,6 +547,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 29,550 dollars too expensive for me
 29,i recommend you the previous camera then
 29,thank you very much
+
+INTERACTION 30,--------------------------------------------------------------------------------------------------------------------------------
+
 30,how can I help you today?
 30,I'm looking for a lightweight camera
 30,if you need a light camera I can show you this Nikon Coolpix S2800. It will please you I think
@@ -527,6 +565,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 30,"Then I recommend you to the previous camera I showed you, the nikon, which has tons of preset modes and is very easy to use"
 30,it also comes in many colors and it's pretty cheap. I don't know the price right now but its very affordable for sure
 30,thank you for your support
+
+INTERACTION 31,--------------------------------------------------------------------------------------------------------------------------------
+
 31,can you help me? 
 31,yes madam
 31,I'm looking for a camera for outdoor shooting. Is this nikon good for me?
@@ -545,6 +586,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 31,"Yes, up to 5 modes that gives you more assistance in different environments. Also, its resolution of 22,3 megapixels is more than enough for the type of photos that you plan to take"
 31,thank you very much
 31,you're welcome
+
+INTERACTION 32,--------------------------------------------------------------------------------------------------------------------------------
+
 32,excuse me
 32,how can I help you
 32,Does this sony a6000 camera support preset modes?
@@ -561,6 +605,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 32,that one is a $2000 professional camera with manual settings.
 32,thank you for the support
 32,yes you're welcome
+
+INTERACTION 33,--------------------------------------------------------------------------------------------------------------------------------
+
 33,excuse me does this camera suports preset modes? 
 33,the canon EOS 5D Mark III is a full manual camera so it doesn't have any preset mode
 33,It doesn't have effect modes either. For that we have to see other models.
@@ -575,6 +622,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 33,"as you can see it's a 470 grams camera, so it's not really heavy"
 33,okay thanks
 33,thank you for visiting our store
+
+INTERACTION 34,--------------------------------------------------------------------------------------------------------------------------------
+
 34,good afternoon how may I help you today?
 34,I'm looking at this Canon EOS 1000D model. Could you tell me more about its exposure?
 34,sure. the Canon EOS 1000D has an exposure time of 30 seconds which can handle various lighting situations quite well.
@@ -588,6 +638,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 34,unfortunately the Canon EOS 1000D doesn't have a silent shooting mode. But its shutter noise is minimal and should not disturb your shooting experience.
 34,thank you that's helpful to know.
 34,you're welcome! If you have any more questions or need further assistance feel free to ask.
+
+INTERACTION 35,--------------------------------------------------------------------------------------------------------------------------------
+
 35,excuse me. Does this canon come with preset modes?
 35,The 5D Mark III model it is a manual camera. if you're looking for a point and shoot camera with simple preset modes I can recommend you the nikon
 35,how many preset modes does it have?
@@ -601,6 +654,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 35,In what colors do you have it?
 35,we have it in 2 colors. white and black
 35,thank you very much
+
+INTERACTION 36,--------------------------------------------------------------------------------------------------------------------------------
+
 36,good afternoon. I'm looking for some camera options
 36,Good afternoon! Sure. I'd be happy to help you. What are you primarily looking for in a camera?
 36,I'm interested in cameras with unique colors and good effect modes.
@@ -611,6 +667,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 36,Both cameras are fantastic choices anyway
 36,Thanks! I'll need some time to think about it.
 36,Of course! Take all the time you need. Let me know if you have any other questions.
+
+INTERACTION 37,--------------------------------------------------------------------------------------------------------------------------------
+
 37,excuse me
 37,yes how can I help you
 37, Is this sony a6000 a full manual camera?
@@ -623,6 +682,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 37,"yes I can show you the Cannon EOS 5D Mark III. this one it goes up to 7200 ISO"
 37,Can you tell me which exposure does it have?
 37,"I don't remember, to be honest. we should check"
+
+INTERACTION 38,--------------------------------------------------------------------------------------------------------------------------------
+
 38,hello good morning
 38,hi how can I help?
 38,I want to look at the new cameras that you have
@@ -635,6 +697,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 38,is only $550 and it comes with basic lens that allows you to have a zoom up to 5x
 38,okay thank you I will take a look at that and then I'll let you know thank you very much for helping me
 38,anytime have a good afternoon
+
+INTERACTION 39,--------------------------------------------------------------------------------------------------------------------------------
+
 39,excuse me
 39,yes how can I help you?
 39,I'm looking for daily use camera
@@ -645,6 +710,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 39,"yes we have it in purple as well. Its available in black, purple and red colors."
 39,and how much for this sony alpha?
 39,The a6000 model costs 550 dollars.it has 9 different preset mode so it's really easy to use.
+
+INTERACTION 40,--------------------------------------------------------------------------------------------------------------------------------
+
 40,hello I am looking for a camera. I usually go out at night with my friend so could you suggest me which one is the best for me?
 40,"this sony alpha is an excellent camera. It takes top quality photographs even in low light conditions thanks to its optical zoom 4x and ISO 3200"
 40,how about the shutter speed?
@@ -655,6 +723,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 40,It goes up to 6400 so it gets fantastic results even in low light
 40,and wahat about its sensor?
 40,It has a full frame CMOS sensor
+
+INTERACTION 41,--------------------------------------------------------------------------------------------------------------------------------
+
 41,help me 
 41,yes how can I help you
 41,I would like to know if there are some special features about this sony a6000 camera I should be aware of 
@@ -673,6 +744,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 41,no. it comes in Black only
 41,"let me take a look at other options, thank you"
 41,you're welcome
+
+INTERACTION 42,--------------------------------------------------------------------------------------------------------------------------------
+
 42,excuse me
 42,how can I help you today?
 42,Does this sony alpha a5000 allow for long exposure shoots?
@@ -683,6 +757,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 42,it has a really high ISO. About 4300. and its has little noise 
 42,okay
 42,if you have any other questions just call me please
+
+INTERACTION 43,--------------------------------------------------------------------------------------------------------------------------------
+
 43,may I help you
 43,I'm looking for a camera but I don't exactly what kind of camera I'm looking for
 43,this sony alpha a6000 is a semi-automatic camera. Are you comfortable with those kind of cameras?
@@ -697,6 +774,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 43,hey. It's okay good okay thank you very much
 43,thank you for coming to our store
 43,welcome goodbye
+
+INTERACTION 44,--------------------------------------------------------------------------------------------------------------------------------
+
 44,good afternoon how can I help?
 44,these cameras look so complicated. I'm a bit lost really
 44,can I ask what sort of pictures you take?
@@ -709,6 +789,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 44,that's great. do I have to worry about setting things manually?
 44,No. its a fully automatic camera with up to 18 preset models. if you choose your favorite settings you won't have to change anything else
 44,alright thanks
+
+INTERACTION 45,--------------------------------------------------------------------------------------------------------------------------------
+
 45,excuse me
 45,yes how may I help you?
 45,The canon EOS 5D allows for long exposure?
@@ -725,6 +808,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 45,it has a CMOS sensor of 23 x 32 mm
 45,thanks i will look around
 45,ask me if you need any more help
+
+INTERACTION 46,--------------------------------------------------------------------------------------------------------------------------------
+
 46,yes I'm looking for a camera but I don't know anything about them. can you explain me the features of this sony alpha a6000 camera? In which colors it is available?  
 46,the available colors of this camera are two. white and black
 46,OK and how much does it weight?
@@ -746,6 +832,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 46,"for a beginner user I always recommend this camera, indeed."
 46,thank you I'll take it
 46,thank you so much
+
+INTERACTION 47,--------------------------------------------------------------------------------------------------------------------------------
+
 47,may I help you?
 47,in how many colors do you have this canon camera?
 47,there's only one color for this camera. Black color. 
@@ -763,6 +852,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 47,It is semi-automatic. You can try it.
 47,okay okay thank you
 47,you are welcome
+
+INTERACTION 48,--------------------------------------------------------------------------------------------------------------------------------
+
 48,hello how can I help you today?
 48,yes can you explain this camera nikon to me
 48,yes this one is a point and shoot camera perfect for beginner users and it has 18 preset modes
@@ -777,6 +869,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 48,ok and what manual settings can be found inside?
 48,it is full manual camera
 48,good okay let me take this catalog and I will come back and give you my answer
+
+INTERACTION 49,--------------------------------------------------------------------------------------------------------------------------------
+
 49,good day. I see you're looking at the Sony Alpha a5000.
 49,yes I am. How much does this one cost?
 49,this model is priced at $329.
@@ -792,6 +887,9 @@ SHOPKEEPER IS RIGHT, The Nikon Coolpix S2800 has autofocus
 49,the Sony Alpha a5000 has a maximum shutter speed of 1/4000 seconds.
 49,sounds pretty good. Thank you for the information.
 49,you're welcome! If you have any more questions feel free to ask.
+
+INTERACTION 50,--------------------------------------------------------------------------------------------------------------------------------
+
 50,hello there. how may I assist you today?
 50,I'm interested in the Canon EOS 1000D. What's the price for this model?
 50,the Canon EOS 1000D is priced at $1099.

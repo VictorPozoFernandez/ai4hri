@@ -81,7 +81,6 @@ def search_callback(msg):
             mycursor5.execute("SELECT MAX(Interaction_ID) FROM Detections;")
 
             for result in mycursor5:
-                print(result)
 
                 if result[0] != None:
                     last_insert_rowid = result[0] + 1
