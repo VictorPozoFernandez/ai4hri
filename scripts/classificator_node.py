@@ -47,8 +47,8 @@ def callback(msg):
         classification_result = sentence_classification_chatgpt(new_utterance)
         
     else:
-        #classification_result = sentence_classification(new_utterance)
         classification_result = sentence_classification(new_utterance)
+
 
     print("------------------------------------------")
     print("\033[94m - " + new_utterance + " (" + classification_result + ") \033[0m")

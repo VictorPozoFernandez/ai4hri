@@ -59,7 +59,7 @@ def callback(msg):
         print("Detected model: " + str(detected_model_list))
         current_model = detected_model_list
     
-    if ("NULL" not in topic) and (len(topic) <= 5) and (current_model != "") and (len(current_model) <= 2) :
+    if ("NULL" not in topic) and (len(topic) <= 5) and (current_model != "") and (len(current_model) <= 4) :
 
         # Initialize the publisher for extracted_info ROS topic
         pub = rospy.Publisher('/ai4hri/extracted_info', String_list, queue_size= 1, latch=True) 
@@ -85,11 +85,12 @@ def detect_change_of_camera(msg):
     global current_topic
 
     if str(msg.data[0]) != "":      
-        previous_conversations = previous_conversations + "Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
+        previous_conversations = previous_conversations + " Customer: " + str(msg.data[0]) + " Shopkeeper: " + str(msg.data[1])
     elif str(msg.data[1]) != "": 
         previous_conversations = previous_conversations + " Shopkeeper: " + str(msg.data[1])
 
     result = change_of_model_classification_fast(msg)
+    print("Detected " + str(result["Detection"]))
     
     if result["Detection"] == "1 camera" and current_model != "" and(len(current_model) == 2):
         print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
@@ -111,7 +112,6 @@ def change_of_model_classification_fast(msg):
 
     # Prepare prompt to send, using JSON format
     chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
-
 
     system_prompt = """
     You are a helpful assistant that listens a conversation between a Customer and a Shopkeeper inside a camera shop and identifies if different cameras are hinted during the conversation.
