@@ -1,6 +1,7 @@
 import rospy
 from std_msgs.msg import String
 import pandas as pd
+import os
 
 def main():
 
@@ -24,7 +25,11 @@ def main():
         num_interaction = input("Select interaction: ")
 
         # Read the simulated data from a CSV file and extract the relevant columns.
-        df = pd.read_csv("/home/victor/catkin_ws/src/ai4hri/scripts/simplified_database.csv")
+        script_dir = os.path.dirname(os.path.abspath(__file__))  # Returns the absolute path to the script
+        parent_dir = os.path.dirname(script_dir)
+        file_path = os.path.join(parent_dir, 'simplified_database.csv')
+        print(file_path)
+        df = pd.read_csv(file_path)
 
         # Filter the extracted columns by the selected interaction number.
         

@@ -163,9 +163,10 @@ def change_of_model_classification_fast(msg):
 def topic_extraction(msg):
 
     # Connect to the Camera_Store database. Initialize the cursor for querying the database.
-    parent_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(parent_dir, "Camera_Store.db")
-    db = sqlite3.connect(db_path)
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Returns the absolute path to the script
+    parent_dir = os.path.dirname(script_dir)
+    file_path = os.path.join(parent_dir, 'Camera_Store.db')
+    db = sqlite3.connect(file_path)
     
     mycursor = db.cursor()
 
@@ -269,9 +270,10 @@ def extract_json(s):
 def extraction_characteristics_products(products_of_interest, topics):
 
     # Connect to the Camera_Store database. Initialize the cursor for querying the database.
-    parent_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(parent_dir, "Camera_Store.db")
-    db = sqlite3.connect(db_path)
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Returns the absolute path to the script
+    parent_dir = os.path.dirname(script_dir)
+    file_path = os.path.join(parent_dir, 'Camera_Store.db')
+    db = sqlite3.connect(file_path)
     
     mycursorGPT = db.cursor()
     mycursorGPT2 = db.cursor()
