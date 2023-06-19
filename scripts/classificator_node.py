@@ -10,9 +10,10 @@ import re
 import json
 
 DEBUG = rospy.get_param('/classificator/DEBUG')
+
 global toggle
-toggle = False
 global previous_utterances
+toggle = False
 previous_utterances = ""
 
 
@@ -28,10 +29,11 @@ def main():
 
 def callback(msg):
 
-    # Initialize publisher for the utterance_and_position topic
-    pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 1) 
     global new_utterance
     global toggle
+
+    # Initialize publisher for the utterance_and_position topic
+    pub = rospy.Publisher('/ai4hri/utterance_and_position', String_list, queue_size= 1) 
     utterance_and_position = String_list()
 
     # Store the previous utterance if available
@@ -43,17 +45,18 @@ def callback(msg):
     # Get new utterance from message and classify it
     new_utterance = msg.data
 
+    # In DEBUG mode we manually use GPT4 instead of the Fine-Tuned GPT3
     if DEBUG == True:
-        classification_result = sentence_classification_chatgpt(new_utterance)
-        
+        classification_result = sentence_classification_chatgpt(new_utterance)     
     else:
         classification_result = sentence_classification(new_utterance)
-
 
     print("------------------------------------------")
     print("\033[94m - " + new_utterance + " (" + classification_result + ") \033[0m")
     print("")
 
+    #The toggle variable is used to detect if the Shopkeeper speaks twice in a row. In that case, the previous utterance is sent empty indicating that the Customer hasn't spoken in between.
+    
     if (("Shopkeeper" in classification_result) or ("shopkeeper" in classification_result)) and (toggle == False):
         # Get the position of the shopkeeper and the customer using a position tracker
         utterance_and_position = get_current_position(previous_utterance, new_utterance)
@@ -83,8 +86,6 @@ def sentence_classification(new_utterance):
 
     # Request classification from fine-tuned GPT3 model
     classification_result = openai.Completion.create(
-        #model="ada:ft-personal-2023-03-07-22-12-15", #Original model
-        #model="ada:ft-personal-2023-03-28-13-40-40", #Improved model with syntetic data
         model="ada:ft-personal-2023-03-29-12-35-58", #Improved model with syntetic data
         prompt= new_utterance + " ### ", #Change if needed (depending on which stop message for the prompt did you use while training the fine-tuned model)
         stop="END") #Change if needed (depending on which stop message did you use for the generated output while training the fine-tuned model)
@@ -177,9 +178,9 @@ def sentence_classification_chatgpt(new_utterance):
         data = extract_json(result.content)
 
     previous_utterances = previous_utterances + " ## " + data["Detection"] + ": " + new_utterance
- 
-
+    
     return data["Detection"]
+
 
 def extract_json(s):
     json_match = re.search(r'\{.*\}', s, re.DOTALL)

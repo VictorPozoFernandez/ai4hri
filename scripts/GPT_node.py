@@ -18,9 +18,8 @@ current_model = ""
 
 DEBUG = rospy.get_param('/GPT/DEBUG')
 
-# Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives, etc. )
-# In this case the position tracker is not implemented yet, all cameras from Malcom's experiment are considered.
-#products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III")] 
+# Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives), etc.
+# In this case the position tracker is not implemented yet, all cameras from the database are considered.
 products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D")] 
 
 def main():
