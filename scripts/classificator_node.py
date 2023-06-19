@@ -4,7 +4,7 @@ from ai4hri.msg import String_list
 import openai
 import os
 from langchain.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage, SystemMessage, AIMessage, Document
+from langchain.schema import HumanMessage, SystemMessage
 from langchain.prompts import PromptTemplate
 import re
 import json

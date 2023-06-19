@@ -2,10 +2,6 @@ import rospy
 from audio_common_msgs.msg import AudioData
 from std_msgs.msg import String
 import speech_recognition as sr
-import queue
-import threading
-import os
-import tempfile
 
 global audio_control
 audio_control = "RESUME"

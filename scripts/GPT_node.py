@@ -3,9 +3,8 @@ from ai4hri.msg import String_list
 import openai
 import os
 import sqlite3
-from sklearn.metrics.pairwise import cosine_similarity
 from langchain.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage, SystemMessage, AIMessage, Document
+from langchain.schema import HumanMessage, SystemMessage
 from langchain.prompts import PromptTemplate
 import json
 import re

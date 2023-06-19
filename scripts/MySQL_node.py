@@ -2,11 +2,9 @@ import rospy
 from ai4hri.msg import String_list
 import os
 import sqlite3
-import openai
 import re
-import ast
 from langchain.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage, SystemMessage, AIMessage, Document
+from langchain.schema import HumanMessage, SystemMessage
 from langchain.prompts import PromptTemplate
 import json
 
