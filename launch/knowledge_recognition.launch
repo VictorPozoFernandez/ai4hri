@@ -11,6 +11,10 @@
     <param name="DEBUG" value="$(arg DEBUG)" />
   </node>
 
+  <node name="control" pkg="ai4hri" type="audio_control.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>
+
   <node name="transcribe" pkg="ai4hri" type="transcribe_node.py" output="screen">
     <param name="DEBUG" value="$(arg DEBUG)" />
   </node>
@@ -27,8 +31,6 @@
     <param name="DEBUG" value="$(arg DEBUG)" />
     <param name="UPDATE" value="$(arg UPDATE)" />
   </node>
-
-  <node name="dr" pkg="rqt_reconfigure" type="rqt_reconfigure" />
 
 
 </launch>

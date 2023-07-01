@@ -17,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-generate_dynamic_reconfigure_options(cfg/audiotranscriber_ai4hri.cfg)
+generate_dynamic_reconfigure_options(cfg/audiotranscriber_ai4hri.cfg cfg/audiorecorder_ai4hri.cfg)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -112,7 +112,7 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-catkin_install_python(PROGRAMS scripts/MySQL_node.py scripts/GPT_node.py scripts/classificator_node.py scripts/record_node.py scripts/transcribe_node.py
+catkin_install_python(PROGRAMS scripts/MySQL_node.py scripts/GPT_node.py scripts/classificator_node.py scripts/record_node.py scripts/transcribe_node.py scripts/audio_control.py
 DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 
