@@ -28,5 +28,7 @@
     <param name="UPDATE" value="$(arg UPDATE)" />
   </node>
 
+  <node name="dr" pkg="rqt_reconfigure" type="rqt_reconfigure" />
+
 
 </launch>
