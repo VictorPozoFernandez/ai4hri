@@ -17,7 +17,7 @@ UPDATE = rospy.get_param('/MySQL/UPDATE')
 # Connect to the Camera_Store database. Initialize the cursor for querying the database.
 script_dir = os.path.dirname(os.path.abspath(__file__))  # Returns the absolute path to the script
 parent_dir = os.path.dirname(script_dir)
-file_path = os.path.join(parent_dir, 'Camera_Store.db')
+file_path = os.path.join(parent_dir, 'Database/Camera_Store.db')
 db2 = sqlite3.connect(file_path, check_same_thread=False)
 
 # Initialize multiple cursors for the database

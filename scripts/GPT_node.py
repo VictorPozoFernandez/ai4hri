@@ -164,7 +164,7 @@ def topic_extraction(msg):
     # Connect to the Camera_Store database. Initialize the cursor for querying the database.
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Returns the absolute path to the script
     parent_dir = os.path.dirname(script_dir)
-    file_path = os.path.join(parent_dir, 'Camera_Store.db')
+    file_path = os.path.join(parent_dir, 'Database/Camera_Store.db')
     db = sqlite3.connect(file_path)
     
     mycursor = db.cursor()
@@ -271,7 +271,7 @@ def extraction_characteristics_products(products_of_interest, topics):
     # Connect to the Camera_Store database. Initialize the cursor for querying the database.
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Returns the absolute path to the script
     parent_dir = os.path.dirname(script_dir)
-    file_path = os.path.join(parent_dir, 'Camera_Store.db')
+    file_path = os.path.join(parent_dir, 'Database/Camera_Store.db')
     db = sqlite3.connect(file_path)
     
     mycursorGPT = db.cursor()
