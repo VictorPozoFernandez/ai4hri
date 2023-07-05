@@ -424,9 +424,6 @@ if __name__ == '__main__':
 
     try:
         products_of_interest = get_camera_models()
-        print(products_of_interest)
-        products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D")] 
-        print(products_of_interest)
         main()
     
     except rospy.ROSInterruptException:
