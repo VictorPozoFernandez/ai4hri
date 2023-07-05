@@ -18,10 +18,6 @@ current_model = ""
 
 DEBUG = rospy.get_param('/GPT/DEBUG')
 
-# Possibility of dynamically changing the products of interest depending on the location of the shop, the type of product that is being discussed (cameras, objectives), etc.
-# In this case the position tracker is not implemented yet, all cameras from the database are considered.
-products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D")] 
-
 def main():
 
     # Initialize the GPT ROS node and subscribe to utterance_and_position topic
@@ -55,7 +51,7 @@ def callback(msg):
     if (result["Detection"] == "1 camera" and (len(current_model) != 2)) or (result["Detection"] == "2 cameras"):
         characteristics_products = extraction_characteristics_products(products_of_interest, topic)
         detected_model_list= model_identification_gpt(msg, characteristics_products)
-        print("Detected model: " + str(detected_model_list))
+        print("Detected element: " + str(detected_model_list))
         current_model = detected_model_list
     
     if ("NULL" not in topic) and (len(topic) <= 5) and (current_model != "") and (len(current_model) <= 4) :
@@ -92,7 +88,7 @@ def detect_change_of_camera(msg):
     print("Detected " + str(result["Detection"]))
     
     if result["Detection"] == "1 camera" and current_model != "" and(len(current_model) == 2):
-        print("Detected model: " + str(current_model) + (" (They keep talking about the same camera)"))
+        print("Detected element: " + str(current_model) + (" (They keep talking about the same element)"))
         
     elif result["Detection"] == "2 cameras":
         previous_conversations = " Shopkeeper: " + str(msg.data[1])
@@ -190,7 +186,7 @@ def topic_extraction(msg):
     topics = topic_identification_gpt(msg, column_list)
     topics_list = ast.literal_eval(topics["Detection"])
 
-    print("Detected topics: " + str(topics_list))
+    print("Detected features: " + str(topics_list))
 
     return topics_list
 
@@ -401,11 +397,37 @@ def model_identification_gpt(msg, characteristics_products):
     return detected_model_list
 
 
+def get_camera_models():
+
+    # Connect to the Camera_Store database. Initialize the cursor for querying the database.
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Returns the absolute path to the script
+    parent_dir = os.path.dirname(script_dir)
+    file_path = os.path.join(parent_dir, 'Database/Camera_Store.db')
+    db = sqlite3.connect(file_path)
+    mycursor = db.cursor()
+    
+    
+    # Execute the SQL query
+    mycursor.execute("SELECT Product_ID, Model FROM Camera")
+    
+    # Fetch all the results
+    result = mycursor.fetchall()
+    
+    # Close the connection
+    db.close()
+    
+    # Return the result
+    return result
+
 
 if __name__ == '__main__':
 
     try:
         main()
+        products_of_interest = get_camera_models()
+        print(products_of_interest)
+        products_of_interest = [(1,"Nikon Coolpix S2800"),(2,"Sony Alpha a6000"),(3,"Canon EOS 5D Mark III"),(4,"Sony Alpha a5000"),(5,"Canon EOS 1000D")] 
+        print(products_of_interest)
     
     except rospy.ROSInterruptException:
         pass
