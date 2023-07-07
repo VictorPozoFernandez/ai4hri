@@ -16,7 +16,7 @@ global current_model
 previous_conversations = ""
 current_model = ""
 
-DEBUG = rospy.get_param('/GPT/DEBUG')
+GPT4 = rospy.get_param('/GPT/GPT4')
 
 def main():
 
@@ -106,7 +106,11 @@ def change_of_model_classification_fast(msg):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
+
+    if GPT4 == True:
+        chat = ChatOpenAI(model_name="gpt-4", temperature=0, openai_api_key=openai_api_key)
+    else:
+        chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
 
     system_prompt = """
     You are a helpful assistant that listens a conversation between a Customer and a Shopkeeper inside a camera shop and identifies if different cameras are hinted during the conversation.
@@ -142,15 +146,8 @@ def change_of_model_classification_fast(msg):
         HumanMessage(content=user_prompt)
     ]
 
-    if DEBUG == True:
-        print("")
-        print(user_prompt)
-        result=input("change_model_gpt:")
-        data = extract_json(result)
-
-    else:
-        result = chat(prompt_history)
-        data = extract_json(result.content)
+    result = chat(prompt_history)
+    data = extract_json(result.content)
     
     return data
 
@@ -197,7 +194,10 @@ def topic_identification_gpt(msg, column_list):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
+    if GPT4 == True:
+        chat = ChatOpenAI(model_name="gpt-4", temperature=0, openai_api_key=openai_api_key)
+    else:
+        chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
 
 
     system_prompt = """
@@ -234,13 +234,6 @@ def topic_identification_gpt(msg, column_list):
         SystemMessage(content=system_prompt),
         HumanMessage(content=user_prompt)
     ]
-
-
-    if DEBUG == True:
-        print("")
-        print(user_prompt)
-        result=input("topic_identification_gpt:")
-        data = extract_json(result)
         
     result = chat(prompt_history)
     data = extract_json(result.content)
@@ -323,7 +316,10 @@ def model_identification_gpt(msg, characteristics_products):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
+    if GPT4 == True:
+        chat = ChatOpenAI(model_name="gpt-4", temperature=0, openai_api_key=openai_api_key)
+    else:
+        chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
 
 
     system_prompt = """
@@ -372,15 +368,8 @@ def model_identification_gpt(msg, characteristics_products):
         HumanMessage(content=user_prompt)
     ]
 
-    if DEBUG == True:
-        print("")
-        print(user_prompt)
-        result=input("model_identification_gpt:")
-        data = extract_json(result)
-
-    else:
-        result = chat(prompt_history)
-        data = extract_json(result.content)
+    result = chat(prompt_history)
+    data = extract_json(result.content)
 
     detected_model_list = []
     # Iterate through products_of_interest and check if they are mentioned in the generated text from ChatGPT

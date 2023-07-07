@@ -2,7 +2,7 @@
 
   <!-- Arguments -->
 
-  <arg name="DEBUG" default="False" />
+  <arg name="GPT4" default="False" />
   <arg name="UPDATE" default="" />
 
   <!-- Nodes -->
@@ -16,19 +16,19 @@
   </node>-->
 
   <node name="transcribe" pkg="ai4hri" type="transcribe_node.py" output="screen">
-    <param name="DEBUG" value="$(arg DEBUG)" />
+    <param name="GPT4" value="$(arg GPT4)" />
   </node>
 
   <node name="classificator" pkg="ai4hri" type="classificator_node.py" output="screen">
-    <param name="DEBUG" value="$(arg DEBUG)" />
+    <param name="GPT4" value="$(arg GPT4)" />
   </node>
 
   <node name="GPT" pkg="ai4hri" type="GPT_node.py" output="screen">
-    <param name="DEBUG" value="$(arg DEBUG)" />
+    <param name="GPT4" value="$(arg GPT4)" />
   </node>
 
   <node name="MySQL" pkg="ai4hri" type="MySQL_node.py" output="screen">
-    <param name="DEBUG" value="$(arg DEBUG)" />
+    <param name="GPT4" value="$(arg GPT4)" />
     <param name="UPDATE" value="$(arg UPDATE)" />
   </node>
 

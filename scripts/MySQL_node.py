@@ -11,7 +11,7 @@ import json
 global last_insert_rowid
 last_insert_rowid = ""
 
-DEBUG = rospy.get_param('/MySQL/DEBUG')
+GPT4 = rospy.get_param('/MySQL/GPT4')
 UPDATE = rospy.get_param('/MySQL/UPDATE')
 
 # Connect to the Camera_Store database. Initialize the cursor for querying the database.
@@ -149,7 +149,10 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=0, openai_api_key=openai_api_key)
+    if GPT4 == True:
+        chat = ChatOpenAI(model_name="gpt-4", temperature=0, openai_api_key=openai_api_key)
+    else:
+        chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
 
     system_prompt = """
     You are a helpful assistant that identifies if a shopkeeper is mistaken when presenting the characteristics of a camera model. Your task is to analyze the information given in Ground Truth and output the relevant JSON objects based on the characteristics mentioned by the shopkeeper:
@@ -237,15 +240,8 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
         HumanMessage(content=user_prompt)
     ]
 
-    if DEBUG == True:
-        print("")
-        print(user_prompt)
-        result=input("judge_gpt:")
-        data = extract_json(result)
-
-    else:
-        result = chat(prompt_history)
-        data = extract_json(result.content)
+    result = chat(prompt_history)
+    data = extract_json(result.content)
 
     return data
 

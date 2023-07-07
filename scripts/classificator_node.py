@@ -9,7 +9,7 @@ from langchain.prompts import PromptTemplate
 import re
 import json
 
-DEBUG = rospy.get_param('/classificator/DEBUG')
+GPT4 = rospy.get_param('/classificator/GPT4')
 
 global toggle
 global previous_utterances
@@ -45,8 +45,8 @@ def callback(msg):
     # Get new utterance from message and classify it
     new_utterance = msg.data
 
-    # In DEBUG mode we manually use GPT4 instead of the Fine-Tuned GPT3
-    if DEBUG == True:
+    # In GPT4 mode we manually use GPT4 instead of the Fine-Tuned GPT3
+    if GPT4 == True:
         classification_result = sentence_classification_chatgpt(new_utterance)     
     else:
         classification_result = sentence_classification(new_utterance)
@@ -117,7 +117,7 @@ def sentence_classification_chatgpt(new_utterance):
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
     # Prepare prompt to send, using JSON format
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
+    chat = ChatOpenAI(model_name="gpt-4", temperature=0, openai_api_key=openai_api_key)
 
 
     system_prompt = """
@@ -167,15 +167,8 @@ def sentence_classification_chatgpt(new_utterance):
         HumanMessage(content=user_prompt)
     ]
 
-    if DEBUG == True:
-        print("")
-        print(user_prompt)
-        result=input("role_identification_gpt:")
-        data = extract_json(result)
-
-    else:
-        result = chat(prompt_history)
-        data = extract_json(result.content)
+    result = chat(prompt_history)
+    data = extract_json(result.content)
 
     previous_utterances = previous_utterances + " ## " + data["Detection"] + ": " + new_utterance
     
