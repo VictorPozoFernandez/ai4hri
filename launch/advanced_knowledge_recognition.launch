@@ -1,0 +1,36 @@
+<launch>
+
+  <!-- Arguments -->
+
+  <arg name="GPT4" default="True" />
+  <arg name="UPDATE" default="" />
+
+  <!-- Nodes -->
+
+  <!--<node name="record" pkg="ai4hri" type="record_node.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>
+
+  <node name="control" pkg="ai4hri" type="audio_control.py" output="screen">
+    <param name="DEBUG" value="$(arg DEBUG)" />
+  </node>-->
+
+  <node name="transcribe" pkg="ai4hri" type="transcribe_node.py" output="screen">
+    <param name="GPT4" value="$(arg GPT4)" />
+  </node>
+
+  <node name="classificator" pkg="ai4hri" type="classificator_node.py" output="screen">
+    <param name="GPT4" value="$(arg GPT4)" />
+  </node>
+
+  <node name="GPT" pkg="ai4hri" type="GPT_node.py" output="screen">
+    <param name="GPT4" value="$(arg GPT4)" />
+  </node>
+
+  <node name="MySQL" pkg="ai4hri" type="MySQL_node.py" output="screen">
+    <param name="GPT4" value="$(arg GPT4)" />
+    <param name="UPDATE" value="$(arg UPDATE)" />
+  </node>
+
+
+</launch>
