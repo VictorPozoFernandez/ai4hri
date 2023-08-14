@@ -155,7 +155,9 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
         chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
 
     system_prompt = """
-    You are a helpful assistant that identifies if a shopkeeper is mistaken when presenting the characteristics of a camera model. Your task is to analyze the information given in Ground Truth and output the relevant JSON objects based on the characteristics mentioned by the shopkeeper:
+    You are a helpful assistant that identifies if a shopkeeper is mistaken when presenting the characteristics of a 
+    camera model. Your task is to analyze the information given in Ground Truth and output the relevant JSON objects
+    based on the characteristics mentioned by the shopkeeper:
 
     1. If the shopkeeper is right about a characteristic from Ground Truth, output:
     [
@@ -167,7 +169,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
         }
     ]
 
-    2. If the shopkeeper is mistaken about a characteristic from Ground Truth, output: ##['<Explain why the Shopkeeper is mistaken>', 'SHOPKEEPER IS MISTAKEN', '<presented camera model>', '<feature from Ground Truth>']##
+    2. If the shopkeeper is mistaken about a characteristic from Ground Truth, output: 
     [
         {
             "Explanation": "<Explain why the Shopkeeper is mistaken>",
@@ -177,7 +179,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
         }
     ]
 
-    3. If the shopkeeper does not mention a characteristic from Ground Truth, output: ##['null', 'NOT MENTIONED', '<presented camera model>', '<feature from Ground Truth>']##
+    3. If the shopkeeper does not mention a characteristic from Ground Truth, output: 
     [
         {
             "Explanation": "null",
@@ -187,7 +189,7 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
         }
     ]
 
-    4. If the shopkeeper is not able to answer, or asks for help, output: ##['<Explain why the shopkeeper is not able to answer>', 'SHOPKEEPER DOESNT KNOW', '<presented camera model>', '<feature from Ground Truth>']##
+    4. If the shopkeeper is not able to answer, or asks for help, output:
     [
         {
             "Explanation": "<Explain why the Shopkeeper is not able to answer",
@@ -197,8 +199,10 @@ def judge_gpt(shopkeeper_sentence, ground_truth):
         }
     ]
     
-    When the shopkeeper presents multiple characteristics, output an JSON object for each characteristic mentioned by the shopkeeper. 
-    Use the information given in Ground Truth to help you reason. Here's an example of how to format your answer:
+    When the shopkeeper presents multiple characteristics, output an JSON object for each characteristic mentioned 
+    by the shopkeeper.  Use the information given in Ground Truth to help you reason. 
+    
+    Here's an example of how to format your answer:
 
     Shopkeeper utterance: The Sony camera is a Mirrorless camera that has a resolution of 20 megapixels
     Ground Truth: ["Sony Alpha a6000: ['Model: Sony Alpha a6000', 'Price: <550>', 'Type_of_camera: <Mirrorless>', 'Resolution: <18.0 megapixels>']"]
