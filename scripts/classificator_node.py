@@ -55,7 +55,8 @@ def callback(msg):
     print("\033[94m - " + new_utterance + " (" + classification_result + ") \033[0m")
     print("")
 
-    #The toggle variable is used to detect if the Shopkeeper speaks twice in a row. In that case, the previous utterance is sent empty indicating that the Customer hasn't spoken in between.
+    '''The toggle variable is used to detect if the Shopkeeper speaks twice in a row. In that case, the previous 
+    utterance is sent empty indicating that the Customer hasn't spoken in between.'''
     
     if (("Shopkeeper" in classification_result) or ("shopkeeper" in classification_result)) and (toggle == False):
         # Get the position of the shopkeeper and the customer using a position tracker
@@ -87,19 +88,19 @@ def sentence_classification(new_utterance):
     # Request classification from fine-tuned GPT3 model
     classification_result = openai.Completion.create(
         model="ada:ft-personal-2023-03-29-12-35-58", #Improved model with syntetic data
-        prompt= new_utterance + " ### ", #Change if needed (depending on which stop message for the prompt did you use while training the fine-tuned model)
-        stop="END") #Change if needed (depending on which stop message did you use for the generated output while training the fine-tuned model)
+        prompt= new_utterance + " ### ", #Change if needed (depending on how you trained the fine-tuned model)
+        stop="END") #Change if needed (depending on how you trained the fine-tuned model)
     
     return classification_result["choices"][0]["text"]
 
 
-def get_current_position(previous_utterance, utterance):
+def get_current_position(previous_utterance, utterance): # NOT IMPLEMENTED YET
 
     #Pending to implement a position tracker. Default to NULL
     localization1 = "NULL"
     localization2 = "NULL"
 
-    # Create a list to store the previous and current utterances along with the current positions of the customer and shopkeeper
+    # Create a list to store the current positions of the customer and shopkeeper
     utterance_and_position = []
     utterance_and_position.append(previous_utterance)
     utterance_and_position.append(utterance)
@@ -121,33 +122,38 @@ def sentence_classification_chatgpt(new_utterance):
 
 
     system_prompt = """
-    You are a helpful assistant in a Camera Shop that identifies if the 'New Interaction' of a conversation history is said by a Customer or the Shopkeeper.
+    You are a helpful assistant in a Camera Shop that identifies if the 'New Interaction' of a conversation 
+    history is said by a Customer or the Shopkeeper.
 
     Customer's behaviour:
 
-    The customer enters the shop, typically looking around at the various displays of cameras, lenses, and other photography equipment.
-    If they need more information or can't find a specific item, they will approach the shopkeeper or sales associate.
-    Once they get help, they might want to test some cameras or lenses based on the shop's policy.
-    If they find what they're looking for and are satisfied with it, they'll proceed to purchase it. Otherwise, they may thank the shopkeeper for their help and leave.
+    The customer enters the shop, typically looking around at the various displays of cameras, lenses, and 
+    other photography equipment. If they need more information or can't find a specific item, they will approach 
+    the shopkeeper or sales associate. Once they get help, they might want to test some cameras or lenses based 
+    on the shop's policy. If they find what they're looking for and are satisfied with it, they'll proceed to 
+    purchase it. Otherwise, they may thank the shopkeeper for their help and leave.
     
     Shopkeeper's behaviour:
 
-    When a customer enters, the shopkeeper typically greets them, offering initial assistance.
-    They stay available for any questions or assistance, ready to explain the features, specifications, and pricing of the products.
+    When a customer enters, the shopkeeper typically greets them, offering initial assistance. They stay available 
+    for any questions or assistance, ready to explain the features, specifications, and pricing of the products.
     If the customer wants to test a camera, the shopkeeper assists them, explaining how to use it correctly.
-    If the Shopkeeper is not able to answer to a question given by the customer, he may call for help.
-    Once the customer decides to purchase, the shopkeeper helps them with the transaction, processes their payment, and packages their purchase.
-    They may also explain the return policy, warranty, or any other after-sales services, thank the customer, and invite them back to the store.
+    If the Shopkeeper is not able to answer to a question given by the customer, he may call for help. Once the 
+    customer decides to purchase, the shopkeeper helps them with the transaction, processes their payment, 
+    and packages their purchase. They may also explain the return policy, warranty, or any other after-sales services, 
+    thank the customer, and invite them back to the store.
 
     Here is an example that illustrates how can you output your answer.
 
     ## New Interaction: 'In which colors is available this model?';
     You: {"Detection": "Customer"}
 
-    Shopkeeper: 'This camera costs 100 dollars' ## Shopkeeper: 'The model is available in color white and blue' ## New Interaction: 'How much does it weight?';
+    Shopkeeper: 'This camera costs 100 dollars' ## Shopkeeper: 'The model is available in color white and blue' 
+    ## New Interaction: 'How much does it weight?';
     You: {"Detection": "Customer"}
     
-    Shopkeeper: 'This camera costs 100 dollars' ## Customer: 'And the price of the first camera that you showed me?' ## New Interaction: '68 dollars only, it's very affordable';
+    Shopkeeper: 'This camera costs 100 dollars' ## Customer: 'And the price of the first camera that you showed me?'
+    ## New Interaction: '68 dollars only, it's very affordable';
     You: {"Detection": "Shopkeeper"}
 
     Output only with the labels "Customer" or "Shopkeeper"
