@@ -113,7 +113,8 @@ def change_of_model_classification_fast(msg):
         chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=openai_api_key)
 
     system_prompt = """
-    You are a helpful assistant that listens a conversation between a Customer and a Shopkeeper inside a camera shop and identifies if different cameras are hinted during the conversation.
+    You are a helpful assistant that listens a conversation between a Customer and a Shopkeeper inside a camera shop and 
+    identifies if different cameras are hinted during the conversation.
 
     Here is an example that illustrates how can you output your answer.
 
@@ -166,7 +167,7 @@ def topic_extraction(msg):
     mycursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = mycursor.fetchall()
 
-    # Iterate through tables. Get all column names. Create a list with all the the found column names in the database that can be considered as topic
+    # Get all column names. Create a list with all the the found column names in the database that can be considered as topic
     column_list = []
     for table in tables:
         table_name = table[0]
@@ -328,30 +329,43 @@ def model_identification_gpt(msg, characteristics_products):
     Here there are some examples that illustrates how can you output your answer.
 
     'What is the price of this Nikon Camera? it costs 68 dollars only';
-    List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])], [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])],
+          [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], 
+          [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
     You: {"Detection": "['Nikon Coolpix S2800']"}
 
     'And what about this camera?'this model is only available in color black';
-    List: [[('Model', ['Nikon Coolpix S2800']), ('Color', ['black', 'pink', 'purple', 'red', 'silver'])], [('Model', ['Sony Alpha a6000']), ('Color', ['black', 'silver', 'white'])], [('Model', ['Canon EOS 5D Mark III']), ('Color', ['black'])]]
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Color', ['black', 'pink', 'purple', 'red', 'silver'])], 
+          [('Model', ['Sony Alpha a6000']), ('Color', ['black', 'silver', 'white'])], 
+          [('Model', ['Canon EOS 5D Mark III']), ('Color', ['black'])]]
     You: {"Detection": "['Canon EOS 5D Mark III']"}
 
     'Has this camera 18 preset modes? No, it only has 9 preset modes';
-    List: [[('Model', ['Nikon Coolpix S2800']), ('Camera_features', ['12 Glamour retouch effects', '18 preset modes', 'Optical Zoom 5x'])], [('Model', ['Sony Alpha a6000']), ('Camera_features', ['13 artistic effect modes', '9 preset modes'])], [('Model', ['Canon EOS 5D Mark III']), ('Camera_features', ['Silent Shooting'])]]
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Camera_features', ['12 Glamour retouch effects', '18 preset modes', 'Optical Zoom 5x'])], 
+          [('Model', ['Sony Alpha a6000']), ('Camera_features', ['13 artistic effect modes', '9 preset modes'])], 
+          [('Model', ['Canon EOS 5D Mark III']), ('Camera_features', ['Silent Shooting'])]]
     You: {"Detection": "['Sony Alpha a6000']"}
 
     'And the weight of this one? This camera weights 95 grams';
-    List: [[('Model', ['Nikon Coolpix S2800']), ('Weight', ['120 grams'])], [('Model', ['Sony Alpha a6000']), ('Weight', ['470 grams'])], [('Model', ['Canon EOS 5D Mark III']), ('Weight', ['950 grams'])]]
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Weight', ['120 grams'])], 
+          [('Model', ['Sony Alpha a6000']), ('Weight', ['470 grams'])], 
+          [('Model', ['Canon EOS 5D Mark III']), ('Weight', ['950 grams'])]]
     You: {"Detection": "['NULL']"}
 
     'How much does it cost this camera? This one costs 200 dollars';
-    List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])], [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Price', ['68'])],
+          [('Model', ['Sony Alpha a6000']), ('Price', ['550'])], 
+          [('Model', ['Canon EOS 5D Mark III']), ('Price', ['2000'])]]
     You: {"Detection": "['NULL']"}
 
     'What about its resolution? It has more than 21 megapixels';
-    List: [[('Model', ['Nikon Coolpix S2800']), ('Resolution', ['20.1 megapixels'])], [('Model', ['Sony Alpha a6000']), ('Resolution', ['24.0 megapixels'])], [('Model', ['Canon EOS 5D Mark III']), ('Resolution', ['22.3 megapixels'])]]
+    List: [[('Model', ['Nikon Coolpix S2800']), ('Resolution', ['20.1 megapixels'])], 
+          [('Model', ['Sony Alpha a6000']), ('Resolution', ['24.0 megapixels'])], 
+          [('Model', ['Canon EOS 5D Mark III']), ('Resolution', ['22.3 megapixels'])]]
     You: {"Detection": "['Sony Alpha a6000', 'Canon EOS 5D Mark III']"}
 
-    Use the data from the List to identify the camera model. If no camera is detected, output {"Detection": "['NULL']"}. If two or more models are detected, output all the detected models . 
+    Use the data from the List to identify the camera model. If no camera is detected, output {"Detection": "['NULL']"}.
+    If two or more models are detected, output all the detected models . 
     Output the answer only in JSON format.
     """
 
