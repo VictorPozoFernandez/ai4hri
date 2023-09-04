@@ -130,25 +130,22 @@ def sentence_classification_chatgpt(new_utterance):
     The customer enters the shop, typically looking around at the various displays of cameras, lenses, and 
     other photography equipment. If they need more information or can't find a specific item, they will approach 
     the shopkeeper or sales associate. Once they get help, they might want to test some cameras or lenses based 
-    on the shop's policy. If they find what they're looking for and are satisfied with it, they'll proceed to 
-    purchase it. Otherwise, they may thank the shopkeeper for their help and leave.
+    on the shop's policy. 
     
     Shopkeeper's behaviour:
 
     When a customer enters, the shopkeeper typically greets them, offering initial assistance. They stay available 
     for any questions or assistance, ready to explain the features, specifications, and pricing of the products.
     If the customer wants to test a camera, the shopkeeper assists them, explaining how to use it correctly.
-    If the Shopkeeper is not able to answer to a question given by the customer, he may call for help. Once the 
-    customer decides to purchase, the shopkeeper helps them with the transaction, processes their payment, 
-    and packages their purchase. They may also explain the return policy, warranty, or any other after-sales services, 
-    thank the customer, and invite them back to the store.
+    If the Shopkeeper is not able to answer to a question given by the customer, he may call for help.
 
     Here is an example that illustrates how can you output your answer.
 
+    Shopkeeper: 'Good morning, how can I help you?'
     ## New Interaction: 'In which colors is available this model?';
     You: {"Detection": "Customer"}
 
-    Shopkeeper: 'This camera costs 100 dollars' ## Shopkeeper: 'The model is available in color white and blue' 
+    Shopkeeper: 'This camera costs 100 dollars' ## Shopkeeper: 'Also, it is available in color white and blue' 
     ## New Interaction: 'How much does it weight?';
     You: {"Detection": "Customer"}
     
@@ -162,7 +159,8 @@ def sentence_classification_chatgpt(new_utterance):
     """
 
     user_template = """
-    {previous_utterances} ## New Interaction: {new_utterance}
+    {previous_utterances} 
+    ## New Interaction: {new_utterance}
     """
 
     user_prompt_template = PromptTemplate(input_variables=["previous_utterances", "new_utterance"], template=user_template)
